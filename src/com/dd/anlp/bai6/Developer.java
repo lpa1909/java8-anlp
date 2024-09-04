@@ -1,4 +1,4 @@
-package com.dd.lambda;
+package com.dd.anlp.bai6;
 
 public class Developer {
     String name;

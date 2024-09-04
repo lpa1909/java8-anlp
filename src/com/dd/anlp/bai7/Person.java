@@ -1,4 +1,4 @@
-package steam;
+package com.dd.anlp.bai7;
 
 public class Person {
     private String name;
