@@ -1,4 +1,4 @@
-package lambda;
+package com.dd.lambda;
 
 public class Developer {
     String name;
