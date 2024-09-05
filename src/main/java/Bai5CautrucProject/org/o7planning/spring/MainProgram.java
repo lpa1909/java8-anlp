@@ -8,6 +8,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class MainProgram {
+
     public static void main(String[] args) {
         ApplicationContext context = new AnnotationConfigApplicationContext(AppConfiguration.class);
         System.out.println();
@@ -22,5 +23,6 @@ public class MainProgram {
         System.out.println();
         MyComponent myComponent = (MyComponent) context.getBean("myComponent");
         myComponent.showAppInfo();
+
     }
 }
