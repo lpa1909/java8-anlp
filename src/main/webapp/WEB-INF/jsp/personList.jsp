@@ -1,3 +1,4 @@
+<%--<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>--%>
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -8,7 +9,7 @@
 </head>
 <body>
     <h1>Welcome</h1>
-    <br/><br/>
+    <br/><hr/>
 
     <div>
         <table border="1">
@@ -16,7 +17,7 @@
                 <th>First Name</th>
                 <th>Last Name</th>
             </tr>
-            <c:forEach item="person" var ="persons">
+            <c:forEach item="${persons}" var ="person">
                 <tr>
                     <td>${person.firstName}</td>
                     <td>${person.lastName}</td>
