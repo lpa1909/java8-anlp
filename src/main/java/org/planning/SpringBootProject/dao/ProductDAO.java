@@ -92,10 +92,12 @@ public class ProductDAO {
 		}
 		sql += " order by p.createDate desc ";
 		//
-		Session session = this.sessionFactory.getCurrentSession();
-		Query<ProductInfo> query = session.createQuery(sql, ProductInfo.class);
+        Query<ProductInfo> query;
+        try (Session session = this.sessionFactory.getCurrentSession()) {
+            query = session.createQuery(sql, ProductInfo.class);
+        }
 
-		if (likeName != null && likeName.length() > 0) {
+        if (likeName != null && likeName.length() > 0) {
 			query.setParameter("likeName", "%" + likeName.toLowerCase() + "%");
 		}
 		return new PaginationResult<ProductInfo>(query, page, maxResult, maxNavigationPage);

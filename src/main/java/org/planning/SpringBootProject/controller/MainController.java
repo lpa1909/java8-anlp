@@ -5,8 +5,10 @@ import java.io.IOException;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.planning.SpringBootProject.dao.AccountDAO;
 import org.planning.SpringBootProject.dao.OrderDAO;
 import org.planning.SpringBootProject.dao.ProductDAO;
+import org.planning.SpringBootProject.entity.Account;
 import org.planning.SpringBootProject.entity.Product;
 import org.planning.SpringBootProject.form.CustomerForm;
 import org.planning.SpringBootProject.model.CartInfo;
@@ -70,12 +72,13 @@ public class MainController {
     }
 
     @RequestMapping("/")
-    public String home() {
+    public String home(Model model) {
+        model.addAttribute("mess", "check data");
         return "index";
     }
 
     // Danh sách sản phẩm.
-    @RequestMapping({ "/productList" })
+    @RequestMapping({"/productList"})
     public String listProductHandler(Model model, //
                                      @RequestParam(value = "name", defaultValue = "") String likeName,
                                      @RequestParam(value = "page", defaultValue = "1") int page) {
@@ -89,7 +92,7 @@ public class MainController {
         return "productList";
     }
 
-    @RequestMapping({ "/buyProduct" })
+    @RequestMapping({"/buyProduct"})
     public String listProductHandler(HttpServletRequest request, Model model, //
                                      @RequestParam(value = "code", defaultValue = "") String code) {
 
@@ -110,7 +113,7 @@ public class MainController {
         return "redirect:/shoppingCart";
     }
 
-    @RequestMapping({ "/shoppingCartRemoveProduct" })
+    @RequestMapping({"/shoppingCartRemoveProduct"})
     public String removeProductHandler(HttpServletRequest request, Model model, //
                                        @RequestParam(value = "code", defaultValue = "") String code) {
         Product product = null;
@@ -131,7 +134,7 @@ public class MainController {
     }
 
     // POST: Cập nhập số lượng cho các sản phẩm đã mua.
-    @RequestMapping(value = { "/shoppingCart" }, method = RequestMethod.POST)
+    @RequestMapping(value = {"/shoppingCart"}, method = RequestMethod.POST)
     public String shoppingCartUpdateQty(HttpServletRequest request, //
                                         Model model, //
                                         @ModelAttribute("cartForm") CartInfo cartForm) {
@@ -143,7 +146,7 @@ public class MainController {
     }
 
     // GET: Hiển thị giỏ hàng.
-    @RequestMapping(value = { "/shoppingCart" }, method = RequestMethod.GET)
+    @RequestMapping(value = {"/shoppingCart"}, method = RequestMethod.GET)
     public String shoppingCartHandler(HttpServletRequest request, Model model) {
         CartInfo myCart = Utils.getCartInSession(request);
 
@@ -152,7 +155,7 @@ public class MainController {
     }
 
     // GET: Nhập thông tin khách hàng.
-    @RequestMapping(value = { "/shoppingCartCustomer" }, method = RequestMethod.GET)
+    @RequestMapping(value = {"/shoppingCartCustomer"}, method = RequestMethod.GET)
     public String shoppingCartCustomerForm(HttpServletRequest request, Model model) {
 
         CartInfo cartInfo = Utils.getCartInSession(request);
@@ -171,7 +174,7 @@ public class MainController {
     }
 
     // POST: Save thông tin khách hàng.
-    @RequestMapping(value = { "/shoppingCartCustomer" }, method = RequestMethod.POST)
+    @RequestMapping(value = {"/shoppingCartCustomer"}, method = RequestMethod.POST)
     public String shoppingCartCustomerSave(HttpServletRequest request, //
                                            Model model, //
                                            @ModelAttribute("customerForm") @Validated CustomerForm customerForm, //
@@ -193,7 +196,7 @@ public class MainController {
     }
 
     // GET: Xem lại thông tin để xác nhận.
-    @RequestMapping(value = { "/shoppingCartConfirmation" }, method = RequestMethod.GET)
+    @RequestMapping(value = {"/shoppingCartConfirmation"}, method = RequestMethod.GET)
     public String shoppingCartConfirmationReview(HttpServletRequest request, Model model) {
         CartInfo cartInfo = Utils.getCartInSession(request);
 
@@ -210,7 +213,7 @@ public class MainController {
     }
 
     // POST: Gửi đơn hàng (Save).
-    @RequestMapping(value = { "/shoppingCartConfirmation" }, method = RequestMethod.POST)
+    @RequestMapping(value = {"/shoppingCartConfirmation"}, method = RequestMethod.POST)
 
     public String shoppingCartConfirmationSave(HttpServletRequest request, Model model) {
         CartInfo cartInfo = Utils.getCartInSession(request);
@@ -238,7 +241,7 @@ public class MainController {
         return "redirect:/shoppingCartFinalize";
     }
 
-    @RequestMapping(value = { "/shoppingCartFinalize" }, method = RequestMethod.GET)
+    @RequestMapping(value = {"/shoppingCartFinalize"}, method = RequestMethod.GET)
     public String shoppingCartFinalize(HttpServletRequest request, Model model) {
 
         CartInfo lastOrderedCart = Utils.getLastOrderedCartInSession(request);
@@ -250,7 +253,7 @@ public class MainController {
         return "shoppingCartFinalize";
     }
 
-    @RequestMapping(value = { "/productImage" }, method = RequestMethod.GET)
+    @RequestMapping(value = {"/productImage"}, method = RequestMethod.GET)
     public void productImage(HttpServletRequest request, HttpServletResponse response, Model model,
                              @RequestParam("code") String code) throws IOException {
         Product product = null;

@@ -24,7 +24,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Account account = accountDAO.findAccount(username);
-        System.out.println("Account= " + account);
+        System.out.println("Account= " + account.getUserRole());
 
         if (account == null) {
             throw new UsernameNotFoundException("User " //
@@ -49,6 +49,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         UserDetails userDetails = (UserDetails) new User(account.getUserName(), //
                 account.getEncrytedPassword(), enabled, accountNonExpired, //
                 credentialsNonExpired, accountNonLocked, grantList);
+
+        System.out.println(userDetails.getUsername());
 
         return userDetails;
     }

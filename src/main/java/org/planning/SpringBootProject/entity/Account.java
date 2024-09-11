@@ -3,8 +3,9 @@ package org.planning.SpringBootProject.entity;
 import java.io.Serializable;
 
 import jakarta.persistence.*;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 
-@Entity
+@EntityScan(basePackageClasses = Account.class)
 @Table(name = "Accounts")
 public class Account implements Serializable {
 

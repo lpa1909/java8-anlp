@@ -6,7 +6,7 @@ import java.util.Date;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "Products")
+@Table(name = "products")
 public class Product implements Serializable {
 
     private static final long serialVersionUID = -1000119078147252957L;
