@@ -17,6 +17,7 @@ import org.planning.SpringBootProject.model.CustomerInfo;
 import org.planning.SpringBootProject.model.OrderInfo;
 import org.planning.SpringBootProject.model.ProductInfo;
 import org.planning.SpringBootProject.pagination.PaginationResult;
+import org.planning.SpringBootProject.pagination.Paging;
 import org.planning.SpringBootProject.util.Utils;
 import org.planning.SpringBootProject.validator.CustomerFormValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,10 +88,9 @@ public class MainController {
         final int maxResult = 5;
         final int maxNavigationPage = 10;
 
-        PaginationResult<ProductInfo> result = productDAO.queryProducts(page, //
-                maxResult, maxNavigationPage, likeName);
+        Paging<ProductInfo> result = productDAO.queryProducts(page, maxResult, maxNavigationPage, likeName);
 
-        model.addAttribute("paginationProducts", result);
+        model.addAttribute("paginationProducts", result.getData());
         return "productList";
     }
 
@@ -227,6 +227,7 @@ public class MainController {
             return "redirect:/shoppingCartCustomer";
         }
         try {
+            System.out.println(cartInfo.getCustomerInfo());
             orderDAO.saveOrder(cartInfo);
         } catch (Exception e) {
 

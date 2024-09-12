@@ -12,7 +12,7 @@
 
 <div class="page-title">Product List</div>
 
-<div class="product-preview-container" th:each="prodInfo : ${paginationProducts.list}">
+<div class="product-preview-container" th:each="prodInfo : ${paginationProducts}">
     <ul>
         <li><img class="product-image"
                  th:src="@{|/productImage?code=${prodInfo.code}|}" /></li>
@@ -33,16 +33,16 @@
 </div>
 
 <br/>
-<div class="page-navigator" th:if="${paginationProducts.totalPages > 1}">
-    <th:block th:each="page : ${paginationProducts.navigationPages}">
+<!--<div class="page-navigator" th:if="${paginationProducts.totalPages > 1}">-->
+<!--    <th:block th:each="page : ${paginationProducts.navigationPages}">-->
 
-        <a th:href="@{|/productList?page=${page}|}" th:if="${page != -1}"
-           class="nav-item" th:utext="${page}"></a>
+<!--        <a th:href="@{/productList?page=${page}}" th:if="${page != -1}"-->
+<!--           class="nav-item" th:utext="${page}"></a>-->
 
-        <span class="nav-item" th:if="${page == -1}"> ... </span>
+<!--        <span class="nav-item" th:if="${page == -1}"> ... </span>-->
 
-    </th:block>
-</div>
+<!--    </th:block>-->
+<!--</div>-->
 
 <th:block th:include="/_footer"></th:block>
 
