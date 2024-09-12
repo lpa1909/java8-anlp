@@ -2,6 +2,7 @@ package org.planning.SpringBootProject.controller;
 
 
 import java.io.IOException;
+import java.util.List;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -13,28 +14,27 @@ import org.planning.SpringBootProject.entity.Product;
 import org.planning.SpringBootProject.form.CustomerForm;
 import org.planning.SpringBootProject.model.CartInfo;
 import org.planning.SpringBootProject.model.CustomerInfo;
+import org.planning.SpringBootProject.model.OrderInfo;
 import org.planning.SpringBootProject.model.ProductInfo;
 import org.planning.SpringBootProject.pagination.PaginationResult;
 import org.planning.SpringBootProject.util.Utils;
 import org.planning.SpringBootProject.validator.CustomerFormValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @Transactional
 public class MainController {
-
     @Autowired
     private OrderDAO orderDAO;
 
@@ -72,8 +72,10 @@ public class MainController {
     }
 
     @RequestMapping("/")
-    public String home(Model model) {
+    public String home(Model model, @RequestParam(value = "page", defaultValue = "1") String pageStr) {
         model.addAttribute("mess", "check data");
+        List<Product> products = productDAO.getAllProducts();
+        model.addAttribute("products", products);
         return "index";
     }
 
@@ -102,7 +104,6 @@ public class MainController {
         }
         if (product != null) {
 
-            //
             CartInfo cartInfo = Utils.getCartInSession(request);
 
             ProductInfo productInfo = new ProductInfo(product);
@@ -260,7 +261,7 @@ public class MainController {
         if (code != null) {
             product = this.productDAO.findProduct(code);
         }
-        if (product != null && product.getImage() != null) {
+        if (product != null && product .getImage() != null) {
             response.setContentType("image/jpeg,image/jpg,image/png,image/gif");
             response.getOutputStream().write(product.getImage());
         }

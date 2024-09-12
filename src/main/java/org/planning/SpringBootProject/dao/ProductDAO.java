@@ -2,6 +2,7 @@ package org.planning.SpringBootProject.dao;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 
 
 import jakarta.persistence.NoResultException;
@@ -43,6 +44,19 @@ public class ProductDAO {
 			return null;
 		}
 		return new ProductInfo(product.getCode(), product.getName(), product.getPrice());
+	}
+
+	public List<Product> getAllProducts(){
+		try {
+
+			String sql = "Select e from " + Product.class.getName() + " e";
+
+			Session session = this.sessionFactory.getCurrentSession();
+			Query<Product> query = session.createQuery(sql, Product.class);
+			return query.getResultList();
+		} catch (NoResultException e) {
+			return null;
+		}
 	}
 
 	@Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)

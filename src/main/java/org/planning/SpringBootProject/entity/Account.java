@@ -1,29 +1,21 @@
 package org.planning.SpringBootProject.entity;
 
+import jakarta.persistence.*;
 import java.io.Serializable;
 
-import jakarta.persistence.*;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
-
-@EntityScan(basePackageClasses = Account.class)
-@Table(name = "Accounts")
+@Entity
+@Table(name = "ACCOUNTS")
 public class Account implements Serializable {
-
     private static final long serialVersionUID = -2054386655979281969L;
-
     public static final String ROLE_MANAGER = "MANAGER";
     public static final String ROLE_EMPLOYEE = "EMPLOYEE";
-
     @Id
     @Column(name = "User_Name", length = 20, nullable = false)
     private String userName;
-
     @Column(name = "Encryted_Password", length = 128, nullable = false)
     private String encrytedPassword;
-
     @Column(name = "Active", length = 1, nullable = false)
     private boolean active;
-
     @Column(name = "User_Role", length = 20, nullable = false)
     private String userRole;
 
@@ -63,5 +55,4 @@ public class Account implements Serializable {
     public String toString() {
         return "[" + this.userName + "," + this.encrytedPassword + "," + this.userRole + "]";
     }
-
 }

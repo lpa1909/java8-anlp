@@ -6,10 +6,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.access.expression.SecurityExpressionHandler;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -41,29 +42,26 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable()) // Consider enabling CSRF protection in a real application
-                .authorizeHttpRequests(authz -> authz
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/admin/login", "/admin/logout", "/403")
+                        .permitAll() // Cho phép truy cập mà không cần xác thực
                         .requestMatchers("/admin/orderList", "/admin/order", "/admin/accountInfo")
                         .hasAnyRole("EMPLOYEE", "MANAGER")
                         .requestMatchers("/admin/product")
                         .hasRole("MANAGER")
-                        .anyRequest().authenticated() // All other requests require authentication
-                )
-                .exceptionHandling(exception -> exception
-                        .accessDeniedPage("/403")
-                )
-                .formLogin(form -> form
-                        .loginPage("/admin/login")
+                        .anyRequest().authenticated())
+                .exceptionHandling(e -> e.accessDeniedPage("/403"))
+                .formLogin(login -> login
                         .loginProcessingUrl("/j_spring_security_check")
+                        .loginPage("/admin/login")
                         .defaultSuccessUrl("/admin/accountInfo")
                         .failureUrl("/admin/login?error=true")
-                        .permitAll() // Allow unauthenticated access to the login page
-                )
+                        .usernameParameter("userName")
+                        .passwordParameter("password"))
                 .logout(logout -> logout
                         .logoutUrl("/admin/logout")
-                        .logoutSuccessUrl("/")
-                        .permitAll() // Allow unauthenticated access to the logout URL
-                );
+                        .logoutSuccessUrl("/"));
 
         return http.build();
     }

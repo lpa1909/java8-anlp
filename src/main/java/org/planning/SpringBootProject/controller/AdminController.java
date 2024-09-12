@@ -57,6 +57,7 @@ public class AdminController {
     // GET: Hiển thị trang login
     @RequestMapping(value = { "/admin/login" }, method = RequestMethod.GET)
     public String login(Model model) {
+        System.out.println("login");
         return "login";
     }
 
