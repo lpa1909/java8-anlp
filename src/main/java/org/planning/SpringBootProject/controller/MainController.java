@@ -215,7 +215,6 @@ public class MainController {
 
     // POST: Gửi đơn hàng (Save).
     @RequestMapping(value = {"/shoppingCartConfirmation"}, method = RequestMethod.POST)
-
     public String shoppingCartConfirmationSave(HttpServletRequest request, Model model) {
         CartInfo cartInfo = Utils.getCartInSession(request);
 

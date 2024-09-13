@@ -1,22 +1,20 @@
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity">
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" th:href="@{/}">Nike Store</a>
-    <form class="form-inline ml-auto">
-        <input class="form-control mr-sm-2" type="search" placeholder="Search Product" aria-label="Search">
-        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-    </form>
-    <ul class="navbar-nav ml-auto">
-        <li class="nav-item"><a class="nav-link" href="#">PRODUCT LIST</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">MY CART</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">MANAGER</a></li>
-        <th:block sec:authorize="isAuthenticated()">
-            <li class="nav-item"><a class="nav-link" th:href="@{/admin/logout}">Logout</a></li>
-        </th:block>
+<div xmlns:th="http://www.thymeleaf.org"
+     xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" th:href="@{/}">Nike Store</a>
+        <form class="form-inline ml-auto">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search Product" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item"><a class="nav-link" href="#">PRODUCT LIST</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">MY CART</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">MANAGER</a></li>
+            <th:if sec:authorize="isAuthenticated()">
+                <li class="nav-item"><a class="nav-link" th:href="@{/admin/logout}">Logout</a></li>
+            </th:if>
 
-        <th:block sec:authorize="!isAuthenticated()">
-            <li class="nav-item"><a class="nav-link" th:href="@{/admin/login}">LOGIN</a></li>
-        </th:block>
-
-    </ul>
-</nav>
+            <th:if sec:authorize="!isAuthenticated()">Login</th:if>
+        </ul>
+    </nav>
+</div>

@@ -1,7 +1,6 @@
 package org.planning.SpringBootProject.dao;
 
-import java.sql.Date;
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -42,7 +41,7 @@ public class OrderDAO {
         return value;
     }
 
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional(noRollbackFor = Exception.class)
     public void saveOrder(CartInfo cartInfo) {
         Session session = this.sessionFactory.getCurrentSession();
 
@@ -51,7 +50,7 @@ public class OrderDAO {
 
         order.setId(UUID.randomUUID().toString());
         order.setOrderNum(orderNum);
-//        order.setOrderDate(new Date());
+        order.setOrderDate(new Date());
         order.setAmount(cartInfo.getAmountTotal());
 
         CustomerInfo customerInfo = cartInfo.getCustomerInfo();
