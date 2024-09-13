@@ -7,14 +7,29 @@
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
         </form>
         <ul class="navbar-nav ml-auto">
-            <li class="nav-item"><a class="nav-link" href="#">PRODUCT LIST</a></li>
-            <li class="nav-item"><a class="nav-link" href="#">MY CART</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/productList}">PRODUCT LIST</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/shoppingCart}">MY CART</a></li>
             <li class="nav-item"><a class="nav-link" href="#">MANAGER</a></li>
-            <th:if sec:authorize="isAuthenticated()">
+            <th:block sec:authorize="hasAnyRole('ROLE_MANAGER','ROLE_EMPLOYEE')">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/admin/orderList}">
+                        Order List
+                    </a>
+                </li>
+            </th:block>
+            <th:block sec:authorize="hasRole('ROLE_MANAGER')">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/admin/product}">
+                        Create Product
+                    </a>
+                </li>
+            </th:block>
+            <th:block sec:authorize="isAuthenticated()">
                 <li class="nav-item"><a class="nav-link" th:href="@{/admin/logout}">Logout</a></li>
-            </th:if>
-
-            <th:if sec:authorize="!isAuthenticated()">Login</th:if>
+            </th:block>
+            <th:block sec:authorize="!isAuthenticated()">
+                <li class="nav-item"><a class="nav-link" th:href="@{/admin/login}">Login</a></li>
+            </th:block>
         </ul>
     </nav>
 </div>

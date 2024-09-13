@@ -201,8 +201,6 @@ public class PaginationResult<E>{
 	
 		navigationPages.add(1);
 		if (begin > 2) {
-
-
 			navigationPages.add(-1);
 		}
 
@@ -213,8 +211,6 @@ public class PaginationResult<E>{
 		}
 
 		if (end < this.totalPages - 2) {
-
-		
 			navigationPages.add(-1);
 		}
 	

@@ -68,6 +68,7 @@ public class AdminController {
         System.out.println(userDetails.getPassword());
         System.out.println(userDetails.getUsername());
         System.out.println(userDetails.isEnabled());
+        model.addAttribute("name", userDetails.getUsername());
         model.addAttribute("userDetails", userDetails);
         return "accountInfo";
     }
