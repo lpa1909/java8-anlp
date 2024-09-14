@@ -3,72 +3,131 @@
 <head>
     <meta charset="UTF-8">
     <title>Shopping Cart Confirmation</title>
-    <link rel="stylesheet" type="text/css" th:href="@{/styles.css}">
+    <!--    <link rel="stylesheet" type="text/css" th:href="@{/styles.css}">-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        .button-container {
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .navi-item {
+            text-decoration: none;
+            color: green;
+        }
+
+        .button-send-sc {
+            border-radius: 5px;
+            border-color: #5f5f5f;
+            box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .card {
+            border-radius: 5px;
+            border-color: #5f5f5f;
+            box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .img-fluid {
+            border-radius: 5px;
+            border-color: #5f5f5f;
+            box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.3);
+        }
+    </style>
 </head>
 <body>
 <th:block th:include="/_header"></th:block>
-<th:block th:include="/_menu"></th:block>
 
-<div class="page-title">Confirmation</div>
-<div class="customer-info-container">
-    <h3>Customer Information:</h3>
-    <ul>
-        <li>Name: <span th:utext="${myCart.customerInfo.name}"></span></li>
-        <li>Email: <span th:utext="${myCart.customerInfo.email}"></span></li>
-        <li>Phone: <span th:utext="${myCart.customerInfo.phone}"></span></li>
-        <li>Address: <span th:utext="${myCart.customerInfo.address}"></span></li>
-    </ul>
-    <h3>Cart Summary:</h3>
-    <ul>
-        <li>Quantity: <span th:utext="${myCart.quantityTotal}"></span>$</li>
-        <li>Total:
-            <span class="total"
-                  th:utext="${#numbers.formatDecimal(myCart.amountTotal,3,2,'COMMA')}">
-               </span>
-        </li>
-    </ul>
-</div>
-<form method="POST" th:action="@{/shoppingCartConfirmation}">
-    <!-- Edit Cart -->
-    <a class="navi-item" th:href="@{/shoppingCart}">
-        Edit Cart
-    </a>
-    <!-- Edit Customer Info -->
-    <a class="navi-item" th:href="@{/shoppingCartCustomer}">
-        Edit Customer Info
-    </a>
-    <!-- Send/Save -->
-    <input type="submit" value="Send" class="button-send-sc" />
-</form>
-<div class="container">
-    <div class="product-preview-container" th:each="cartLineInfo : ${myCart.cartLines}">
-        <ul>
-            <li>
-                <img class="product-image"
-                     src="@{|/productImage?code=${cartLineInfo.productInfo.code}|}" />
-            </li>
-            <li>
-                Code: <span th:utext="${cartLineInfo.productInfo.code}"></span>
-                <input
-                        type="hidden" name="code" th:value="${cartLineInfo.productInfo.code}" />
-            </li>
-            <li>Name: <span th:utext="${cartLineInfo.productInfo.name}"></span></li>
-            <li>Price:
-                <span class="price"
-                      th:utext="${#numbers.formatDecimal(cartLineInfo.productInfo.price,3,2,'COMMA')}">
-                  </span>
-            </li>
-            <li>Quantity: <span th:utext="${cartLineInfo.quantity}"></span></li>
-            <li>Subtotal:
-                <span class="subtotal"
-                      th:utext="${#numbers.formatDecimal(cartLineInfo.amount,3,2,'COMMA')}">
-                  </span>
-            </li>
-        </ul>
+<section class="h-100 gradient-custom" >
+    <div class="container py-3 h-100" >
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-lg-10 col-xl-8">
+                <div class="card" style="border-radius: 10px;">
+                    <div class="card-header px-4 py-5">
+                        <h5 class="text-muted mb-0">Thanks for your Order</span>!
+                        </h5>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <p class="lead fw-normal mb-0" style="color: #a8729a;">Order Confirmation</p>
+                        </div>
+                        <div class="card shadow-0 border mb-4">
+                            <div class="card-body" th:each="cartLineInfo : ${myCart.cartLines}">
+                                <div class="row" >
+                                    <div class="col-md-2">
+                                        <img th:src="@{|/productImage?code=${cartLineInfo.productInfo.code}|}"
+                                             class="img-fluid" alt="Phone">
+                                    </div>
+                                    <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                                        <p class="text-muted mb-0" th:utext="${cartLineInfo.productInfo.code}"></p>
+                                        <input type="hidden" name="code" th:value="${cartLineInfo.productInfo.code}"/>
+                                    </div>
+                                    <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                                        <p class="text-muted mb-0 small"
+                                           th:utext="${cartLineInfo.productInfo.name}"></p>
+                                    </div>
+                                    <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                                        <p class="text-muted mb-0 small"
+                                           th:utext="${#numbers.formatDecimal(cartLineInfo.productInfo.price,3,2,'COMMA')}"></p>
+                                    </div>
+                                    <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                                        <p class="text-muted mb-0 small" th:utext="${cartLineInfo.quantity}"></p>
+                                    </div>
+                                    <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                                        <p class="text-muted mb-0 small"
+                                           th:utext="${#numbers.formatDecimal(cartLineInfo.amount,3,2,'COMMA')}"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between pt-2">
+                            <p class="fw-bold mb-0">Order Details</p>
+                        </div>
+
+                        <div class="d-flex justify-content-between pt-2">
+                            <p class="text-muted mb-0">Full name: <span th:utext="${myCart.customerInfo.name}"></span></p>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <p class="text-muted mb-0">Email: <span th:utext="${myCart.customerInfo.email}"></span></p>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <p class="text-muted mb-0">Phone: <span th:utext="${myCart.customerInfo.phone}"></span></p>
+                            <p class="text-muted mb-0"><span class="fw-bold me-4">Quantity: <span th:utext="${myCart.quantityTotal}"></span></p>
+                        </div>
+                        <div class="d-flex justify-content-between mb-3">
+                            <p class="text-muted mb-0">Address: <span th:utext="${myCart.customerInfo.address}"></span></p>
+                            <p class="text-muted mb-0"><span class="fw-bold me-4"><b>Total: <span class="total" th:utext="${#numbers.formatDecimal(myCart.amountTotal,3,2,'COMMA')}"></span></b></p>
+                        </div>
+                    </div>
+                    <div class="card-footer border-0 px-4 py-5"
+                         style="background-color: #cccccc; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
+                        <form method="POST" th:action="@{/shoppingCartConfirmation}">
+                            <div class="button-container">
+                                <a class="navi-item" th:href="@{/shoppingCart}">
+                                    <i class="fa fa-pencil"></i> Edit Cart
+                                </a>
+                                <a class="navi-item" th:href="@{/shoppingCartCustomer}">
+                                    <i class="fa fa-pencil"></i> Edit Customer Info
+                                </a>
+                                <input type="submit" value="Send" class="button-send-sc"/>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
     </div>
-</div>
+</section>
 
-<th:block th:include="/_footer"></th:block>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<!--<th:block th:include="/_footer"></th:block>-->
 
 </body>
 </html>

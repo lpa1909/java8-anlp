@@ -141,16 +141,11 @@ public class ProductDAO {
                 return new Paging<>(productInfos, totalRecords, page, maxResult);
             }
         } catch (SQLException e) {
-            // Log the error using a logging framework (e.g., Log4j, SLF4J)
             e.printStackTrace();
-
-            // Optionally, re-throw the exception or wrap it in a custom exception
-            // throw new DataAccessException("Error querying products", e);
         }
 
-        // Return an empty Paging object or throw an exception if an error occurs
         return new Paging<>(Collections.emptyList(), 0, page, maxResult);
-        // Or consider throwing an exception to indicate the failure
+
     }
 
     private int getTotalRecords(String likeName) throws SQLException {
