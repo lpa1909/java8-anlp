@@ -15,12 +15,6 @@
             text-align: center;
         }
 
-        .total-count {
-            text-align: center;
-            margin-bottom: 10px;
-        }
-
-
         table {
             width: 100%;
             max-width: 900px;
@@ -47,7 +41,7 @@
 
         a {
             text-decoration: none;
-            color: blue;
+            color: black;
         }
 
         .pagination .page-link {
@@ -60,18 +54,18 @@
             background-color: #e9ecef;
         }
 
-        .page-navigator{
+        .page-navigator {
             display: flex;
             justify-content: center;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
 <th:block th:include="/_header"></th:block>
-<!--<th:block th:include="/_menu"></th:block>-->
-
 <div class="page-title">Order List</div>
-<div class="total-count">Total Order Count: <span th:utext="${paginationResult.totalRecords}"></span></div>
+<div style="text-align: center; margin-bottom: 5px;">Total Order Count: <span
+        th:utext="${paginationResult.totalRecords}"></span></div>
 <table border="1" style="width:100%">
     <tr>
         <th>Order Num</th>
@@ -90,24 +84,21 @@
         <td th:utext="${orderInfo.customerEmail}"></td>
         <td style="color:red;" th:utext="${#numbers.formatDecimal(orderInfo.amount,3,2,'COMMA')}">
         </td>
-        <td><a th:href="@{|/admin/order?orderId=${orderInfo.id}|}" "><i class="fas fa-eye" style="color: black; "></i></a></td>
+        <td><a th:href="@{|/admin/order?orderId=${orderInfo.id}|}"><i class="fa fa-eye" aria-hidden="true"></i></a></td>
     </tr>
 </table>
-<div class="page-navigator py-3">
-    <nav aria-label="paging" th:if="${paginationResult.totalPages > 1}">
-        <ul class="pagination pagination-sm">
-            <th:block th:each="page: ${paginationResult.navigationPages}">
-                <li class="page-item"><a class="page-link" th:if="${page != -1}"
+
+<div class="page-navigator" th:if="${paginationResult.totalPages > 1}">
+    <th:block th:each="page: ${paginationResult.navigationPages}">
+        <nav aria-label="...">
+            <ul class="pagination pagination-sm">
+                <li class="page-item"><a th:if="${page != -1}" class="page-link"
                                          th:href="@{|/admin/orderList?page=${page}|}" th:utext="${page}"></a></li>
                 <span th:if="${page == -1}" class="nav-item"> ... </span>
-            </th:block>
-        </ul>
-    </nav>
+            </ul>
+        </nav>
+    </th:block>
 </div>
-
-
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<!--<th:block th:include="/_footer"></th:block>-->
 </body>
 </html>
