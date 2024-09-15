@@ -170,7 +170,7 @@
                     <div class="col-md-12">
                         <input th:field="*{newProduct}" type="hidden"/>
                         <input th:if="${productForm.newProduct}" type="text" placeholder="Code"
-                               th:field="*{code}"/>
+                               th:field="*{code}" th:required/>
                         <th:block th:if="${!productForm.newProduct}">
                             <span th:utext="${productForm.code}"></span>
                             <input type="hidden" th:field="*{code}"/>
@@ -179,12 +179,12 @@
                     </div>
 
                     <div class="col-md-12">
-                        <input th:field="*{name}" placeholder="Product Name" type="text"/>
+                        <input th:field="*{name}" placeholder="Product Name" type="text" th:required/>
                         <span class="error-message" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">..</span>
                     </div>
 
                     <div class="col-md-12">
-                        <input th:field="*{price}" placeholder="Price" type="text"/>
+                        <input th:field="*{price}" placeholder="Price" type="text" th:required/>
                         <span class="error-message" th:if="${#fields.hasErrors('price')}" th:errors="*{price}">..</span>
                     </div>
 

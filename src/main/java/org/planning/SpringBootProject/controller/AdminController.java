@@ -3,6 +3,9 @@ package org.planning.SpringBootProject.controller;
 import java.util.List;
 
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.planning.SpringBootProject.dao.OrderDAO;
 import org.planning.SpringBootProject.dao.ProductDAO;
@@ -56,8 +59,11 @@ public class AdminController {
 
     // GET: Hiển thị trang login
     @RequestMapping(value = { "/admin/login" }, method = RequestMethod.GET)
-    public String login(Model model) {
+    public String login(Model model, HttpServletRequest request, HttpSession session) {
         System.out.println("login");
+
+        model.addAttribute("session", session);
+        model.addAttribute("request", request);
         return "login";
     }
 

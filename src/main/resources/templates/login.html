@@ -10,7 +10,7 @@
 <body>
 <th:block th:include="/_header"></th:block>
 
-   <!-- /login?error=true -->
+
 <!--<th:block th:if="${#session != null && #session.getAttribute('SPRING_SECURITY_LAST_EXCEPTION') != null}">-->
 <!--   <div th:if= "${#request.getParameter('error') == 'true'}"-->
 <!--        style="color: red; margin: 10px 0px;">-->
@@ -31,13 +31,13 @@
                <form method="POST" th:action="@{/j_spring_security_check}">
                   <!-- Email input -->
                   <div data-mdb-input-init class="form-outline mb-4">
-                     <input name="userName" id="form1Example13" class="form-control form-control-lg" />
+                     <input name="userName" id="form1Example13" class="form-control form-control-lg" th:required/>
                      <label class="form-label" for="form1Example13">Username *</label>
                   </div>
 
                   <!-- Password input -->
                   <div data-mdb-input-init class="form-outline mb-4">
-                     <input type="password" name="password" id="form1Example23" class="form-control form-control-lg" />
+                     <input type="password" name="password" id="form1Example23" class="form-control form-control-lg" th:required/>
                      <label class="form-label" for="form1Example23">Password *</label>
                   </div>
 

@@ -39,9 +39,9 @@
                        title="Thêm vào giỏ hàng">
                         <i class="fas fa-shopping-cart"></i>
                     </a>
-                    <a class="btn btn-info trash-button" title="Thông tin chi tiết">
-                        <i class="fas fa-eye"></i>
-                    </a>
+<!--                    <a class="btn btn-info trash-button" title="Thông tin chi tiết">-->
+<!--                        <i class="fas fa-eye"></i>-->
+<!--                    </a>-->
                     <th:block sec:authorize="hasRole('ROLE_MANAGER')">
                         <a th:href="@{|/admin/product?code=${prodInfo.code}|}" class="btn btn-warning trash-button"
                            title="Chỉnh sửa">

@@ -9,7 +9,7 @@
         <ul class="navbar-nav ml-auto">
             <li class="nav-item"><a class="nav-link" th:href="@{/productList}">PRODUCT LIST</a></li>
             <li class="nav-item"><a class="nav-link" th:href="@{/shoppingCart}">MY CART</a></li>
-            <li class="nav-item"><a class="nav-link" href="#">MANAGER</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/admin/accountInfo}">ACCOUNT</a></li>
             <th:block sec:authorize="hasAnyRole('ROLE_MANAGER','ROLE_EMPLOYEE')">
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/admin/orderList}">

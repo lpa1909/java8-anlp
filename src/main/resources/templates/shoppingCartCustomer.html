@@ -109,24 +109,24 @@
 
                     <div class="col-md-12">
                         <input th:field="*{name}" class="form-control" type="text" name="name"
-                               placeholder="Full Name" required>
+                               placeholder="Full Name" th:required>
                     </div>
 
                     <div class="col-md-12">
                         <input th:field="*{email}" class="form-control" type="email" name="email"
-                               placeholder="E-mail Address" required>
+                               placeholder="E-mail Address" th:required>
                     </div>
 
                     <div class="col-md-12">
                         <input th:field="*{phone}" class="form-control" type="text" name="phone"
                                placeholder="Phone"
-                               required>
+                               th:required pattern="[0-9]{10}">
                     </div>
 
 
                     <div class="col-md-12">
                         <input th:field="*{address}" class="form-control" type="text" name="address"
-                               placeholder="Address" required>
+                               placeholder="Address" th:required>
                     </div>
 
                     <div class="form-button mt-3">
