@@ -76,6 +76,7 @@ public class MainController {
     public String home(Model model, @RequestParam(value = "page", defaultValue = "1") String pageStr) {
         model.addAttribute("mess", "check data");
         List<Product> products = productDAO.getAllProducts();
+//        for(Product p : products) System.out.println(p.getImage() );
         model.addAttribute("products", products);
         return "index";
     }
@@ -264,7 +265,7 @@ public class MainController {
         if (code != null) {
             product = this.productDAO.findProduct(code);
         }
-        if (product != null && product .getImage() != null) {
+        if (product != null && product.getImage() != null) {
             response.setContentType("image/jpeg,image/jpg,image/png,image/gif");
             response.getOutputStream().write(product.getImage());
         }

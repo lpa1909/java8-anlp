@@ -97,7 +97,7 @@ public class ProductDAO {
             byte[] image = null;
             try {
                 image = productForm.getFileData().getBytes();
-            } catch (IOException e) {
+            }catch (IOException e) {
             }
             if (image != null && image.length > 0) {
                 product.setImage(image);
