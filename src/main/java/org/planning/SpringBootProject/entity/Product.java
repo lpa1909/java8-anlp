@@ -29,6 +29,9 @@ public class Product implements Serializable {
     @Column(name = "Create_Date", nullable = false)
     private Date createDate;
 
+    @Column(name = "isDelete", nullable = false)
+    private boolean isDelete;
+
     public Product() {
     }
 
@@ -72,4 +75,11 @@ public class Product implements Serializable {
         this.image = image;
     }
 
+    public boolean isDelete() {
+        return isDelete;
+    }
+
+    public void setDelete(boolean delete) {
+        isDelete = delete;
+    }
 }

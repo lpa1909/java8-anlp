@@ -61,14 +61,37 @@ public class ProductDAO {
 
     public List<Product> getAllProducts() {
         try {
-
-            String sql = "Select e from " + Product.class.getName() + " e";
+            String sql = "Select e from " + Product.class.getName() + " e where e.isDelete = true";
 
             Session session = this.sessionFactory.getCurrentSession();
             Query<Product> query = session.createQuery(sql, Product.class);
             return query.getResultList();
         } catch (NoResultException e) {
             return null;
+        }
+    }
+
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
+    public void deleteProduct(String code) {
+        try {
+            Session session = this.sessionFactory.getCurrentSession();
+
+            String hql = "FROM Product p WHERE p.code = :code";
+            Query query = session.createQuery(hql);
+            query.setParameter("code", code);
+            Product product = (Product) query.getSingleResult();
+
+            // Nếu sản phẩm tồn tại, cập nhật isDelete thành false
+            if (product != null) {
+                product.setDelete(false);
+            } else {
+
+                throw new NoResultException("Không tìm thấy sản phẩm với mã " + code);
+            }
+        } catch (NoResultException e) {
+            e.printStackTrace();
+
         }
     }
 
@@ -104,6 +127,7 @@ public class ProductDAO {
             }
         }
         if (isNew) {
+            product.setDelete(true);
             session.persist(product);
         }
         // Nếu có lỗi tại DB, ngoại lệ sẽ ném ra ngay lập tức
@@ -113,7 +137,7 @@ public class ProductDAO {
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
     public Paging<ProductInfo> queryProducts(int page, int maxResult, int maxNavigationPage, String likeName) {
 
-        String sql = "SELECT * FROM products WHERE name LIKE ? LIMIT ? OFFSET ?";
+        String sql = "SELECT * FROM products WHERE name LIKE ? AND isDelete = true LIMIT ? OFFSET ?";
 
         try (Connection connection = dataSource.getConnection(); // Get connection from your DataSource
              PreparedStatement statement = connection.prepareStatement(sql)) {

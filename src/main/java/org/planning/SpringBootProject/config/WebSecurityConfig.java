@@ -48,7 +48,7 @@ public class WebSecurityConfig {
                         .permitAll() // Cho phép truy cập mà không cần xác thực
                         .requestMatchers("/admin/orderList", "/admin/order", "/admin/accountInfo")
                         .hasAnyRole("EMPLOYEE", "MANAGER")
-                        .requestMatchers("/admin/product")
+                        .requestMatchers("/admin/product", "/admin/deleteProduct")
                         .hasRole("MANAGER")
                         .anyRequest().authenticated())
                 .exceptionHandling(e -> e.accessDeniedPage("/403"))

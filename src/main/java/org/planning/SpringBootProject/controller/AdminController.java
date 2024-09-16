@@ -7,17 +7,23 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.planning.SpringBootProject.config.WebSecurityConfig;
+import org.planning.SpringBootProject.dao.AccountDAO;
 import org.planning.SpringBootProject.dao.OrderDAO;
 import org.planning.SpringBootProject.dao.ProductDAO;
+import org.planning.SpringBootProject.entity.Account;
 import org.planning.SpringBootProject.entity.Product;
 import org.planning.SpringBootProject.form.ProductForm;
 import org.planning.SpringBootProject.model.OrderDetailInfo;
 import org.planning.SpringBootProject.model.OrderInfo;
+import org.planning.SpringBootProject.model.ProductInfo;
 import org.planning.SpringBootProject.pagination.PaginationResult;
+import org.planning.SpringBootProject.pagination.Paging;
 import org.planning.SpringBootProject.validator.ProductFormValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -43,6 +49,11 @@ public class AdminController {
 
     @Autowired
     private ProductFormValidator productFormValidator;
+    @Autowired
+    private AccountDAO accountDAO;
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     @InitBinder
     public void myInitBinder(WebDataBinder dataBinder) {
@@ -58,7 +69,7 @@ public class AdminController {
     }
 
     // GET: Hiển thị trang login
-    @RequestMapping(value = { "/admin/login" }, method = RequestMethod.GET)
+    @RequestMapping(value = {"/admin/login"}, method = RequestMethod.GET)
     public String login(Model model, HttpServletRequest request, HttpSession session) {
         System.out.println("login");
         System.out.println("session : " + session);
@@ -67,7 +78,7 @@ public class AdminController {
         return "login";
     }
 
-    @RequestMapping(value = { "/admin/accountInfo" }, method = RequestMethod.GET)
+    @RequestMapping(value = {"/admin/accountInfo"}, method = RequestMethod.GET)
     public String accountInfo(Model model) {
 
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -79,7 +90,33 @@ public class AdminController {
         return "accountInfo";
     }
 
-    @RequestMapping(value = { "/admin/orderList" }, method = RequestMethod.GET)
+    @RequestMapping(value = {"/admin/changePassword"}, method = RequestMethod.GET)
+    public String changePassword(Model model, @RequestParam(value = "userName") String userName,
+                                 @RequestParam(value = "currentPassword") String currentPassword,
+                                 @RequestParam(value = "newPassword") String newPassword,
+                                 @RequestParam(value = "confirmPassword") String confirmPassword) {
+        String encodedCurrentPassword = passwordEncoder.encode(currentPassword);
+        System.out.println(encodedCurrentPassword);
+        Account a = accountDAO.findAccount(userName);
+        if (a.getEncrytedPassword().equals(currentPassword)) {
+            if (newPassword.equals(confirmPassword)) {
+                String encodedConfirmPassword = passwordEncoder.encode(confirmPassword);
+                accountDAO.changePassword(userName, encodedConfirmPassword);
+                model.addAttribute("mess", "Change password successfully");
+            }
+            else{
+                model.addAttribute("errorMessage", "New password not match confirmation password");
+            }
+        }else{
+            model.addAttribute("errorMessage", "Current password not match");
+        }
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        model.addAttribute("name", userDetails.getUsername());
+        model.addAttribute("userDetails", userDetails);
+        return "accountInfo";
+    }
+
+    @RequestMapping(value = {"/admin/orderList"}, method = RequestMethod.GET)
     public String orderList(Model model, //
                             @RequestParam(value = "page", defaultValue = "1") String pageStr) {
         int page = 1;
@@ -98,7 +135,7 @@ public class AdminController {
     }
 
     // GET: Hiển thị product
-    @RequestMapping(value = { "/admin/product" }, method = RequestMethod.GET)
+    @RequestMapping(value = {"/admin/product"}, method = RequestMethod.GET)
     public String product(Model model, @RequestParam(value = "code", defaultValue = "") String code) {
         ProductForm productForm = null;
 
@@ -117,7 +154,7 @@ public class AdminController {
     }
 
     // POST: Save product
-    @RequestMapping(value = { "/admin/product" }, method = RequestMethod.POST)
+    @RequestMapping(value = {"/admin/product"}, method = RequestMethod.POST)
     public String productSave(Model model, //
                               @ModelAttribute("productForm") @Validated ProductForm productForm, //
                               BindingResult result, //
@@ -139,7 +176,7 @@ public class AdminController {
         return "redirect:/productList";
     }
 
-    @RequestMapping(value = { "/admin/order" }, method = RequestMethod.GET)
+    @RequestMapping(value = {"/admin/order"}, method = RequestMethod.GET)
     public String orderView(Model model, @RequestParam("orderId") String orderId) {
         OrderInfo orderInfo = null;
         if (orderId != null) {
@@ -156,4 +193,21 @@ public class AdminController {
         return "order";
     }
 
+    @RequestMapping(value = {"admin/deleteProduct"}, method = RequestMethod.GET)
+    public String handleDeleteProduct(Model model, @RequestParam("code") String code, @RequestParam(value = "name", defaultValue = "") String likeName,
+                                      @RequestParam(value = "page", defaultValue = "1") int page) {
+        productDAO.deleteProduct(code);
+
+        final int maxResult = 6;
+        final int maxNavigationPage = 10;
+
+        Paging<ProductInfo> result = productDAO.queryProducts(page, maxResult, maxNavigationPage, likeName);
+
+        model.addAttribute("totalPages", result.getTotalPages());
+        model.addAttribute("currentPage", result.getCurrentPage());
+        model.addAttribute("likeName", likeName);
+        model.addAttribute("paginationProducts", result.getData());
+        return "productList";
+
+    }
 }

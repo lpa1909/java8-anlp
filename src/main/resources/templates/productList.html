@@ -47,9 +47,9 @@
                            title="Chỉnh sửa">
                             <i class="fas fa-pencil"></i>
                         </a>
-<!--                        <a class="btn btn-danger trash-button" title="Xóa">-->
-<!--                            <i class="fas fa-trash"></i>-->
-<!--                        </a>-->
+                        <a th:href="@{|/admin/deleteProduct?code=${prodInfo.code}|}" class="btn btn-danger trash-button" title="Xóa">
+                            <i class="fas fa-trash"></i>
+                        </a>
                     </th:block>
                 </div>
             </div>

@@ -98,6 +98,8 @@ public class MainController {
         return "productList";
     }
 
+    // Xóa sản phẩm
+
     @RequestMapping({"/buyProduct"})
     public String listProductHandler(HttpServletRequest request, Model model, //
                                      @RequestParam(value = "code", defaultValue = "") String code) {
