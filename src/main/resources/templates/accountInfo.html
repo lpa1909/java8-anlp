@@ -78,7 +78,8 @@
                                 <i class="fa fa-pencil"
                                    aria-hidden="true"></i> Change Password
                             </button>
-                            <p th:text="${mess}"></p>
+                            <p style="color: green; font-weight: bold" th:text="${mess}"></p>
+                            <p style="color: red; font-weight: bold" th:text="${errorMessage}"></p>
                             <div class="d-flex justify-content-start rounded-3 p-2 mb-2 bg-body-tertiary">
                             </div>
                         </div>
@@ -97,7 +98,7 @@
             <tr>
                 <td><label for="currentPassword">Current Password:</label></td>
                 <td><input type="password" id="currentPassword" name="currentPassword"></td>
-                <p style="color: red" th:text="${errorMessage}"></p>
+
             </tr>
 
             <tr>
@@ -109,7 +110,7 @@
             <tr>
                 <td><label for="confirmPassword">Confirm Password:</label></td>
                 <td><input type="password" id="confirmPassword" name="confirmPassword"></td>
-                <p style="color: red" th:text="${errorMessage}"></p>
+
             </tr>
         </table>
         <br/>

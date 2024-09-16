@@ -95,10 +95,9 @@ public class AdminController {
                                  @RequestParam(value = "currentPassword") String currentPassword,
                                  @RequestParam(value = "newPassword") String newPassword,
                                  @RequestParam(value = "confirmPassword") String confirmPassword) {
-        String encodedCurrentPassword = passwordEncoder.encode(currentPassword);
-        System.out.println(encodedCurrentPassword);
         Account a = accountDAO.findAccount(userName);
-        if (a.getEncrytedPassword().equals(currentPassword)) {
+        System.out.println(a.getEncrytedPassword());
+        if (passwordEncoder.matches(currentPassword, a.getEncrytedPassword())) {
             if (newPassword.equals(confirmPassword)) {
                 String encodedConfirmPassword = passwordEncoder.encode(confirmPassword);
                 accountDAO.changePassword(userName, encodedConfirmPassword);
