@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.planning.SpringBootProject.dao.AccountDAO;
 import org.planning.SpringBootProject.entity.Account;
+import org.planning.SpringBootProject.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -20,10 +21,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
     private AccountDAO accountDAO;
+    @Autowired
+    private AccountRepository accountRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Account account = accountDAO.findAccount(username);
+        Account account = accountRepository.findByUsername(username);
         System.out.println("Account= " + account.getUserRole());
 
         if (account == null) {

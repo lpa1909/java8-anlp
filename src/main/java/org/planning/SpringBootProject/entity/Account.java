@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.Date;
 
 @Entity
 @Table(name = "ACCOUNTS")
@@ -21,6 +22,14 @@ public class Account implements Serializable {
     private boolean active;
     @Column(name = "User_Role", length = 20, nullable = false)
     private String userRole;
+//    @Column(name = "createAt", length = 20)
+//    private Date createdAt;
+//    @Column(name = "updateAt", length = 20)
+//    private Date updatedAt;
+//    @Column(name = "deleteAt", length = 20)
+//    private Date deletedAt;
+//    @Column(name = "isDelete", length = 1, nullable = false)
+//    private boolean isDelete;
 
     public String getUserName() {
         return userName;
@@ -53,6 +62,38 @@ public class Account implements Serializable {
     public void setUserRole(String userRole) {
         this.userRole = userRole;
     }
+
+//    public Date getCreatedAt() {
+//        return createdAt;
+//    }
+//
+//    public void setCreatedAt(Date createdAt) {
+//        this.createdAt = createdAt;
+//    }
+//
+//    public Date getDeletedAt() {
+//        return deletedAt;
+//    }
+//
+//    public void setDeletedAt(Date deletedAt) {
+//        this.deletedAt = deletedAt;
+//    }
+//
+//    public boolean isDelete() {
+//        return isDelete;
+//    }
+//
+//    public void setDelete(boolean delete) {
+//        isDelete = delete;
+//    }
+//
+//    public Date getUpdatedAt() {
+//        return updatedAt;
+//    }
+//
+//    public void setUpdatedAt(Date updatedAt) {
+//        this.updatedAt = updatedAt;
+//    }
 
     @Override
     public String toString() {

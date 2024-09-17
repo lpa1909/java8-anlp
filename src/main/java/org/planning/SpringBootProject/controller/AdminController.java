@@ -19,6 +19,8 @@ import org.planning.SpringBootProject.model.OrderInfo;
 import org.planning.SpringBootProject.model.ProductInfo;
 import org.planning.SpringBootProject.pagination.PaginationResult;
 import org.planning.SpringBootProject.pagination.Paging;
+import org.planning.SpringBootProject.repository.AccountRepository;
+import org.planning.SpringBootProject.repository.ProductRepository;
 import org.planning.SpringBootProject.validator.ProductFormValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -55,6 +57,12 @@ public class AdminController {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
+    @Autowired
+    private AccountRepository accountRepository;
+
+    @Autowired
+    private ProductRepository productRepository;
+
     @InitBinder
     public void myInitBinder(WebDataBinder dataBinder) {
         Object target = dataBinder.getTarget();
@@ -71,6 +79,8 @@ public class AdminController {
     // GET: Hiển thị trang login
     @RequestMapping(value = {"/admin/login"}, method = RequestMethod.GET)
     public String login(Model model, HttpServletRequest request, HttpSession session) {
+        List<Product> list = productDAO.findProductByName("Air Jordan ");
+        System.out.println(list.size());
         model.addAttribute("session", session);
         model.addAttribute("request", request);
         return "login";
@@ -93,12 +103,12 @@ public class AdminController {
                                  @RequestParam(value = "currentPassword") String currentPassword,
                                  @RequestParam(value = "newPassword") String newPassword,
                                  @RequestParam(value = "confirmPassword") String confirmPassword) {
-        Account a = accountDAO.findAccount(userName);
+        Account a = accountRepository.findByUsername(userName);
         System.out.println(a.getEncrytedPassword());
         if (passwordEncoder.matches(currentPassword, a.getEncrytedPassword())) {
             if (newPassword.equals(confirmPassword)) {
                 String encodedConfirmPassword = passwordEncoder.encode(confirmPassword);
-                accountDAO.changePassword(userName, encodedConfirmPassword);
+                accountRepository.changePasswordAccount(encodedConfirmPassword, userName);
                 model.addAttribute("mess", "Change password successfully");
             }
             else{
@@ -193,7 +203,9 @@ public class AdminController {
     @RequestMapping(value = {"admin/deleteProduct"}, method = RequestMethod.GET)
     public String handleDeleteProduct(Model model, @RequestParam("code") String code, @RequestParam(value = "name", defaultValue = "") String likeName,
                                       @RequestParam(value = "page", defaultValue = "1") int page) {
-        productDAO.deleteProduct(code);
+//        productDAO.deleteProduct(code);
+
+        productRepository.softDeleteProduct(code);
 
         final int maxResult = 6;
         final int maxNavigationPage = 10;

@@ -5,6 +5,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.planning.SpringBootProject.entity.Account;
+import org.planning.SpringBootProject.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Repository;
@@ -16,11 +17,13 @@ public class AccountDAO {
 
     @Autowired
     private SessionFactory sessionFactory;
+    @Autowired
+    private AccountRepository accountRepository;
 
-    public Account findAccount(String username) {
-        Session session = this.sessionFactory.getCurrentSession();
-        return session.find(Account.class, username);
-    }
+//    public Account findAccount(String username) {
+//        Session session = this.sessionFactory.getCurrentSession();
+//        return session.find(Account.class, username);
+//    }
 
     public void changePassword(String userName, String newEncryptedPassword) {
         try {

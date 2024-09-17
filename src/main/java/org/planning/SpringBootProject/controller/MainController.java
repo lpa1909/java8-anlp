@@ -18,6 +18,7 @@ import org.planning.SpringBootProject.model.OrderInfo;
 import org.planning.SpringBootProject.model.ProductInfo;
 import org.planning.SpringBootProject.pagination.PaginationResult;
 import org.planning.SpringBootProject.pagination.Paging;
+import org.planning.SpringBootProject.repository.ProductRepository;
 import org.planning.SpringBootProject.util.Utils;
 import org.planning.SpringBootProject.validator.CustomerFormValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,9 @@ public class MainController {
 
     @Autowired
     private CustomerFormValidator customerFormValidator;
+
+    @Autowired
+    private ProductRepository productRepository;
 
     @InitBinder
     public void myInitBinder(WebDataBinder dataBinder) {
@@ -75,8 +79,7 @@ public class MainController {
     @RequestMapping("/")
     public String home(Model model, @RequestParam(value = "page", defaultValue = "1") String pageStr) {
         model.addAttribute("mess", "check data");
-        List<Product> products = productDAO.getAllProducts();
-//        for(Product p : products) System.out.println(p.getImage() );
+        List<Product> products = productRepository.getAllProducts();
         model.addAttribute("products", products);
         return "index";
     }
