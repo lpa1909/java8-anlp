@@ -4,10 +4,12 @@ import java.io.Serializable;
 import java.util.Date;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 @Entity
 @Table(name = "Orders", //
         uniqueConstraints = { @UniqueConstraint(columnNames = "Order_Num") })
+@Data
 public class Order implements Serializable {
 
     private static final long serialVersionUID = -2576670215015463100L;

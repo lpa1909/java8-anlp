@@ -1,10 +1,13 @@
 package org.planning.SpringBootProject.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
+
 import java.io.Serializable;
 
 @Entity
 @Table(name = "ACCOUNTS")
+@Data
 public class Account implements Serializable {
     private static final long serialVersionUID = -2054386655979281969L;
     public static final String ROLE_MANAGER = "MANAGER";

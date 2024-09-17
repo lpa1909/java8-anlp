@@ -1,5 +1,8 @@
 package org.planning.SpringBootProject.repository;
 
-public interface ProductRepository {
+import org.planning.SpringBootProject.entity.Product;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ProductRepository extends JpaRepository<Product, String> {
 
 }

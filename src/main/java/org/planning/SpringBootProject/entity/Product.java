@@ -4,9 +4,11 @@ import java.io.Serializable;
 import java.util.Date;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 @Entity
 @Table(name = "products")
+@Data
 public class Product implements Serializable {
 
     private static final long serialVersionUID = -1000119078147252957L;

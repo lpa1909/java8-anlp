@@ -22,6 +22,7 @@ import org.planning.SpringBootProject.form.ProductForm;
 import org.planning.SpringBootProject.model.ProductInfo;
 import org.planning.SpringBootProject.pagination.PaginationResult;
 import org.planning.SpringBootProject.pagination.Paging;
+import org.planning.SpringBootProject.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
@@ -37,6 +38,12 @@ public class ProductDAO {
     private SessionFactory sessionFactory;
     @Autowired
     private DataSource dataSource;
+    @Autowired
+    private ProductRepository productRepository;
+
+    public List<Product> getAll(){
+         return productRepository.findAll();
+    }
 
     public Product findProduct(String code) {
         try {

@@ -3,9 +3,11 @@ package org.planning.SpringBootProject.entity;
 import java.io.Serializable;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 @Entity
 @Table(name = "Order_Details")
+@Data
 public class OrderDetail implements Serializable {
 
     private static final long serialVersionUID = 7550745928843183535L;

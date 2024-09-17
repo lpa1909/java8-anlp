@@ -71,8 +71,6 @@ public class AdminController {
     // GET: Hiển thị trang login
     @RequestMapping(value = {"/admin/login"}, method = RequestMethod.GET)
     public String login(Model model, HttpServletRequest request, HttpSession session) {
-        System.out.println("login");
-        System.out.println("session : " + session);
         model.addAttribute("session", session);
         model.addAttribute("request", request);
         return "login";
