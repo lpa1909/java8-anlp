@@ -10,18 +10,20 @@ import org.planning.SpringBootProject.dao.AccountDAO;
 import org.planning.SpringBootProject.dao.OrderDAO;
 import org.planning.SpringBootProject.dao.ProductDAO;
 import org.planning.SpringBootProject.entity.Account;
+import org.planning.SpringBootProject.entity.Order;
 import org.planning.SpringBootProject.entity.Product;
 import org.planning.SpringBootProject.form.CustomerForm;
-import org.planning.SpringBootProject.model.CartInfo;
-import org.planning.SpringBootProject.model.CustomerInfo;
-import org.planning.SpringBootProject.model.OrderInfo;
-import org.planning.SpringBootProject.model.ProductInfo;
+import org.planning.SpringBootProject.model.*;
 import org.planning.SpringBootProject.pagination.PaginationResult;
 import org.planning.SpringBootProject.pagination.Paging;
+import org.planning.SpringBootProject.repository.OrderRepository;
 import org.planning.SpringBootProject.repository.ProductRepository;
 import org.planning.SpringBootProject.util.Utils;
 import org.planning.SpringBootProject.validator.CustomerFormValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -48,6 +50,9 @@ public class MainController {
 
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private OrderRepository orderRepository;
 
     @InitBinder
     public void myInitBinder(WebDataBinder dataBinder) {
@@ -109,7 +114,7 @@ public class MainController {
 
         Product product = null;
         if (code != null && code.length() > 0) {
-            product = productDAO.findProduct(code);
+            product = productRepository.findProduct(code);
         }
         if (product != null) {
 
@@ -128,7 +133,7 @@ public class MainController {
                                        @RequestParam(value = "code", defaultValue = "") String code) {
         Product product = null;
         if (code != null && code.length() > 0) {
-            product = productDAO.findProduct(code);
+            product = productRepository.findProduct(code);
         }
         if (product != null) {
 
@@ -167,7 +172,6 @@ public class MainController {
     // GET: Nhập thông tin khách hàng.
     @RequestMapping(value = {"/shoppingCartCustomer"}, method = RequestMethod.GET)
     public String shoppingCartCustomerForm(HttpServletRequest request, Model model) {
-
         CartInfo cartInfo = Utils.getCartInSession(request);
 
         if (cartInfo.isEmpty()) {
@@ -268,7 +272,7 @@ public class MainController {
                              @RequestParam("code") String code) throws IOException {
         Product product = null;
         if (code != null) {
-            product = this.productDAO.findProduct(code);
+            product = this.productRepository.findProduct(code);
         }
         if (product != null && product.getImage() != null) {
             response.setContentType("image/jpeg,image/jpg,image/png,image/gif");
@@ -277,4 +281,45 @@ public class MainController {
         response.getOutputStream().close();
     }
 
+
+    @RequestMapping(value = {"/user/orderList"}, method = RequestMethod.GET)
+    public String listOrderByUser(@RequestParam(name = "userId") String userId, Model model, //
+                                  @RequestParam(value = "page", defaultValue = "1") String pageStr){
+        int page = 1;
+        try {
+            page = Integer.parseInt(pageStr);
+        } catch (Exception e) {
+        }
+        final int MAX_RESULT = 5;
+        final int MAX_NAVIGATION_PAGE = 10;
+
+        PaginationResult<OrderInfo> paginationResult = orderDAO.listOrderInfoByUser(userId, page, MAX_RESULT, MAX_NAVIGATION_PAGE);
+
+        model.addAttribute("paginationResult", paginationResult);
+        return "orderList";
+    }
+
+    @RequestMapping(value = {"/user/order"}, method = RequestMethod.GET)
+    public String orderView(Model model, @RequestParam("orderId") String orderId) {
+        OrderInfo orderInfo = null;
+        if (orderId != null) {
+            orderInfo = this.orderDAO.getOrderInfo(orderId);
+        }
+        if (orderInfo == null) {
+            return "redirect:/admin/orderList";
+        }
+        List<OrderDetailInfo> details = this.orderDAO.listOrderDetailInfos(orderId);
+        orderInfo.setDetails(details);
+
+        model.addAttribute("orderInfo", orderInfo);
+
+        return "order";
+    }
+
+    @RequestMapping(value = {"/search"}, method = RequestMethod.GET)
+    public String search(Model model, @RequestParam("query") String query){
+        List<Product> products = productRepository.findByNameContainingIgnoreCase(query);
+        model.addAttribute("products", products);
+        return "index";
+    }
 }

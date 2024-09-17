@@ -45,17 +45,7 @@
 <th:block th:include="/_header"></th:block>
 <!--<th:block th:include="/_menu"></th:block>-->
 
-<th:block sec:authorize="isAuthenticated()">
-    <div class="d-flex">
-        <button type="button" class="btn btn-success"
-                style="border-radius: 15px; border-color: #5f5f5f; box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.3)">
-            <i class="bi bi-person">
-                Hello
-                <a th:href="@{/admin/accountInfo}" th:text="${name}" style="text-decoration: none; color: white;">..</a>
-            </i>
-        </button>
-    </div>
-</th:block>
+
 
 <section class="w-100 px-4 py-5">
     <div class="row d-flex justify-content-center">

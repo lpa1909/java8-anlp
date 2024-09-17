@@ -11,7 +11,10 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -19,6 +22,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
+@EnableWebSecurity
 public class WebSecurityConfig {
     @Autowired
     @Lazy
@@ -41,15 +45,20 @@ public class WebSecurityConfig {
     }
 
     @Bean
+    public SessionRegistry sessionRegistry() {
+        return new SessionRegistryImpl();
+    }
+
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/admin/login", "/admin/logout", "/403")
                         .permitAll() // Cho phép truy cập mà không cần xác thực
-                        .requestMatchers("/admin/orderList", "/admin/order", "/admin/accountInfo")
+                        .requestMatchers( "/admin/accountInfo")
                         .hasAnyRole("EMPLOYEE", "MANAGER")
-                        .requestMatchers("/admin/product", "/admin/deleteProduct")
+                        .requestMatchers("/admin/order","/admin/product", "/admin/deleteProduct", "/admin/orderList")
                         .hasRole("MANAGER")
                         .anyRequest().authenticated())
                 .exceptionHandling(e -> e.accessDeniedPage("/403"))
@@ -60,6 +69,10 @@ public class WebSecurityConfig {
                         .failureUrl("/admin/login?error=true")
                         .usernameParameter("userName")
                         .passwordParameter("password"))
+                .sessionManagement(session -> session
+                        .maximumSessions(1) // Cho phép tối đa 1 phiên cho mỗi người dùng
+                        .sessionRegistry(sessionRegistry())
+                )
                 .logout(logout -> logout
                         .logoutUrl("/admin/logout")
                         .logoutSuccessUrl("/"));

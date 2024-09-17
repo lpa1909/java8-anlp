@@ -10,6 +10,8 @@ import org.planning.SpringBootProject.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.session.SessionInformation;
+import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -23,6 +25,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private AccountDAO accountDAO;
     @Autowired
     private AccountRepository accountRepository;
+    @Autowired
+    private SessionRegistry sessionRegistry;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

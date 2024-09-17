@@ -14,6 +14,7 @@ public class OrderInfo {
     private String customerAddress;
     private String customerEmail;
     private String customerPhone;
+    private String userId;
 
     private List<OrderDetailInfo> details;
 
@@ -24,7 +25,22 @@ public class OrderInfo {
     // Sử dụng cho Hibernate Query.
     public OrderInfo(String id, Date orderDate, int orderNum, //
             double amount, String customerName, String customerAddress, //
-            String customerEmail, String customerPhone) {
+            String customerEmail, String customerPhone, String userId) {
+        this.id = id;
+        this.orderDate = orderDate;
+        this.orderNum = orderNum;
+        this.amount = amount;
+
+        this.customerName = customerName;
+        this.customerAddress = customerAddress;
+        this.customerEmail = customerEmail;
+        this.customerPhone = customerPhone;
+        this.userId = userId;
+    }
+
+    public OrderInfo(String id, Date orderDate, int orderNum, //
+                     double amount, String customerName, String customerAddress, //
+                     String customerEmail, String customerPhone) {
         this.id = id;
         this.orderDate = orderDate;
         this.orderNum = orderNum;
@@ -35,6 +51,7 @@ public class OrderInfo {
         this.customerEmail = customerEmail;
         this.customerPhone = customerPhone;
     }
+
 
     public String getId() {
         return id;
@@ -108,4 +125,11 @@ public class OrderInfo {
         this.details = details;
     }
 
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 }

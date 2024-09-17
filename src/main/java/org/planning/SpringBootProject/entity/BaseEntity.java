@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 public class BaseEntity implements Serializable {
     private static final long serialVersionUID = 1842915944086730414L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id",  nullable = false, updatable = false)
     protected String id;
 

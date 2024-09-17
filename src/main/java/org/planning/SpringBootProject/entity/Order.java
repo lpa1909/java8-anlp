@@ -39,6 +39,17 @@ public class Order implements Serializable {
     @Column(name = "Customer_Phone", length = 128, nullable = false)
     private String customerPhone;
 
+    @Column(name = "userId", length = 255, nullable = false)
+    private String userId;
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
     public String getId() {
         return id;
     }

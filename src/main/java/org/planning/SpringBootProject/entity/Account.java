@@ -9,11 +9,10 @@ import java.util.Date;
 @Entity
 @Table(name = "ACCOUNTS")
 @Data
-public class Account implements Serializable {
+public class Account extends BaseEntity {
     private static final long serialVersionUID = -2054386655979281969L;
     public static final String ROLE_MANAGER = "MANAGER";
     public static final String ROLE_EMPLOYEE = "EMPLOYEE";
-    @Id
     @Column(name = "User_Name", length = 20, nullable = false)
     private String userName;
     @Column(name = "Encryted_Password", length = 128, nullable = false)

@@ -3,6 +3,7 @@ package org.planning.SpringBootProject.validator;
 import org.planning.SpringBootProject.dao.ProductDAO;
 import org.planning.SpringBootProject.entity.Product;
 import org.planning.SpringBootProject.form.ProductForm;
+import org.planning.SpringBootProject.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -14,6 +15,8 @@ public class ProductFormValidator implements Validator {
 
     @Autowired
     private ProductDAO productDAO;
+    @Autowired
+    private ProductRepository productRepository;
 
     // Validator này chỉ dùng để kiểm tra class ProductForm.
     @Override
@@ -35,7 +38,7 @@ public class ProductFormValidator implements Validator {
             if (code.matches("\\s+")) {
                 errors.rejectValue("code", "Pattern.productForm.code");
             } else if (productForm.isNewProduct()) {
-                Product product = productDAO.findProduct(code);
+                Product product = productRepository.findProduct(code);
                 if (product != null) {
                     errors.rejectValue("code", "Duplicate.productForm.code");
                 }

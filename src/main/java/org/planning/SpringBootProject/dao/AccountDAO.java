@@ -25,25 +25,25 @@ public class AccountDAO {
 //        return session.find(Account.class, username);
 //    }
 
-    public void changePassword(String userName, String newEncryptedPassword) {
-        try {
-            Session session = this.sessionFactory.getCurrentSession();
-
-
-            String hql = "UPDATE " + Account.class.getName() + " a SET a.encrytedPassword = :newPassword WHERE a.userName = :userName";
-            Query query = session.createQuery(hql);
-            query.setParameter("newPassword", newEncryptedPassword);
-            query.setParameter("userName", userName);
-
-
-            int rowsAffected = query.executeUpdate();
-            System.out.println("success");
-            if (rowsAffected == 0) {
-                throw new UsernameNotFoundException("Not found account by username " + userName);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-
-        }
-    }
+//    public void changePassword(String userName, String newEncryptedPassword) {
+//        try {
+//            Session session = this.sessionFactory.getCurrentSession();
+//
+//
+//            String hql = "UPDATE " + Account.class.getName() + " a SET a.encrytedPassword = :newPassword WHERE a.userName = :userName";
+//            Query query = session.createQuery(hql);
+//            query.setParameter("newPassword", newEncryptedPassword);
+//            query.setParameter("userName", userName);
+//
+//
+//            int rowsAffected = query.executeUpdate();
+//            System.out.println("success");
+//            if (rowsAffected == 0) {
+//                throw new UsernameNotFoundException("Not found account by username " + userName);
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//
+//        }
+//    }
 }

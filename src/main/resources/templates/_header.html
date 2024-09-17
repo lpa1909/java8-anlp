@@ -1,18 +1,35 @@
 <div xmlns:th="http://www.thymeleaf.org"
-     xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+     xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" th:href="@{/}">Nike Store</a>
-        <form class="form-inline ml-auto">
-            <input class="form-control mr-sm-2" type="search" placeholder="Search Product" aria-label="Search">
+        <a class="navbar-brand" th:href="@{/}"><i class="fa fa-shopping-bag" aria-hidden="true"></i> Nike Store</a>
+        <form class="form-inline ml-auto" th:action="@{/search}" method="GET">
+            <input class="form-control mr-sm-2" type="search" name="query" placeholder="Search Product" aria-label="Search">
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
         </form>
         <ul class="navbar-nav ml-auto">
+            <th:block sec:authorize="isAuthenticated()">
+                <li class="nav-item">
+                    <button class="btn btn-success"
+                            style="border-radius: 15px; border-color: #5f5f5f; box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, 0.3); display: flex; align-items: center; max-height: 35px;"> <!— Added flex and align-items -->
+                        <i class="bi bi-person"></i>
+                        <a class="nav-link" th:utext="${#authentication.name}" th:href="@{/admin/accountInfo}" style="margin-left: 5px;"></a> <!— Added margin for spacing -->
+                    </button>
+                </li>
+            </th:block>
+
             <li class="nav-item"><a class="nav-link" th:href="@{/productList}">PRODUCT LIST</a></li>
             <li class="nav-item"><a class="nav-link" th:href="@{/shoppingCart}">MY CART</a></li>
             <li class="nav-item"><a class="nav-link" th:href="@{/admin/accountInfo}">ACCOUNT</a></li>
-            <th:block sec:authorize="hasAnyRole('ROLE_MANAGER','ROLE_EMPLOYEE')">
+            <th:block sec:authorize="hasAnyRole('ROLE_MANAGER')">
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/admin/orderList}">
+                        View Order List By Admin
+                    </a>
+                </li>
+            </th:block>
+            <th:block sec:authorize="hasAnyRole('ROLE_EMPLOYEE')">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{|/user/orderList?userId=${session.id}|}">
                         Order List
                     </a>
                 </li>

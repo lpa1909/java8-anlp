@@ -63,6 +63,9 @@ public class AdminController {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private HttpSession session;
+
     @InitBinder
     public void myInitBinder(WebDataBinder dataBinder) {
         Object target = dataBinder.getTarget();
@@ -90,10 +93,13 @@ public class AdminController {
     public String accountInfo(Model model) {
 
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Account a = accountRepository.findByUsername(userDetails.getUsername());
+        System.out.println("id :  " + a.getId());
         System.out.println(userDetails.getPassword());
         System.out.println(userDetails.getUsername());
         System.out.println(userDetails.isEnabled());
-        model.addAttribute("name", userDetails.getUsername());
+        session.setAttribute("id", a.getId());
+        model.addAttribute("account", a);
         model.addAttribute("userDetails", userDetails);
         return "accountInfo";
     }
@@ -134,8 +140,7 @@ public class AdminController {
         final int MAX_RESULT = 5;
         final int MAX_NAVIGATION_PAGE = 10;
 
-        PaginationResult<OrderInfo> paginationResult //
-                = orderDAO.listOrderInfo(page, MAX_RESULT, MAX_NAVIGATION_PAGE);
+        PaginationResult<OrderInfo> paginationResult = orderDAO.listOrderInfo(page, MAX_RESULT, MAX_NAVIGATION_PAGE);
 
         model.addAttribute("paginationResult", paginationResult);
         return "orderList";
@@ -147,7 +152,7 @@ public class AdminController {
         ProductForm productForm = null;
 
         if (code != null && code.length() > 0) {
-            Product product = productDAO.findProduct(code);
+            Product product = productRepository.findProduct(code);
             if (product != null) {
                 productForm = new ProductForm(product);
             }

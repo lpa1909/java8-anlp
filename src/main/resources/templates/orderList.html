@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <meta charset="UTF-8">
     <title>Product List</title>
     <!--    <link rel="stylesheet" type="text/css" th:href="@{/styles.css}">-->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
         .page-title {
@@ -84,21 +85,45 @@
         <td th:utext="${orderInfo.customerEmail}"></td>
         <td style="color:red;" th:utext="${#numbers.formatDecimal(orderInfo.amount,3,2,'COMMA')}">
         </td>
-        <td><a th:href="@{|/admin/order?orderId=${orderInfo.id}|}"><i class="fa fa-eye" aria-hidden="true"></i></a></td>
+        <td>
+            <th:block sec:authorize="hasAnyRole('ROLE_MANAGER')">
+                <a th:href="@{|/admin/order?orderId=${orderInfo.id}|}"><i class="fa fa-eye" aria-hidden="true"></i></a>
+            </th:block>
+            <th:block sec:authorize="hasAnyRole('ROLE_EMPLOYEE')">
+                <a th:href="@{|/user/order?orderId=${orderInfo.id}|}"><i class="fa fa-eye" aria-hidden="true"></i></a>
+            </th:block>
+        </td>
     </tr>
 </table>
 
-<div class="page-navigator" th:if="${paginationResult.totalPages > 1}">
-    <th:block th:each="page: ${paginationResult.navigationPages}">
-        <nav aria-label="...">
-            <ul class="pagination pagination-sm">
-                <li class="page-item"><a th:if="${page != -1}" class="page-link"
-                                         th:href="@{|/admin/orderList?page=${page}|}" th:utext="${page}"></a></li>
-                <span th:if="${page == -1}" class="nav-item"> ... </span>
-            </ul>
-        </nav>
-    </th:block>
-</div>
+
+<th:block sec:authorize="hasAnyRole('ROLE_EMPLOYEE')">
+    <div class="page-navigator" th:if="${paginationResult.totalPages > 1}">
+        <th:block th:each="page: ${paginationResult.navigationPages}">
+            <nav aria-label="...">
+                <ul class="pagination pagination-sm">
+                    <li class="page-item"><a th:if="${page != -1}" class="page-link"
+                                             th:href="@{|/user/orderList?page=${page}&userId=${session.id}|}"
+                                             th:utext="${page}"></a></li>
+                    <span th:if="${page == -1}" class="nav-item"> ... </span>
+                </ul>
+            </nav>
+        </th:block>
+    </div>
+</th:block>
+<th:block sec:authorize="hasRole('ROLE_MANAGER')">
+    <div class="page-navigator" th:if="${paginationResult.totalPages > 1}">
+        <th:block th:each="page: ${paginationResult.navigationPages}">
+            <nav aria-label="...">
+                <ul class="pagination pagination-sm">
+                    <li class="page-item"><a th:if="${page != -1}" class="page-link"
+                                             th:href="@{|/admin/orderList?page=${page}|}" th:utext="${page}"></a></li>
+                    <span th:if="${page == -1}" class="nav-item"> ... </span>
+                </ul>
+            </nav>
+        </th:block>
+    </div>
+</th:block>
 <!--<th:block th:include="/_footer"></th:block>-->
 </body>
 </html>

@@ -16,6 +16,8 @@ import org.planning.SpringBootProject.model.CustomerInfo;
 import org.planning.SpringBootProject.model.OrderDetailInfo;
 import org.planning.SpringBootProject.model.OrderInfo;
 import org.planning.SpringBootProject.pagination.PaginationResult;
+import org.planning.SpringBootProject.repository.OrderRepository;
+import org.planning.SpringBootProject.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,22 +32,28 @@ public class OrderDAO {
     @Autowired
     private ProductDAO productDAO;
 
-    private int getMaxOrderNum() {
-        String sql = "Select max(o.orderNum) from " + Order.class.getName() + " o ";
-        Session session = this.sessionFactory.getCurrentSession();
-        Query<Integer> query = session.createQuery(sql, Integer.class);
-        Integer value = (Integer) query.getSingleResult();
-        if (value == null) {
-            return 0;
-        }
-        return value;
-    }
+    @Autowired
+    private ProductRepository productRepository;
+
+    @Autowired
+    private OrderRepository orderRepository;
+
+//    private int getMaxOrderNum() {
+//        String sql = "Select max(o.orderNum) from " + Order.class.getName() + " o ";
+//        Session session = this.sessionFactory.getCurrentSession();
+//        Query<Integer> query = session.createQuery(sql, Integer.class);
+//        Integer value = (Integer) query.getSingleResult();
+//        if (value == null) {
+//            return 0;
+//        }
+//        return value;
+//    }
 
     @Transactional(noRollbackFor = Exception.class)
     public void saveOrder(CartInfo cartInfo) {
         Session session = this.sessionFactory.getCurrentSession();
 
-        int orderNum = this.getMaxOrderNum() + 1;
+        int orderNum = this.orderRepository.getOrderMaxNum() + 1;
         Order order = new Order();
 
         order.setId(UUID.randomUUID().toString());
@@ -72,7 +80,7 @@ public class OrderDAO {
             detail.setQuanity(line.getQuantity());
 
             String code = line.getProductInfo().getCode();
-            Product product = this.productDAO.findProduct(code);
+            Product product = this.productRepository.findProduct(code);
             detail.setProduct(product);
 
             session.persist(detail);
@@ -94,6 +102,20 @@ public class OrderDAO {
 
         Session session = this.sessionFactory.getCurrentSession();
         Query<OrderInfo> query = session.createQuery(sql, OrderInfo.class);
+        return new PaginationResult<OrderInfo>(query, page, maxResult, maxNavigationPage);
+    }
+
+    public PaginationResult<OrderInfo> listOrderInfoByUser(String userId,int page, int maxResult, int maxNavigationPage) {
+        String sql = "SELECT new " + OrderInfo.class.getName()
+                + "(ord.id, ord.orderDate, ord.orderNum, ord.amount, "
+                + " ord.customerName, ord.customerAddress, ord.customerEmail, ord.customerPhone) " + " from "
+                + Order.class.getName() + " ord "
+                + " WHERE ord.userId = :userId"
+                + " order by ord.orderNum desc";
+
+        Session session = this.sessionFactory.getCurrentSession();
+        Query<OrderInfo> query = session.createQuery(sql, OrderInfo.class);
+        query.setParameter("userId", userId);
         return new PaginationResult<OrderInfo>(query, page, maxResult, maxNavigationPage);
     }
 
