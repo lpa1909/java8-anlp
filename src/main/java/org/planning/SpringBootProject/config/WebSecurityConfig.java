@@ -54,7 +54,7 @@ public class WebSecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/admin/login", "/admin/logout", "/403")
+                        .requestMatchers("/admin/login", "/admin/logout", "/403", "/signup")
                         .permitAll() // Cho phép truy cập mà không cần xác thực
                         .requestMatchers( "/admin/accountInfo")
                         .hasAnyRole("EMPLOYEE", "MANAGER")
@@ -65,7 +65,7 @@ public class WebSecurityConfig {
                 .formLogin(login -> login
                         .loginProcessingUrl("/j_spring_security_check")
                         .loginPage("/admin/login")
-                        .defaultSuccessUrl("/admin/accountInfo")
+                        .defaultSuccessUrl("/admin/accountInfo", true)
                         .failureUrl("/admin/login?error=true")
                         .usernameParameter("userName")
                         .passwordParameter("password"))

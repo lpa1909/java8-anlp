@@ -21,14 +21,45 @@ public class Account extends BaseEntity {
     private boolean active;
     @Column(name = "User_Role", length = 20, nullable = false)
     private String userRole;
+    @Column(name = "Gmail", length = 255)
+    private String gmail;
+    @Column(name = "Full_Name", length = 255)
+    private String fullName;
+    @Column(name = "Phone_Number", length = 255)
+    private String phoneNumber;
 //    @Column(name = "createAt", length = 20)
 //    private Date createdAt;
 //    @Column(name = "updateAt", length = 20)
 //    private Date updatedAt;
 //    @Column(name = "deleteAt", length = 20)
-//    private Date deletedAt;
+//    private Date deletedAtw;
 //    @Column(name = "isDelete", length = 1, nullable = false)
 //    private boolean isDelete;
+
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public String getGmail() {
+        return gmail;
+    }
+
+    public void setGmail(String gmail) {
+        this.gmail = gmail;
+    }
 
     public String getUserName() {
         return userName;

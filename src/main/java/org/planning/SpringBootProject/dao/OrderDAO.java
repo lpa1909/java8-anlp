@@ -50,7 +50,7 @@ public class OrderDAO {
 //    }
 
     @Transactional(noRollbackFor = Exception.class)
-    public void saveOrder(CartInfo cartInfo) {
+    public void saveOrder(CartInfo cartInfo, String userId) {
         Session session = this.sessionFactory.getCurrentSession();
 
         int orderNum = this.orderRepository.getOrderMaxNum() + 1;
@@ -66,6 +66,7 @@ public class OrderDAO {
         order.setCustomerEmail(customerInfo.getEmail());
         order.setCustomerPhone(customerInfo.getPhone());
         order.setCustomerAddress(customerInfo.getAddress());
+        order.setUserId(userId);
 
         session.persist(order);
 

@@ -34,5 +34,7 @@ public interface ProductRepository extends JpaRepository<Product, String> {
     @Query(value = "Select e from Product e Where e.code =:code")
     Product findProduct(String code);
 
+    boolean existsByCode(String code);
+
     List<Product> findByNameContainingIgnoreCase(String keyword);
 }

@@ -87,21 +87,21 @@
         <table>
             <tr>
                 <td><label for="currentPassword">Current Password:</label></td>
-                <td><input type="password" id="currentPassword" name="currentPassword"></td>
+                <td><input type="password" id="currentPassword" name="currentPassword" required ></td>
 
             </tr>
 
             <tr>
                 <td><label for="newPassword">New Password:</label></td>
-                <td><input type="password" id="newPassword" name="newPassword"></td>
+                <td><input type="password" id="newPassword" name="newPassword" required pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"></td>
 
             </tr>
 
             <tr>
                 <td><label for="confirmPassword">Confirm Password:</label></td>
-                <td><input type="password" id="confirmPassword" name="confirmPassword"></td>
+                <td><input type="password" id="confirmPassword" name="confirmPassword" required pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"></td>
 
-            </tr>
+            </tr>`
         </table>
         <br/>
         <button type="submit" class="btn-event btn btn-primary"><i class="fa fa-paper-plane" aria-hidden="true"></i>

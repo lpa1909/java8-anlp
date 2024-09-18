@@ -21,6 +21,7 @@ import org.planning.SpringBootProject.pagination.PaginationResult;
 import org.planning.SpringBootProject.pagination.Paging;
 import org.planning.SpringBootProject.repository.AccountRepository;
 import org.planning.SpringBootProject.repository.ProductRepository;
+import org.planning.SpringBootProject.validator.PasswordValidator;
 import org.planning.SpringBootProject.validator.ProductFormValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -98,6 +99,7 @@ public class AdminController {
         System.out.println(userDetails.getPassword());
         System.out.println(userDetails.getUsername());
         System.out.println(userDetails.isEnabled());
+        model.addAttribute("name", userDetails.getUsername());
         session.setAttribute("id", a.getId());
         model.addAttribute("account", a);
         model.addAttribute("userDetails", userDetails);
@@ -109,6 +111,14 @@ public class AdminController {
                                  @RequestParam(value = "currentPassword") String currentPassword,
                                  @RequestParam(value = "newPassword") String newPassword,
                                  @RequestParam(value = "confirmPassword") String confirmPassword) {
+        PasswordValidator p = new PasswordValidator();
+        if(!p.isValid(newPassword)){
+            model.addAttribute("errorMessage", "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.");
+            UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            model.addAttribute("name", userDetails.getUsername());
+            model.addAttribute("userDetails", userDetails);
+            return "accountInfo";
+        }
         Account a = accountRepository.findByUsername(userName);
         System.out.println(a.getEncrytedPassword());
         if (passwordEncoder.matches(currentPassword, a.getEncrytedPassword())) {
@@ -172,6 +182,8 @@ public class AdminController {
                               BindingResult result, //
                               final RedirectAttributes redirectAttributes) {
 
+
+
         if (result.hasErrors()) {
             return "product";
         }
@@ -223,5 +235,12 @@ public class AdminController {
         model.addAttribute("paginationProducts", result.getData());
         return "productList";
 
+    }
+
+    @RequestMapping(value = {"/admin/manageAccount"}, method = RequestMethod.GET)
+    public String manageAccount(Model model){
+        List<Account> accounts = accountRepository.findAll();
+        model.addAttribute("accounts", accounts);
+        return "manageAccount";
     }
 }

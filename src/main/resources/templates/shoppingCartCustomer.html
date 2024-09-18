@@ -112,24 +112,25 @@
 
                     <div class="col-md-12">
                         <input th:field="*{name}" class="form-control" type="text" name="name"
-                               placeholder="Full Name" th:required>
+                               placeholder="Full Name" required>
                     </div>
 
                     <div class="col-md-12">
                         <input th:field="*{email}" class="form-control" type="email" name="email"
-                               placeholder="E-mail Address" th:required>
+                               placeholder="E-mail Address" required pattern="[^\s@]+@[^\s@]+\.[^\s@]+">
+                        <div class="invalid-feedback">Please enter email same format</div>
                     </div>
 
                     <div class="col-md-12">
                         <input th:field="*{phone}" class="form-control" type="text" name="phone"
                                placeholder="Phone"
-                               th:required pattern="[0-9]{10}">
+                               required pattern="[0-9]{10}">
                     </div>
 
 
                     <div class="col-md-12">
                         <input th:field="*{address}" class="form-control" type="text" name="address"
-                               placeholder="Address" th:required>
+                               placeholder="Address" required>
                     </div>
 
                     <div class="form-button mt-3">

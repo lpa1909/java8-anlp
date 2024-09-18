@@ -1,6 +1,8 @@
 package org.planning.SpringBootProject.entity;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.GenericGenerator;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -8,7 +10,8 @@ import java.time.LocalDateTime;
 public class BaseEntity implements Serializable {
     private static final long serialVersionUID = 1842915944086730414L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     @Column(name = "id",  nullable = false, updatable = false)
     protected String id;
 

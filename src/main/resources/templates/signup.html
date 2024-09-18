@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <!--   <link rel="stylesheet" type="text/css" th:href="@{/styles.css}">-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body>
+<th:block th:include="/_header"></th:block>
+
+
+<!--<th:block th:if="${#session != null && #session.getAttribute('SPRING_SECURITY_LAST_EXCEPTION') != null}">-->
+<!--   <div th:if= "${#request.getParameter('error') == 'true'}"-->
+<!--        style="color: red; margin: 10px 0px;">-->
+<!--      Login Failed!!!<br /> Reason :-->
+<!--      <span th:utext="${#session.getAttribute('SPRING_SECURITY_LAST_EXCEPTION').message}"></span>-->
+<!--   </div>-->
+<!--</th:block>-->
+
+
+<section class="vh-100">
+    <div class="container py-5 h-100">
+        <div class="row d-flex align-items-center justify-content-center h-100">
+            <div class="col-md-8 col-lg-7 col-xl-6">
+                <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.svg"
+                     class="img-fluid" alt="Phone image">
+            </div>
+            <div class="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
+                <form method="POST" th:action="@{/signup}" th:object="${account}" method="POST">
+                    <!-- Email input -->
+                    <div data-mdb-input-init class="form-outline mb-4">
+                        <input name="userName" id=username class="form-control form-control-lg" th:field="*{userName}" required/>
+                        <label class="form-label" for="username">Username *</label>
+                    </div>
+                    <!-- Password input -->
+                    <div data-mdb-input-init class="form-outline mb-4">
+                        <input type="password" name="password" id="password" class="form-control form-control-lg" th:field=" *{encrytedPassword}" required/>
+                        <label class="form-label" for="password">Password *</label>
+                    </div>
+
+                    <div data-mdb-input-init class="form-outline mb-4">
+                        <input type="password" name="fullName" id="fullName" class="form-control form-control-lg" th:field="*{fullName}" required/>
+                        <label class="form-label" for="fullName">FullName *</label>
+                    </div>
+                    <div data-mdb-input-init class="form-outline mb-4">
+                        <input type="password" name="Gmail" id="Gmail" class="form-control form-control-lg" th:field="*{gmail}" required/>
+                        <label class="form-label" for="Gmail">Gmail *</label>
+                    </div>
+                    <div data-mdb-input-init class="form-outline mb-4">
+                        <input type="password" name="Phone" id="Phone" class="form-control form-control-lg" th:field=" *{phoneNumber}" required/>
+                        <label class="form-label" for="Phone">Phone *</label>
+                    </div>
+
+                    <!-- Submit button -->
+                    <button type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-success btn-lg btn-block">SignUp</button>
+                    <button type="reset" data-mdb-button-init data-mdb-ripple-init class="btn btn-warning btn-lg btn-block">Reset</button>
+
+                    <div class="divider d-flex align-items-center my-4">
+                        <p class="text-center fw-bold mx-3 mb-0 text-muted">OR</p>
+                    </div>
+
+                    <a data-mdb-ripple-init class="btn btn-primary btn-lg btn-block" style="background-color: #3b5998"
+                       role="button">
+                        <i class="fab fa-facebook-f me-2"></i>  Register with Facebook
+                    </a>
+                    <a data-mdb-ripple-init class="btn btn-danger btn-lg btn-block" style="background-color: #B54747" href="#!"
+                       role="button">
+                        <i class="fab fa-google me-2"></i>  Register with Google</a>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<span class="error-message" th:text="${error}"></span>
+
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

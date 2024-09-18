@@ -8,6 +8,7 @@ public class CustomerForm {
     private String address;
     private String email;
     private String phone;
+    private String id;
 
     private boolean valid;
 
@@ -20,7 +21,16 @@ public class CustomerForm {
             this.address = customerInfo.getAddress();
             this.email = customerInfo.getEmail();
             this.phone = customerInfo.getPhone();
+            this.id = customerInfo.getId();
         }
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getAddress() {

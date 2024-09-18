@@ -2,7 +2,10 @@ package org.planning.SpringBootProject.controller;
 
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -16,6 +19,7 @@ import org.planning.SpringBootProject.form.CustomerForm;
 import org.planning.SpringBootProject.model.*;
 import org.planning.SpringBootProject.pagination.PaginationResult;
 import org.planning.SpringBootProject.pagination.Paging;
+import org.planning.SpringBootProject.repository.AccountRepository;
 import org.planning.SpringBootProject.repository.OrderRepository;
 import org.planning.SpringBootProject.repository.ProductRepository;
 import org.planning.SpringBootProject.util.Utils;
@@ -26,6 +30,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,6 +58,10 @@ public class MainController {
 
     @Autowired
     private OrderRepository orderRepository;
+    @Autowired
+    private AccountRepository accountRepository;
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     @InitBinder
     public void myInitBinder(WebDataBinder dataBinder) {
@@ -85,7 +94,19 @@ public class MainController {
     public String home(Model model, @RequestParam(value = "page", defaultValue = "1") String pageStr) {
         model.addAttribute("mess", "check data");
         List<Product> products = productRepository.getAllProducts();
+        List<Account> accounts = accountRepository.findAll();
+        for(Account a : accounts) System.out.println(a.getId());
         model.addAttribute("products", products);
+//        Account a = new Account();
+//        a.setFullName("My name is Admin 2");
+//        a.setGmail("admin@gmail.com");
+//        a.setPhoneNumber("0123456789");
+//        a.setActive(true);
+//        a.setUserRole("ROLE_MANAGER");
+//        a.setUserName("admin2");
+//        a.setEncrytedPassword(passwordEncoder.encode("123"));
+//        a.setCreatedAt(LocalDateTime.now());
+//        accountRepository.save(a);
         return "index";
     }
 
@@ -228,7 +249,7 @@ public class MainController {
 
     // POST: Gửi đơn hàng (Save).
     @RequestMapping(value = {"/shoppingCartConfirmation"}, method = RequestMethod.POST)
-    public String shoppingCartConfirmationSave(HttpServletRequest request, Model model) {
+    public String shoppingCartConfirmationSave(HttpServletRequest request, Model model, @RequestParam("userId")String userId) {
         CartInfo cartInfo = Utils.getCartInSession(request);
 
         if (cartInfo.isEmpty()) {
@@ -240,7 +261,7 @@ public class MainController {
         }
         try {
             System.out.println(cartInfo.getCustomerInfo());
-            orderDAO.saveOrder(cartInfo);
+            orderDAO.saveOrder(cartInfo, userId);
         } catch (Exception e) {
 
             return "shoppingCartConfirmation";
@@ -322,4 +343,33 @@ public class MainController {
         model.addAttribute("products", products);
         return "index";
     }
+
+    @RequestMapping(value = {"/signup"}, method = RequestMethod.GET)
+    public String signUpForm(Model model){
+        model.addAttribute("account", new Account());
+        return "signup";
+    }
+
+    @RequestMapping(value = {"/signup"}, method = RequestMethod.POST)
+    public String signUp(@Validated @ModelAttribute("account") Account account, BindingResult result, Model model){
+        if(result.hasErrors()){
+            return "signup";
+        }
+        String passwordEncoded = passwordEncoder.encode(account.getEncrytedPassword());
+        account.setEncrytedPassword(passwordEncoded);
+        account.setCreatedAt(LocalDateTime.now());
+        accountRepository.save(account);
+        return "redirect:/login";
+    }
+
+
+
+//    @GetMapping("/checkCode")
+//    public ResponseEntity<Map<String, Boolean>> checkCode(@RequestParam String code) {
+//        boolean codeExists = productRepository.existsByCode(code); // Kiểm tra sự tồn tại của code
+//
+//        Map<String, Boolean> response = new HashMap<>();
+//        response.put("exists", codeExists);
+//        return ResponseEntity.ok(response);
+//    }
 }
