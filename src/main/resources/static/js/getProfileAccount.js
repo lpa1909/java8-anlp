@@ -44,9 +44,9 @@ $(document).ready(function() {
                     '<td>' + response.userName + '</td>' +
                     '<td>' + response.userRole + '</td>' +
                     '<td>' + (response.active ? '<i class="fa fa-check-circle" aria-hidden="true" style="color: green;"></i>' : '<i class="fa fa-times-circle" aria-hidden="true" style="color: red;"></i>') + '</td>' +
-                    '<td>' + response.createdAt + '</td>' +
-                    '<td>' + response.updatedAt + '</td>' +
-                    '<td>' + response.deletedAt + '</td>' +
+                    '<td>' + formatDate(response.createdAt) + '</td>' +
+                    '<td>' + formatDate(response.updatedAt) + '</td>' +
+                    '<td>' + formatDate(response.deletedAt) + '</td>' +
                     '<td>' + (response.deleted ? '<i class="fa fa-check-circle" aria-hidden="true" style="color: green;"></i>' : '<i class="fa fa-times-circle" aria-hidden="true" style="color: red;"></i>') + '</td>' +
                     '</tr>';
 
@@ -64,5 +64,19 @@ $(document).ready(function() {
     $('.closeButton2').click(function(){
         $('#viewAccountDetail').modal('hide');
     })
+
+
+    function formatDate(dateString) {
+        if (!dateString) return ''; // Xử lý trường hợp dateString là null hoặc undefined
+        const date = new Date(dateString);
+        const formatter = new Intl.DateTimeFormat('vi-VN', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+        return formatter.format(date);
+    }
 });
 

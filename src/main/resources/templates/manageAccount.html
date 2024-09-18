@@ -135,7 +135,7 @@
         <td th:utext="${a.phoneNumber}"></td>
         <td th:utext="${a.userName}"></td>
         <td th:utext="${a.userRole}"></td>
-        <td th:style="'color: ' + ${a.isActive ? 'green' : 'red'}"><i class="fa fa-check-circle" aria-hidden="true"></i>
+        <td th:style="'color: ' + ${a.isActive ? 'green' : 'red'}"><i class="fa" th:classappend="${a.isActive} ? 'fa-check-circle' : 'fa-times-circle'" aria-hidden="true"></i>
         </td>
         <td th:utext="${#temporals.format(a.createdAt, 'dd-MM-yyyy HH:mm')}"></td>
         <td th:utext="${#temporals.format(a.updatedAt, 'dd-MM-yyyy HH:mm')}"></td>
