@@ -1,5 +1,6 @@
 package org.planning.SpringBootProject.controller;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -24,6 +25,7 @@ import org.planning.SpringBootProject.repository.ProductRepository;
 import org.planning.SpringBootProject.validator.PasswordValidator;
 import org.planning.SpringBootProject.validator.ProductFormValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -239,6 +241,50 @@ public class AdminController {
 
     @RequestMapping(value = {"/admin/manageAccount"}, method = RequestMethod.GET)
     public String manageAccount(Model model){
+        List<Account> accounts = accountRepository.findAll();
+        model.addAttribute("accounts", accounts);
+        return "manageAccount";
+    }
+
+    @RequestMapping(value = {"/admin/loadData"}, method = RequestMethod.GET)
+    public ResponseEntity<Account> loadData(Model model, @RequestParam("accountId") String id){
+        Account account = accountRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Account not found")); // Xử lý trường hợp không tìm thấy tài khoản
+
+        // Trả về dữ liệu tài khoản dưới dạng JSON
+        return ResponseEntity.ok(account);
+    }
+
+    @RequestMapping(value = {"/admin/editAccount"}, method = RequestMethod.POST)
+    public String editAccount(@Validated @ModelAttribute("account") Account account, BindingResult result, Model model){
+//        if(result.hasErrors()){
+//            return "manageAccount";
+//        }
+        System.out.println(account.getUserRole());
+        Account a2 = accountRepository.findByUsername(account.getUserName());
+        a2.setUpdatedAt(LocalDateTime.now());
+        a2.setFullName(account.getFullName());
+        a2.setGmail(account.getGmail());
+        a2.setPhoneNumber(account.getPhoneNumber());
+        a2.setUserName(account.getUserName());
+        a2.setUserRole(account.getUserRole());
+        accountRepository.save(a2);
+        List<Account> accounts = accountRepository.findAll();
+        model.addAttribute("accounts", accounts);
+        return "manageAccount";
+    }
+
+    @RequestMapping(value = {"/admin/deleteAccount"}, method = RequestMethod.GET)
+    public String deleteAccount(@RequestParam("id") String id, Model model){
+        accountRepository.softDeleteAccount(id);
+        List<Account> accounts = accountRepository.findAll();
+        model.addAttribute("accounts", accounts);
+        return "manageAccount";
+    }
+
+    @RequestMapping(value = {"/admin/activeAccount"}, method = RequestMethod.GET)
+    public String activeAccount(@RequestParam("id") String id, Model model){
+        accountRepository.activeAccount(id);
         List<Account> accounts = accountRepository.findAll();
         model.addAttribute("accounts", accounts);
         return "manageAccount";

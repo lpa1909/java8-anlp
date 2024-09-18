@@ -15,4 +15,12 @@ public interface AccountRepository extends JpaRepository<Account, String> {
     @Modifying
     @Query(value = "UPDATE Account a SET a.encrytedPassword = :newPassword WHERE a.userName = :userName")
     void changePasswordAccount(@Param("newPassword") String newPassword, @Param("userName") String userName);
+
+    @Modifying
+    @Query("UPDATE Account a SET a.isDeleted = true, a.active = false, a.deletedAt = CURRENT_TIMESTAMP WHERE a.id = :id")
+    void softDeleteAccount(@Param("id") String id);
+
+    @Modifying
+    @Query("UPDATE Account a SET a.isDeleted = false, a.active = true, a.updatedAt = CURRENT_TIMESTAMP WHERE a.id = :id")
+    void activeAccount(@Param("id") String id);
 }
