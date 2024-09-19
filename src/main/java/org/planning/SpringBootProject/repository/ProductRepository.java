@@ -22,7 +22,7 @@ public interface ProductRepository extends JpaRepository<Product, String> {
     List<Product> getAllProducts();
 
     @Modifying
-    @Query("UPDATE Product p SET p.isDelete = false WHERE p.code = :code")
+    @Query("UPDATE Product p SET p.isDelete = false, p.deleteDate = CURRENT_TIMESTAMP WHERE p.code = :code")
     void softDeleteProduct(@Param("code") String code);
 
     @Query(value = "SELECT p FROM Product p WHERE p.name LIKE %:likeName% AND p.isDelete = true")
@@ -38,5 +38,7 @@ public interface ProductRepository extends JpaRepository<Product, String> {
 
     List<Product> findByNameContainingIgnoreCase(String keyword);
 
-
+    @Modifying
+    @Query("UPDATE Product p SET p.isDelete = true, p.updateDate = CURRENT_TIMESTAMP WHERE p.code = :code")
+    void unlockProduct(@Param("code") String code);
 }

@@ -31,6 +31,12 @@ public class Product implements Serializable {
     @Column(name = "Create_Date", nullable = false)
     private Date createDate;
 
+    @Column(name = "Update_Date", nullable = true)
+    private Date updateDate;
+
+    @Column(name = "Delete_Date", nullable = true)
+    private Date deleteDate;
+
     @Column(name = "isDelete", nullable = false)
     private boolean isDelete;
 

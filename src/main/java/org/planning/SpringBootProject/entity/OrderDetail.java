@@ -1,6 +1,7 @@
 package org.planning.SpringBootProject.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import jakarta.persistence.*;
 import lombok.Data;

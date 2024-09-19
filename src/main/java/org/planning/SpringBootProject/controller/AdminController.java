@@ -313,4 +313,20 @@ public class AdminController {
             return "manageAccount";
         }
     }
+
+    @RequestMapping(value = {"/admin/manageProduct"}, method = RequestMethod.GET)
+    public String loadProduct(Model model){
+        List<Product> products = productRepository.findAll();
+        model.addAttribute("products", products);
+        return "manageProduct";
+    }
+
+    @RequestMapping(value = "/admin/unlockProduct", method = RequestMethod.GET)
+    public String unlockProduct(@RequestParam("code") String code, Model model){
+        productRepository.unlockProduct(code);
+        List<Product> products = productRepository.findAll();
+        model.addAttribute("products", products);
+        return "manageProduct";
+    }
+
 }
