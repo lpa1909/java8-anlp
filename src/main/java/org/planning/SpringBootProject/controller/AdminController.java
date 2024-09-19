@@ -222,20 +222,7 @@ public class AdminController {
     @RequestMapping(value = {"admin/deleteProduct"}, method = RequestMethod.GET)
     public String handleDeleteProduct(Model model, @RequestParam("code") String code, @RequestParam(value = "name", defaultValue = "") String likeName,
                                       @RequestParam(value = "page", defaultValue = "1") int page) {
-//        productDAO.deleteProduct(code);
-
         productRepository.softDeleteProduct(code);
-
-//        final int maxResult = 6;
-//        final int maxNavigationPage = 10;
-//
-//        Paging<ProductInfo> result = productDAO.queryProducts(page, maxResult, maxNavigationPage, likeName);
-//
-//        model.addAttribute("totalPages", result.getTotalPages());
-//        model.addAttribute("currentPage", result.getCurrentPage());
-//        model.addAttribute("likeName", likeName);
-//        model.addAttribute("paginationProducts", result.getData());
-//        return "productList";
         return "redirect:/productList";
     }
 
