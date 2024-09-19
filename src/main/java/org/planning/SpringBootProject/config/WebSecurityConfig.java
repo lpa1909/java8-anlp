@@ -65,8 +65,8 @@ public class WebSecurityConfig {
                 .formLogin(login -> login
                         .loginProcessingUrl("/j_spring_security_check")
                         .loginPage("/admin/login")
-//                        .defaultSuccessUrl("/admin/accountInfo", true)
-//                        .failureUrl("/admin/login?error=true")
+                        .defaultSuccessUrl("/admin/accountInfo", true)
+                        .failureUrl("/admin/login?error=true")
                         .usernameParameter("userName")
                         .passwordParameter("password"))
                 .sessionManagement(session -> session

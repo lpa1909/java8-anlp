@@ -24,6 +24,7 @@ import org.planning.SpringBootProject.repository.OrderRepository;
 import org.planning.SpringBootProject.repository.ProductRepository;
 import org.planning.SpringBootProject.util.Utils;
 import org.planning.SpringBootProject.validator.CustomerFormValidator;
+import org.planning.SpringBootProject.validator.PasswordValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -352,24 +353,33 @@ public class MainController {
 
     @RequestMapping(value = {"/signup"}, method = RequestMethod.POST)
     public String signUp(@Validated @ModelAttribute("account") Account account, BindingResult result, Model model){
-        if(result.hasErrors()){
-            return "signup";
+//        if(result.hasErrors()){
+//            return "signup";
+//        }
+        List<Account> accounts = accountRepository.findAll();
+        boolean check = true;
+        for(Account a : accounts){
+            if(a.getUserName().equals(account.getUserName()) || a.getGmail().equals(account.getGmail())){
+                check = false;
+            }
         }
-        String passwordEncoded = passwordEncoder.encode(account.getEncrytedPassword());
-        account.setEncrytedPassword(passwordEncoded);
-        account.setCreatedAt(LocalDateTime.now());
-        accountRepository.save(account);
-        return "redirect:/login";
+        if(!check){
+            model.addAttribute("error", "Username or email is valid, please try again.");
+            return "signup";
+        }else{
+            PasswordValidator p = new PasswordValidator();
+            if(!p.isValid(account.getEncrytedPassword())){
+                model.addAttribute("error", "Password must contain at least 8 characters, including uppercase, lowercase, numbers, and special characters.");
+                return "signup";
+            }
+            String passwordEncoded = passwordEncoder.encode(account.getEncrytedPassword());
+            account.setEncrytedPassword(passwordEncoded);
+            account.setCreatedAt(LocalDateTime.now());
+            account.setActive(false);
+            account.setDeleted(true);
+            account.setUserRole("ROLE_EMPLOYEE");
+            accountRepository.save(account);
+            return "redirect:/login";
+        }
     }
-
-
-
-//    @GetMapping("/checkCode")
-//    public ResponseEntity<Map<String, Boolean>> checkCode(@RequestParam String code) {
-//        boolean codeExists = productRepository.existsByCode(code); // Kiểm tra sự tồn tại của code
-//
-//        Map<String, Boolean> response = new HashMap<>();
-//        response.put("exists", codeExists);
-//        return ResponseEntity.ok(response);
-//    }
 }
