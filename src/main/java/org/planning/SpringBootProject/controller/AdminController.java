@@ -114,7 +114,7 @@ public class AdminController {
                                  @RequestParam(value = "newPassword") String newPassword,
                                  @RequestParam(value = "confirmPassword") String confirmPassword) {
         PasswordValidator p = new PasswordValidator();
-        if(!p.isValid(newPassword)){
+        if (!p.isValid(newPassword)) {
             model.addAttribute("errorMessage", "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.");
             UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             model.addAttribute("name", userDetails.getUsername());
@@ -128,11 +128,10 @@ public class AdminController {
                 String encodedConfirmPassword = passwordEncoder.encode(confirmPassword);
                 accountRepository.changePasswordAccount(encodedConfirmPassword, userName);
                 model.addAttribute("mess", "Change password successfully");
-            }
-            else{
+            } else {
                 model.addAttribute("errorMessage", "New password not match confirmation password");
             }
-        }else{
+        } else {
             model.addAttribute("errorMessage", "Current password not match");
         }
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -183,7 +182,6 @@ public class AdminController {
                               @ModelAttribute("productForm") @Validated ProductForm productForm, //
                               BindingResult result, //
                               final RedirectAttributes redirectAttributes) {
-
 
 
         if (result.hasErrors()) {
@@ -240,14 +238,14 @@ public class AdminController {
     }
 
     @RequestMapping(value = {"/admin/manageAccount"}, method = RequestMethod.GET)
-    public String manageAccount(Model model){
+    public String manageAccount(Model model) {
         List<Account> accounts = accountRepository.findAll();
         model.addAttribute("accounts", accounts);
         return "manageAccount";
     }
 
     @RequestMapping(value = {"/admin/loadData"}, method = RequestMethod.GET)
-    public ResponseEntity<Account> loadData(Model model, @RequestParam("accountId") String id){
+    public ResponseEntity<Account> loadData(Model model, @RequestParam("accountId") String id) {
         Account account = accountRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Account not found")); // Xử lý trường hợp không tìm thấy tài khoản
 
@@ -256,7 +254,7 @@ public class AdminController {
     }
 
     @RequestMapping(value = {"/admin/editAccount"}, method = RequestMethod.POST)
-    public String editAccount(@Validated @ModelAttribute("account") Account account, BindingResult result, Model model){
+    public String editAccount(@Validated @ModelAttribute("account") Account account, BindingResult result, Model model) {
 //        if(result.hasErrors()){
 //            return "manageAccount";
 //        }
@@ -275,7 +273,7 @@ public class AdminController {
     }
 
     @RequestMapping(value = {"/admin/deleteAccount"}, method = RequestMethod.GET)
-    public String deleteAccount(@RequestParam("id") String id, Model model){
+    public String deleteAccount(@RequestParam("id") String id, Model model) {
         accountRepository.softDeleteAccount(id);
         List<Account> accounts = accountRepository.findAll();
         model.addAttribute("accounts", accounts);
@@ -283,10 +281,36 @@ public class AdminController {
     }
 
     @RequestMapping(value = {"/admin/activeAccount"}, method = RequestMethod.GET)
-    public String activeAccount(@RequestParam("id") String id, Model model){
+    public String activeAccount(@RequestParam("id") String id, Model model) {
         accountRepository.activeAccount(id);
         List<Account> accounts = accountRepository.findAll();
         model.addAttribute("accounts", accounts);
         return "manageAccount";
+    }
+
+    @RequestMapping(value = {"/admin/addAccount"}, method = RequestMethod.POST)
+    public String addAccount(@ModelAttribute("account") Account account, BindingResult result, Model model) {
+        List<Account> accounts = accountRepository.findAll();
+        boolean check = true;
+        for (Account a : accounts) {
+            if (a.getUserName().equals(account.getUserName()) || a.getGmail().equals(account.getGmail())) {
+                check = false;
+            }
+        }
+        if (!check) {
+            model.addAttribute("errorMessage", "Username or Email is valid, please try again.");
+            model.addAttribute("accounts", accounts);
+            return "manageAccount";
+        } else {
+            String passwordEncoded = passwordEncoder.encode(account.getEncrytedPassword());
+            account.setEncrytedPassword(passwordEncoded);
+            account.setCreatedAt(LocalDateTime.now());
+            account.setActive(true);
+            account.setDeleted(false);
+            accountRepository.save(account);
+            model.addAttribute("accounts", accounts);
+            model.addAttribute("successMessage", "Add success");
+            return "manageAccount";
+        }
     }
 }

@@ -1,12 +1,28 @@
-$(document).ready(function() {
-    $('.edit-button').click(function(e) {
+$(document).ready(function () {
+    toastr.options = {
+        'closeButton': true,
+        'debug': false,
+        'newestOnTop': false,
+        'progressBar': false,
+        'positionClass': 'toast-top-right',
+        'preventDuplicates': false,
+        'showDuration': '1000',
+        'hideDuration': '1000',
+        'timeOut': '5000',
+        'extendedTimeOut': '1000',
+        'showEasing': 'swing',
+        'hideEasing': 'linear',
+        'showMethod': 'fadeIn',
+        'hideMethod': 'fadeOut',
+    }
+    $('.edit-button').click(function (e) {
         var accountId = $(this).data('accountId');
         console.log(accountId);
         $.ajax({
             url: '/admin/loadData?accountId=' + accountId,
             method: 'GET',
             contentType: 'application/json',
-            success: function(response){
+            success: function (response) {
                 console.log(response)
                 $('#changePasswordForm input[name="fullName"]').val(response.fullName);
                 $('#changePasswordForm input[name="gmail"]').val(response.gmail);
@@ -16,18 +32,18 @@ $(document).ready(function() {
                 $('#changePasswordForm').modal('show');
                 toastr.success('Load data successfully', response);
             },
-            error: function(jqXHR, status, error){
+            error: function (jqXHR, status, error) {
                 toastr.error('Load data failed.');
             }
         });
 
     });
 
-    $('.closeButton').click(function(){
+    $('.closeButton').click(function () {
         $('#changePasswordForm').modal('hide');
     })
 
-    $('.view-btn').click(function(){
+    $('.view-btn').click(function () {
         var accountId = $(this).data('accountId');
         console.log(accountId);
         $.ajax({
@@ -61,8 +77,16 @@ $(document).ready(function() {
         });
     });
 
-    $('.closeButton2').click(function(){
+    $('.closeButton2').click(function () {
         $('#viewAccountDetail').modal('hide');
+    })
+
+    $('.add-btn').click(function () {
+        $('#addAccountForm').modal('show');
+    })
+
+    $('.closeButtonAdd').click(function () {
+        $('#addAccountForm').modal('hide');
     })
 
 
@@ -78,5 +102,8 @@ $(document).ready(function() {
         });
         return formatter.format(date);
     }
+
 });
+
+
 
