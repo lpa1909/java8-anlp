@@ -12,6 +12,9 @@ public interface AccountRepository extends JpaRepository<Account, String> {
     @Query(value = "Select a From Account a WHERE a.userName = :userName")
     Account findByUsername(@Param("userName") String userName);
 
+    @Query(value = "Select a From Account a WHERE a.id = :id")
+    Account findByUserId(@Param("id") String id);
+
     @Modifying
     @Query(value = "UPDATE Account a SET a.encrytedPassword = :newPassword WHERE a.userName = :userName")
     void changePasswordAccount(@Param("newPassword") String newPassword, @Param("userName") String userName);

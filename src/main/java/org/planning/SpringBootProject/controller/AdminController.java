@@ -184,9 +184,19 @@ public class AdminController {
                               @ModelAttribute("productForm") @Validated ProductForm productForm, //
                               BindingResult result, //
                               final RedirectAttributes redirectAttributes) {
-
-
         if (result.hasErrors()) {
+            return "product";
+        }
+        List<Product> products = productRepository.findAll();
+        Product p2 = productRepository.findProduct(productForm.getCode());
+        boolean check = true;
+        for(Product p : products){
+            if(productForm.getCode().equals(p.getCode()) && !productForm.getCode().equals(p2.getCode())){
+                check = false;
+            }
+        }
+        if(!check){
+            model.addAttribute("errorId", "Product code already exists");
             return "product";
         }
         try {
@@ -247,8 +257,21 @@ public class AdminController {
 //        if(result.hasErrors()){
 //            return "manageAccount";
 //        }
+        List<Account> accounts = accountRepository.findAll();
+        Account a2 = accountRepository.findByUserId(account.getId());
+        boolean check = true;
+        for (Account a : accounts) {
+                if ((a.getUserName().equals(account.getUserName()) && !a.getUserName().equals(a2.getUserName())) || (a.getGmail().equals(account.getGmail()) && !a.getGmail().equals(a2.getGmail()))) {
+                    check = false;
+                }
+        }
+        if (!check) {
+            model.addAttribute("errorMessage", "Username or email is valid, please try again.");
+            model.addAttribute("accounts", accounts);
+            return "manageAccount";
+        }
         System.out.println(account.getUserRole());
-        Account a2 = accountRepository.findByUsername(account.getUserName());
+
         a2.setUpdatedAt(LocalDateTime.now());
         a2.setFullName(account.getFullName());
         a2.setGmail(account.getGmail());
@@ -256,9 +279,11 @@ public class AdminController {
         a2.setUserName(account.getUserName());
         a2.setUserRole(account.getUserRole());
         accountRepository.save(a2);
-        List<Account> accounts = accountRepository.findAll();
+        model.addAttribute("successMessage", "Edit account successfully");
         model.addAttribute("accounts", accounts);
         return "manageAccount";
+
+
     }
 
     @RequestMapping(value = {"/admin/deleteAccount"}, method = RequestMethod.GET)
@@ -304,16 +329,23 @@ public class AdminController {
     }
 
     @RequestMapping(value = {"/admin/manageProduct"}, method = RequestMethod.GET)
-    public String loadProduct(Model model){
+    public String loadProduct(Model model) {
         List<Product> products = productRepository.findAll();
         model.addAttribute("products", products);
         return "manageProduct";
     }
 
     @RequestMapping(value = "/admin/unlockProduct", method = RequestMethod.GET)
-    public String unlockProduct(@RequestParam("code") String code, Model model){
+    public String unlockProduct(@RequestParam("code") String code, Model model) {
         productRepository.unlockProduct(code);
         List<Product> products = productRepository.findAll();
+        model.addAttribute("products", products);
+        return "manageProduct";
+    }
+
+    @RequestMapping(value = {"/admin/searchInManageProduct"}, method = RequestMethod.GET)
+    public String search(Model model, @RequestParam("query") String query){
+        List<Product> products = productRepository.findByNameContainingIgnoreCase(query);
         model.addAttribute("products", products);
         return "manageProduct";
     }

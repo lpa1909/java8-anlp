@@ -29,6 +29,7 @@ $(document).ready(function () {
                 $('#changePasswordForm input[name="phoneNumber"]').val(response.phoneNumber);
                 $('#changePasswordForm input[name="userName"]').val(response.userName);
                 $('#changePasswordForm input[name="userRole"] option').val(response.userRole);
+                $('#changePasswordForm input[name="id"]').val(response.id);
                 $('#changePasswordForm').modal('show');
                 toastr.success('Load data successfully', response);
             },

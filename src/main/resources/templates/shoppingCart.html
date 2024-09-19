@@ -116,7 +116,7 @@
                                                         <input class="form-control"
                                                                th:name="|cartLines[${varStatus.index}].quantity|"
                                                                th:value="${cartLineInfo.quantity}"
-                                                               style="width: 70px; border-radius:  10px; border-color: black; box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.3);">
+                                                               style="width: 70px; border-radius:  10px; border-color: black; box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.3);" required pattern="\d*">
                                                         <button rel="tooltip" class="button-update-sc" type="submit"><i
                                                                 class="fa fa-pencil"></i></button>
                                                     </div>
