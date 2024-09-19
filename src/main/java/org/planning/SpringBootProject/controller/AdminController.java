@@ -25,6 +25,8 @@ import org.planning.SpringBootProject.repository.ProductRepository;
 import org.planning.SpringBootProject.validator.PasswordValidator;
 import org.planning.SpringBootProject.validator.ProductFormValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.CacheControl;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -224,17 +226,17 @@ public class AdminController {
 
         productRepository.softDeleteProduct(code);
 
-        final int maxResult = 6;
-        final int maxNavigationPage = 10;
-
-        Paging<ProductInfo> result = productDAO.queryProducts(page, maxResult, maxNavigationPage, likeName);
-
-        model.addAttribute("totalPages", result.getTotalPages());
-        model.addAttribute("currentPage", result.getCurrentPage());
-        model.addAttribute("likeName", likeName);
-        model.addAttribute("paginationProducts", result.getData());
-        return "productList";
-
+//        final int maxResult = 6;
+//        final int maxNavigationPage = 10;
+//
+//        Paging<ProductInfo> result = productDAO.queryProducts(page, maxResult, maxNavigationPage, likeName);
+//
+//        model.addAttribute("totalPages", result.getTotalPages());
+//        model.addAttribute("currentPage", result.getCurrentPage());
+//        model.addAttribute("likeName", likeName);
+//        model.addAttribute("paginationProducts", result.getData());
+//        return "productList";
+        return "redirect:/productList";
     }
 
     @RequestMapping(value = {"/admin/manageAccount"}, method = RequestMethod.GET)

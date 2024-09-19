@@ -156,7 +156,6 @@ public class ProductDAO {
                 .collect(Collectors.toList());
         int totalRecords = productRepository.getTotalRecords(likeName);
         return new Paging<>(productInfos, totalRecords, page, maxResult);
-
     }
 
 //    private int getTotalRecords(String likeName) throws SQLException {
