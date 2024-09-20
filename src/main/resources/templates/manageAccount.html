@@ -12,7 +12,6 @@
         .page-title {
             font-size: 24px;
             font-weight: bold;
-            margin-bottom: 20px;
             text-align: center;
         }
 
@@ -147,11 +146,20 @@
             overflow-y: auto;
             max-height: 40rem;
         }
+        .form-inline {
+            display: flex; /* Sử dụng Flexbox để căn giữa form tìm kiếm */
+            justify-content: center;
+        }
     </style>
 </head>
 <body>
 <th:block th:include="/_header"></th:block>
 <div class="page-title">Manage Account</div>
+<form class="form-inline ml-6" th:action="@{/admin/searchAccountByAdmin}" method="GET">
+    <input class="form-control mr-sm-8" type="search" name="query" placeholder="Search Account"
+           aria-label="Search">
+    <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
+</form>
 <div class="table-container">
     <a class="add-btn btn btn-light"><i class="fa fa-user-plus" aria-hidden="true"></i> Add Account</a>
     <b>

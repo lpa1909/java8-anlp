@@ -350,4 +350,11 @@ public class AdminController {
         return "manageProduct";
     }
 
+    @RequestMapping(value = {"/admin/searchAccountByAdmin"}, method = RequestMethod.GET)
+    public String searchAccountByAdmin(Model model, @RequestParam("query") String query){
+        List<Account> accounts = accountRepository.searchAccount(query);
+        model.addAttribute("accounts", accounts);
+        return "manageAccount";
+    }
+
 }
