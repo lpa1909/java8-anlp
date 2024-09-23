@@ -38,6 +38,11 @@
                         Order List
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{|/user/viewOrderStatus?userId=${session.id}|}">
+                        Order Status
+                    </a>
+                </li>
             </th:block>
             <th:block sec:authorize="hasRole('ROLE_MANAGER')">
                 <li class="nav-item">

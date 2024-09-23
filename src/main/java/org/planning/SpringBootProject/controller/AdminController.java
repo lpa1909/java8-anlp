@@ -21,6 +21,7 @@ import org.planning.SpringBootProject.model.ProductInfo;
 import org.planning.SpringBootProject.pagination.PaginationResult;
 import org.planning.SpringBootProject.pagination.Paging;
 import org.planning.SpringBootProject.repository.AccountRepository;
+import org.planning.SpringBootProject.repository.OrderRepository;
 import org.planning.SpringBootProject.repository.ProductRepository;
 import org.planning.SpringBootProject.validator.PasswordValidator;
 import org.planning.SpringBootProject.validator.ProductFormValidator;
@@ -70,6 +71,8 @@ public class AdminController {
 
     @Autowired
     private HttpSession session;
+    @Autowired
+    private OrderRepository orderRepository;
 
     @InitBinder
     public void myInitBinder(WebDataBinder dataBinder) {
@@ -357,4 +360,13 @@ public class AdminController {
         return "manageAccount";
     }
 
+    @RequestMapping(value = {"/admin/changeStatus"}, method = RequestMethod.POST)
+    public ResponseEntity<?> changeStatus(@RequestParam("status") String status, @RequestParam("orderNum") int orderNum){
+        if(status.equals("DELIVERY") || status.equals("CONFIRM") || status.equals("WAITING")){
+            orderRepository.changeOrderStatus(status, orderNum);
+            return ResponseEntity.ok("Order Status updated success!");
+        }else{
+            return ResponseEntity.badRequest().body("Status invalid!");
+        }
+    }
 }

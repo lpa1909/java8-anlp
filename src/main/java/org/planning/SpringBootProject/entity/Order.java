@@ -42,6 +42,17 @@ public class Order implements Serializable {
     @Column(name = "userId", length = 255, nullable = false)
     private String userId;
 
+    @Column(name = "orderStatus", length = 255, nullable = false)
+    private String orderStatus;
+
+    public String getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(String orderStatus) {
+        this.orderStatus = orderStatus;
+    }
+
     public String getUserId() {
         return userId;
     }

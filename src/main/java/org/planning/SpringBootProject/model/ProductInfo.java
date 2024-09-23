@@ -6,6 +6,7 @@ public class ProductInfo {
     private String code;
     private String name;
     private double price;
+    private int quanityProduct;
 
     public ProductInfo() {
     }
@@ -14,13 +15,23 @@ public class ProductInfo {
         this.code = product.getCode();
         this.name = product.getName();
         this.price = product.getPrice();
+        this.quanityProduct = product.getQuanityProduct();
     }
 
     // Sử dụng trong JPA/Hibernate query
-    public ProductInfo(String code, String name, double price) {
+    public ProductInfo(String code, String name, double price, int quanityProduct) {
         this.code = code;
         this.name = name;
         this.price = price;
+        this.quanityProduct = quanityProduct;
+    }
+
+    public int getQuanityProduct() {
+        return quanityProduct;
+    }
+
+    public void setQuanityProduct(int quanityProduct) {
+        this.quanityProduct = quanityProduct;
     }
 
     public String getCode() {

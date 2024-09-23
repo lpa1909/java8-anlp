@@ -92,6 +92,7 @@
             <th>Name</th>
             <th>Image</th>
             <th>Price</th>
+            <th>Quanity</th>
             <th>Create_Date</th>
             <th>Update_Date</th>
             <th>Delete_Date</th>
@@ -105,6 +106,7 @@
                     th:src="@{|/productImage?code=${p.code}|}" style="max-width: 30px; max-height: 30px"
                     class="img-cart"></td>
             <td th:utext="${p.price}"></td>
+            <td th:utext="${p.quanityProduct}"></td>
             <td th:utext="${#dates.format(p.createDate,'dd-MM-yyyy HH:mm')}"></td>
             <td th:utext="${#dates.format(p.updateDate,'dd-MM-yyyy HH:mm')}"></td>
             <td th:utext="${#dates.format(p.deleteDate,'dd-MM-yyyy HH:mm')}"></td>

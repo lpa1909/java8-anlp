@@ -40,7 +40,34 @@ public class Product implements Serializable {
     @Column(name = "isDelete", nullable = false)
     private boolean isDelete;
 
+    @Column(name = "quanityProducts", nullable = false)
+    private int quanityProduct;
+
     public Product() {
+    }
+
+    public Date getDeleteDate() {
+        return deleteDate;
+    }
+
+    public void setDeleteDate(Date deleteDate) {
+        this.deleteDate = deleteDate;
+    }
+
+    public int getQuanityProduct() {
+        return quanityProduct;
+    }
+
+    public void setQuanityProduct(int quanityProduct) {
+        this.quanityProduct = quanityProduct;
+    }
+
+    public Date getUpdateDate() {
+        return updateDate;
+    }
+
+    public void setUpdateDate(Date updateDate) {
+        this.updateDate = updateDate;
     }
 
     public String getCode() {

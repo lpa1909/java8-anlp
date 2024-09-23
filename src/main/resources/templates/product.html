@@ -138,6 +138,12 @@
 <!--                        <span style="color: red" class="error-message" th:if="${#fields.hasErrors('price')}" th:errors="*{price}">..</span>-->
                     </div>
 
+                    <div class="col-md-12">
+                        <input th:field="*{quantity}" placeholder="Quantity" type="text" required pattern="\d*"equired/>
+<!--                        <span style="color: red" class="error-message" th:utext="${errorPrice}">..</span>-->
+<!--                        <span style="color: red" class="error-message" th:if="${#fields.hasErrors('price')}" th:errors="*{price}">..</span>-->
+                    </div>
+
 
                     <div class="col-md-12">
                         <label>

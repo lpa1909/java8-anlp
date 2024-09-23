@@ -3,7 +3,7 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <meta charset="UTF-8">
-    <title>Product List</title>
+    <title>Order List</title>
     <!--    <link rel="stylesheet" type="text/css" th:href="@{/styles.css}">-->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
@@ -16,9 +16,13 @@
             text-align: center;
         }
 
+        .dropdown-item{
+            border-radius: 10px;
+        }
+
         table {
             width: 100%;
-            max-width: 900px;
+            max-width: 1200px;
             margin: 0 auto;
             border-collapse: collapse;
             box-shadow: 10px 10px 10px 10px rgba(0, 0, 0, 0.2);
@@ -60,6 +64,27 @@
             justify-content: center;
             margin-top: 10px;
         }
+
+        #addAccountForm {
+            display: none;
+            border: 1px solid #ccc;
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            position: fixed;
+            top: 30%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            z-index: 10000;
+            border-radius: 10px;
+            box-shadow: 10px 10px 10px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        #addAccountForm.show {
+            display: block;
+            opacity: 1;
+        }
     </style>
 </head>
 <body>
@@ -75,6 +100,9 @@
         <th>Customer Address</th>
         <th>Customer Email</th>
         <th>Amount</th>
+        <th:block sec:authorize="hasAnyRole('ROLE_MANAGER')">
+            <th>Status</th>
+        </th:block>
         <th>View</th>
     </tr>
     <tr th:each="orderInfo : ${paginationResult.list}">
@@ -85,12 +113,23 @@
         <td th:utext="${orderInfo.customerEmail}"></td>
         <td style="color:red;" th:utext="${#numbers.formatDecimal(orderInfo.amount,3,2,'COMMA')}">
         </td>
+        <th:block sec:authorize="hasAnyRole('ROLE_MANAGER')">
+            <td><span class="badge text-white"
+                      th:classappend="${orderInfo.orderStatus == 'WAITING' ? 'bg-danger' :
+                              orderInfo.orderStatus == 'CONFIRM' ? 'bg-info' :
+                              orderInfo.orderStatus == 'DELIVERY' ? 'bg-warning' :
+                              orderInfo.orderStatus == 'SUCCESS' ? 'bg-success' : ''}"
+                      th:utext="${orderInfo.orderStatus}"></span></td>
+        </th:block>
         <td>
             <th:block sec:authorize="hasAnyRole('ROLE_MANAGER')">
-                <a th:href="@{|/admin/order?orderId=${orderInfo.id}|}"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                <a class="btn btn-info" th:href="@{|/admin/order?orderId=${orderInfo.id}|}"><i class="fa fa-eye"
+                                                                                               aria-hidden="true"></i></a>
+                <button class="change-button btn btn-warning" th:data-order-id="${orderInfo.orderNum}"><i class="fa fa-pencil" aria-hidden="true"></i></button>
             </th:block>
             <th:block sec:authorize="hasAnyRole('ROLE_EMPLOYEE')">
-                <a th:href="@{|/user/order?orderId=${orderInfo.id}|}"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                <a class="btn btn-info" th:href="@{|/user/order?orderId=${orderInfo.id}|}"><i class="fa fa-eye"
+                                                                                              aria-hidden="true"></i></a>
             </th:block>
         </td>
     </tr>
@@ -124,6 +163,38 @@
         </th:block>
     </div>
 </th:block>
+
+
+<div id="addAccountForm">
+    <button class="close-btn btn btn-outline-danger">x</button>
+    <h2>Change Order Status</h2>
+    <div class="row">
+        <div class="col-4">
+            <button class="dropdown-item bg-danger text-white" data-status="WAITING">WAITING</button>
+
+        </div>
+        <div class="col-4">
+            <button class="dropdown-item bg-primary text-white" data-status="CONFIRM">CONFIRM</button>
+        </div>
+        <div class="col-4">
+            <button class="dropdown-item bg-warning text-white" data-status="DELIVERY">DELIVERY</button>
+        </div>
+<!--        <div class="col-3">-->
+<!--            <button class="dropdown-item bg-success text-white" data-status="SUCCESS">SUCCESS</button>-->
+<!--        </div>-->
+    </div>
+
+
+
+</div>
 <!--<th:block th:include="/_footer"></th:block>-->
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<!-- Toastr -->
+<link rel="stylesheet" type="text/css"
+      href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+<script th:src="@{/js/changeOrderStatus.js}"></script>
 </body>
 </html>

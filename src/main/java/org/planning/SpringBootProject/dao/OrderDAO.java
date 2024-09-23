@@ -67,23 +67,22 @@ public class OrderDAO {
         order.setCustomerPhone(customerInfo.getPhone());
         order.setCustomerAddress(customerInfo.getAddress());
         order.setUserId(userId);
-
+        order.setOrderStatus("WAITING");
         session.persist(order);
 
         List<CartLineInfo> lines = cartInfo.getCartLines();
 
         for (CartLineInfo line : lines) {
+            String code = line.getProductInfo().getCode();
+            Product product = this.productRepository.findProduct(code);
             OrderDetail detail = new OrderDetail();
             detail.setId(UUID.randomUUID().toString());
             detail.setOrder(order);
             detail.setAmount(line.getAmount());
             detail.setPrice(line.getProductInfo().getPrice());
-            detail.setQuanity(line.getQuantity());
-
-            String code = line.getProductInfo().getCode();
-            Product product = this.productRepository.findProduct(code);
+            detail.setQuanity(product.getQuanityProduct() - line.getQuantity());
             detail.setProduct(product);
-
+            product.setQuanityProduct(product.getQuanityProduct() - line.getQuantity());
             session.persist(detail);
         }
 
@@ -97,7 +96,7 @@ public class OrderDAO {
     public PaginationResult<OrderInfo> listOrderInfo(int page, int maxResult, int maxNavigationPage) {
         String sql = "Select new " + OrderInfo.class.getName()//
                 + "(ord.id, ord.orderDate, ord.orderNum, ord.amount, "
-                + " ord.customerName, ord.customerAddress, ord.customerEmail, ord.customerPhone) " + " from "
+                + " ord.customerName, ord.customerAddress, ord.customerEmail, ord.customerPhone, ord.orderStatus) " + " from "
                 + Order.class.getName() + " ord "//
                 + " order by ord.orderNum desc";
 
@@ -120,6 +119,21 @@ public class OrderDAO {
         return new PaginationResult<OrderInfo>(query, page, maxResult, maxNavigationPage);
     }
 
+    public PaginationResult<OrderInfo> listOrderInfoByUserAndStatus(String userId,int page, int maxResult, int maxNavigationPage, String orderStatus) {
+        String sql = "SELECT new " + OrderInfo.class.getName()
+                + "(ord.id, ord.orderDate, ord.orderNum, ord.amount, "
+                + " ord.customerName, ord.customerAddress, ord.customerEmail, ord.customerPhone, ord.orderStatus) " + " from "
+                + Order.class.getName() + " ord "
+                + " WHERE ord.userId = :userId AND (ord.orderStatus = :orderStatus OR :orderStatus = '')"
+                + " order by ord.orderNum desc";
+
+        Session session = this.sessionFactory.getCurrentSession();
+        Query<OrderInfo> query = session.createQuery(sql, OrderInfo.class);
+        query.setParameter("userId", userId);
+        query.setParameter("orderStatus", orderStatus);
+        return new PaginationResult<OrderInfo>(query, page, maxResult, maxNavigationPage);
+    }
+
     public Order findOrder(String orderId) {
         Session session = this.sessionFactory.getCurrentSession();
         return session.find(Order.class, orderId);
@@ -132,7 +146,7 @@ public class OrderDAO {
         }
         return new OrderInfo(order.getId(), order.getOrderDate(), //
                 order.getOrderNum(), order.getAmount(), order.getCustomerName(), //
-                order.getCustomerAddress(), order.getCustomerEmail(), order.getCustomerPhone());
+                order.getCustomerAddress(), order.getCustomerEmail(), order.getCustomerPhone(), order.getOrderStatus());
     }
 
     public List<OrderDetailInfo> listOrderDetailInfos(String orderId) {

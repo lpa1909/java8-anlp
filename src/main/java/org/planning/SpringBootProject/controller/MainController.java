@@ -3,18 +3,21 @@ package org.planning.SpringBootProject.controller;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import org.planning.SpringBootProject.dao.AccountDAO;
 import org.planning.SpringBootProject.dao.OrderDAO;
 import org.planning.SpringBootProject.dao.ProductDAO;
 import org.planning.SpringBootProject.entity.Account;
 import org.planning.SpringBootProject.entity.Order;
 import org.planning.SpringBootProject.entity.Product;
+import org.planning.SpringBootProject.exception.InsufficientQuantityException;
 import org.planning.SpringBootProject.form.CustomerForm;
 import org.planning.SpringBootProject.model.*;
 import org.planning.SpringBootProject.pagination.PaginationResult;
@@ -96,7 +99,7 @@ public class MainController {
         model.addAttribute("mess", "check data");
         List<Product> products = productRepository.getAllProducts();
         List<Account> accounts = accountRepository.findAll();
-        for(Account a : accounts) System.out.println(a.getId());
+        for (Account a : accounts) System.out.println(a.getId());
         model.addAttribute("products", products);
 //        Account a = new Account();
 //        a.setFullName("My name is Admin 2");
@@ -175,8 +178,12 @@ public class MainController {
     public String shoppingCartUpdateQty(HttpServletRequest request, //
                                         Model model, //
                                         @ModelAttribute("cartForm") CartInfo cartForm) {
-
         CartInfo cartInfo = Utils.getCartInSession(request);
+//        Product product = productRepository.findProductByCode(id);
+//        if(cartInfo.getQuantityTotal() > product.getQuanityProduct()){
+//            model.addAttribute("mess", "The product you selected is not available in sufficient quantity, please try again.");
+//            return "redirect:/shoppingCart";
+//        }
         cartInfo.updateQuantity(cartForm);
 
         return "redirect:/shoppingCart";
@@ -235,9 +242,7 @@ public class MainController {
     @RequestMapping(value = {"/shoppingCartConfirmation"}, method = RequestMethod.GET)
     public String shoppingCartConfirmationReview(HttpServletRequest request, Model model) {
         CartInfo cartInfo = Utils.getCartInSession(request);
-
         if (cartInfo == null || cartInfo.isEmpty()) {
-
             return "redirect:/shoppingCart";
         } else if (!cartInfo.isValidCustomer()) {
 
@@ -250,9 +255,18 @@ public class MainController {
 
     // POST: Gửi đơn hàng (Save).
     @RequestMapping(value = {"/shoppingCartConfirmation"}, method = RequestMethod.POST)
-    public String shoppingCartConfirmationSave(HttpServletRequest request, Model model, @RequestParam("userId")String userId) {
+    public String shoppingCartConfirmationSave(HttpServletRequest request, Model model, @RequestParam("userId") String userId) {
         CartInfo cartInfo = Utils.getCartInSession(request);
-
+        List<CartLineInfo> lines = cartInfo.getCartLines();
+        for (CartLineInfo line : lines) {
+            String code = line.getProductInfo().getCode();
+            Product product = this.productRepository.findProduct(code);
+            if(line.getQuantity() > product.getQuanityProduct()){
+                model.addAttribute("messError", "error");
+                model.addAttribute("myCart", cartInfo);
+                return "shoppingCartConfirmation";
+            }
+        }
         if (cartInfo.isEmpty()) {
 
             return "redirect:/shoppingCart";
@@ -261,7 +275,6 @@ public class MainController {
             return "redirect:/shoppingCartCustomer";
         }
         try {
-            System.out.println(cartInfo.getCustomerInfo());
             orderDAO.saveOrder(cartInfo, userId);
         } catch (Exception e) {
 
@@ -276,6 +289,12 @@ public class MainController {
 
         return "redirect:/shoppingCartFinalize";
     }
+
+//    @ExceptionHandler(InsufficientQuantityException.class)
+//    public String handleInsufficientQuantityException(InsufficientQuantityException ex, RedirectAttributes redirectAttributes) {
+//        redirectAttributes.addFlashAttribute("messError", ex.getMessage());
+//        return "redirect:/shoppingCartConfirmation";
+//    }
 
     @RequestMapping(value = {"/shoppingCartFinalize"}, method = RequestMethod.GET)
     public String shoppingCartFinalize(HttpServletRequest request, Model model) {
@@ -306,7 +325,7 @@ public class MainController {
 
     @RequestMapping(value = {"/user/orderList"}, method = RequestMethod.GET)
     public String listOrderByUser(@RequestParam(name = "userId") String userId, Model model, //
-                                  @RequestParam(value = "page", defaultValue = "1") String pageStr){
+                                  @RequestParam(value = "page", defaultValue = "1") String pageStr) {
         int page = 1;
         try {
             page = Integer.parseInt(pageStr);
@@ -339,36 +358,36 @@ public class MainController {
     }
 
     @RequestMapping(value = {"/search"}, method = RequestMethod.GET)
-    public String search(Model model, @RequestParam("query") String query){
+    public String search(Model model, @RequestParam("query") String query) {
         List<Product> products = productRepository.findByNameContainingIgnoreCase(query);
         model.addAttribute("products", products);
         return "index";
     }
 
     @RequestMapping(value = {"/signup"}, method = RequestMethod.GET)
-    public String signUpForm(Model model){
+    public String signUpForm(Model model) {
         model.addAttribute("account", new Account());
         return "signup";
     }
 
     @RequestMapping(value = {"/signup"}, method = RequestMethod.POST)
-    public String signUp(@Validated @ModelAttribute("account") Account account, BindingResult result, Model model){
+    public String signUp(@Validated @ModelAttribute("account") Account account, BindingResult result, Model model) {
 //        if(result.hasErrors()){
 //            return "signup";
 //        }
         List<Account> accounts = accountRepository.findAll();
         boolean check = true;
-        for(Account a : accounts){
-            if(a.getUserName().equals(account.getUserName()) || a.getGmail().equals(account.getGmail())){
+        for (Account a : accounts) {
+            if (a.getUserName().equals(account.getUserName()) || a.getGmail().equals(account.getGmail())) {
                 check = false;
             }
         }
-        if(!check){
+        if (!check) {
             model.addAttribute("error", "Username or email is valid, please try again.");
             return "signup";
-        }else{
+        } else {
             PasswordValidator p = new PasswordValidator();
-            if(!p.isValid(account.getEncrytedPassword())){
+            if (!p.isValid(account.getEncrytedPassword())) {
                 model.addAttribute("error", "Password must contain at least 8 characters, including uppercase, lowercase, numbers, and special characters.");
                 return "signup";
             }
@@ -380,6 +399,38 @@ public class MainController {
             account.setUserRole("ROLE_EMPLOYEE");
             accountRepository.save(account);
             return "redirect:/login";
+        }
+    }
+
+
+
+    @RequestMapping(value = {"/user/viewOrderStatus"}, method = RequestMethod.GET)
+    public String listOrderByUserAndStatus(@RequestParam(name = "userId") String userId, Model model, //
+                                  @RequestParam(value = "page", defaultValue = "1") String pageStr,
+                                           @RequestParam(value = "status", defaultValue = "") String status) {
+        int page = 1;
+        try {
+            page = Integer.parseInt(pageStr);
+        } catch (Exception e) {
+        }
+        final int MAX_RESULT = 5;
+        final int MAX_NAVIGATION_PAGE = 10;
+
+        PaginationResult<OrderInfo> paginationResult = orderDAO.listOrderInfoByUserAndStatus(userId, page, MAX_RESULT, MAX_NAVIGATION_PAGE, status);
+
+        model.addAttribute("paginationResult", paginationResult);
+        return "orderStatus";
+    }
+
+
+    @RequestMapping(value = {"/user/confirmStatus"}, method = RequestMethod.POST)
+    public ResponseEntity<?> changeStatus(@RequestParam("orderNum") int orderNum){
+        Order order = orderRepository.findByOrderNum(orderNum);
+        if(order != null){
+            orderRepository.confirmOrderStatusByUser(orderNum);
+            return ResponseEntity.ok("Order Status updated success!");
+        }else{
+            return ResponseEntity.badRequest().body("Status invalid!");
         }
     }
 }

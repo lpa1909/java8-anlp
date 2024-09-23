@@ -126,6 +126,7 @@ public class ProductDAO {
         product.setCode(code);
         product.setName(productForm.getName());
         product.setPrice(productForm.getPrice());
+        product.setQuanityProduct(productForm.getQuantity());
 
         if (productForm.getFileData() != null) {
             byte[] image = null;
@@ -152,7 +153,7 @@ public class ProductDAO {
         Page<Product> productPage = productRepository.findByLikeNameAndIsDeletedTrue(likeName, pageable);
 
         List<ProductInfo> productInfos = productPage.getContent().stream()
-                .map(product -> new ProductInfo(product.getCode(), product.getName(), product.getPrice()))
+                .map(product -> new ProductInfo(product.getCode(), product.getName(), product.getPrice(), product.getQuanityProduct()))
                 .collect(Collectors.toList());
         int totalRecords = productRepository.getTotalRecords(likeName);
         return new Paging<>(productInfos, totalRecords, page, maxResult);
