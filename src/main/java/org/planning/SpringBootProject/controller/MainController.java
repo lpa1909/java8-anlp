@@ -3,10 +3,8 @@ package org.planning.SpringBootProject.controller;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.ZoneId;
+import java.util.*;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -15,6 +13,7 @@ import org.planning.SpringBootProject.dao.AccountDAO;
 import org.planning.SpringBootProject.dao.OrderDAO;
 import org.planning.SpringBootProject.dao.ProductDAO;
 import org.planning.SpringBootProject.entity.Account;
+import org.planning.SpringBootProject.entity.Comment;
 import org.planning.SpringBootProject.entity.Order;
 import org.planning.SpringBootProject.entity.Product;
 import org.planning.SpringBootProject.exception.InsufficientQuantityException;
@@ -23,6 +22,7 @@ import org.planning.SpringBootProject.model.*;
 import org.planning.SpringBootProject.pagination.PaginationResult;
 import org.planning.SpringBootProject.pagination.Paging;
 import org.planning.SpringBootProject.repository.AccountRepository;
+import org.planning.SpringBootProject.repository.CommentRepository;
 import org.planning.SpringBootProject.repository.OrderRepository;
 import org.planning.SpringBootProject.repository.ProductRepository;
 import org.planning.SpringBootProject.util.Utils;
@@ -30,10 +30,12 @@ import org.planning.SpringBootProject.validator.CustomerFormValidator;
 import org.planning.SpringBootProject.validator.PasswordValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Repository;
@@ -66,6 +68,8 @@ public class MainController {
     private AccountRepository accountRepository;
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
+    @Autowired
+    private CommentRepository commentRepository;
 
     @InitBinder
     public void myInitBinder(WebDataBinder dataBinder) {
@@ -262,7 +266,7 @@ public class MainController {
             String code = line.getProductInfo().getCode();
             Product product = this.productRepository.findProduct(code);
             if(line.getQuantity() > product.getQuanityProduct()){
-                model.addAttribute("messError", "error");
+                model.addAttribute("messError", "There is not enough product left compared to your request, please try again");
                 model.addAttribute("myCart", cartInfo);
                 return "shoppingCartConfirmation";
             }
@@ -357,6 +361,28 @@ public class MainController {
         return "order";
     }
 
+
+    @RequestMapping(value = {"/comment"}, method = RequestMethod.GET)
+    public String commentByUser(Model model, @RequestParam("orderId") String orderId) {
+        Order o = orderRepository.findByOrderId(orderId);
+        if(!o.getOrderStatus().equals("SUCCESS")){
+            return "403";
+        }
+        OrderInfo orderInfo = null;
+        if (orderId != null) {
+            orderInfo = this.orderDAO.getOrderInfo(orderId);
+        }
+        if (orderInfo == null) {
+            return "redirect:/admin/orderList";
+        }
+        List<OrderDetailInfo> details = this.orderDAO.listOrderDetailInfos(orderId);
+        orderInfo.setDetails(details);
+
+        model.addAttribute("orderInfo", orderInfo);
+
+        return "commentByUser";
+    }
+
     @RequestMapping(value = {"/search"}, method = RequestMethod.GET)
     public String search(Model model, @RequestParam("query") String query) {
         List<Product> products = productRepository.findByNameContainingIgnoreCase(query);
@@ -433,4 +459,101 @@ public class MainController {
             return ResponseEntity.badRequest().body("Status invalid!");
         }
     }
+
+    @RequestMapping(value = {"/reviewProducts"})
+    public ResponseEntity<List<CommentInfo>> reviewProducts(Model model, @RequestParam("productCode") String productCode, @RequestParam("email") String email) {
+        List<Comment> comments = commentRepository.getCommentById(productCode);
+        List<CommentInfo> commentInfos = new ArrayList<>();
+        Account a;
+        for(Comment comment : comments){
+            a = accountRepository.findByUserId(comment.getUserId());
+
+            CommentInfo commentInfo = new CommentInfo();
+            commentInfo.setId(comment.getId());
+            commentInfo.setDetails(comment.getDetails());
+            commentInfo.setStar(comment.getStar());
+            commentInfo.setUserId(comment.getId());
+            commentInfo.setProductId(comment.getProductId());
+            commentInfo.setCreatedAt(comment.getCreateAt());
+            if(a != null){
+                commentInfo.setUserName(a.getUserName());
+                commentInfo.setFullName(a.getFullName());
+            }
+            commentInfos.add(commentInfo);
+        }
+        return ResponseEntity.ok(commentInfos);
+    }
+
+    @RequestMapping(value = {"/loadCommentOfProduct"})
+    public ResponseEntity<Page<CommentInfo>> loadCommentOfProduct(Model model, @RequestParam("productCode") String productCode, @RequestParam(defaultValue = "0") int page,
+                                                                  @RequestParam(defaultValue = "3") int size) {
+        Pageable pageable = PageRequest.of(page, size); // Tạo đối tượng Pageable
+
+        Page<Comment> commentPage = commentRepository.getCommentById(productCode, pageable);
+
+        List<Comment> comments = commentRepository.getCommentById(productCode);
+        List<CommentInfo> commentInfos = new ArrayList<>();
+        Account a;
+        for(Comment comment : commentPage.getContent()){
+            a = accountRepository.findByUserId(comment.getUserId());
+
+            CommentInfo commentInfo = new CommentInfo();
+            commentInfo.setId(comment.getId());
+            commentInfo.setDetails(comment.getDetails());
+            commentInfo.setStar(comment.getStar());
+            commentInfo.setUserId(comment.getId());
+            commentInfo.setProductId(comment.getProductId());
+            commentInfo.setCreatedAt(comment.getCreateAt());
+            if(a != null){
+                commentInfo.setUserName(a.getUserName());
+                commentInfo.setFullName(a.getFullName());
+            }
+            commentInfos.add(commentInfo);
+        }
+        Page<CommentInfo> commentInfoPage = new PageImpl<>(commentInfos, pageable, commentPage.getTotalElements());
+
+        return ResponseEntity.ok(commentInfoPage);
+    }
+
+
+    @RequestMapping(value = {"/sendCommentProduct"})
+    public ResponseEntity<List<CommentInfo>> reviewProductsSend(Model model, @RequestParam("productCode") String productCode, @RequestParam("userId") String userId, @RequestParam("details") String details) {
+        LocalDateTime localDateTime = LocalDateTime.now();
+        Date date = Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
+        String id = UUID.randomUUID().toString();
+        commentRepository.createComment(id, details, "5", userId, productCode, date);
+        List<Comment> comments = commentRepository.getCommentById(productCode);
+        List<CommentInfo> commentInfos = new ArrayList<>();
+        Account a;
+        for(Comment comment : comments){
+            a = accountRepository.findByUserId(comment.getUserId());
+
+            CommentInfo commentInfo = new CommentInfo();
+            commentInfo.setId(comment.getId());
+            commentInfo.setDetails(comment.getDetails());
+            commentInfo.setStar(comment.getStar());
+            commentInfo.setUserId(comment.getId());
+            commentInfo.setProductId(comment.getProductId());
+            commentInfo.setCreatedAt(comment.getCreateAt());
+            if(a != null){
+                commentInfo.setUserName(a.getUserName());
+                commentInfo.setFullName(a.getFullName());
+            }
+            commentInfos.add(commentInfo);
+        }
+        return ResponseEntity.ok(commentInfos);
+    }
+
+    @RequestMapping(value = {"/deleteComment"})
+    public ResponseEntity<String> deleteComment(@RequestParam("commentId") String commentId) {
+        commentRepository.deleteById(commentId);
+        return ResponseEntity.ok("Delete Comment Success!");
+    }
+
+    @RequestMapping(value = {"/hi"})
+    public String view() {
+        return "reviewProducts";
+    }
+
+
 }

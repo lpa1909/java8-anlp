@@ -27,7 +27,7 @@ public class OrderInfo {
 
     public OrderInfo(String id, Date orderDate, int orderNum, //
                      double amount, String customerName, String customerAddress, //
-                     String customerEmail, String customerPhone,  String orderStatus) {
+                     String customerEmail, String customerPhone,  String orderStatus, String userId) {
         this.id = id;
         this.orderDate = orderDate;
         this.orderNum = orderNum;
@@ -38,6 +38,7 @@ public class OrderInfo {
         this.customerEmail = customerEmail;
         this.customerPhone = customerPhone;
         this.orderStatus = orderStatus;
+        this.userId = userId;
     }
 
     public OrderInfo(String id, Date orderDate, int orderNum, //

@@ -96,7 +96,7 @@ public class OrderDAO {
     public PaginationResult<OrderInfo> listOrderInfo(int page, int maxResult, int maxNavigationPage) {
         String sql = "Select new " + OrderInfo.class.getName()//
                 + "(ord.id, ord.orderDate, ord.orderNum, ord.amount, "
-                + " ord.customerName, ord.customerAddress, ord.customerEmail, ord.customerPhone, ord.orderStatus) " + " from "
+                + " ord.customerName, ord.customerAddress, ord.customerEmail, ord.customerPhone, ord.orderStatus, ord.userId) " + " from "
                 + Order.class.getName() + " ord "//
                 + " order by ord.orderNum desc";
 
@@ -122,7 +122,7 @@ public class OrderDAO {
     public PaginationResult<OrderInfo> listOrderInfoByUserAndStatus(String userId,int page, int maxResult, int maxNavigationPage, String orderStatus) {
         String sql = "SELECT new " + OrderInfo.class.getName()
                 + "(ord.id, ord.orderDate, ord.orderNum, ord.amount, "
-                + " ord.customerName, ord.customerAddress, ord.customerEmail, ord.customerPhone, ord.orderStatus) " + " from "
+                + " ord.customerName, ord.customerAddress, ord.customerEmail, ord.customerPhone, ord.orderStatus, ord.userId) " + " from "
                 + Order.class.getName() + " ord "
                 + " WHERE ord.userId = :userId AND (ord.orderStatus = :orderStatus OR :orderStatus = '')"
                 + " order by ord.orderNum desc";
@@ -146,7 +146,7 @@ public class OrderDAO {
         }
         return new OrderInfo(order.getId(), order.getOrderDate(), //
                 order.getOrderNum(), order.getAmount(), order.getCustomerName(), //
-                order.getCustomerAddress(), order.getCustomerEmail(), order.getCustomerPhone(), order.getOrderStatus());
+                order.getCustomerAddress(), order.getCustomerEmail(), order.getCustomerPhone(), order.getOrderStatus(), order.getUserId());
     }
 
     public List<OrderDetailInfo> listOrderDetailInfos(String orderId) {

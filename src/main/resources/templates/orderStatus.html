@@ -160,7 +160,7 @@
                         <a class="btn btn-info" th:href="@{|/user/order?orderId=${orderInfo.id}|}"><i class="fa fa-eye"
                                                                                                       aria-hidden="true"></i></a>
                         <button th:data-order-num="${orderInfo.orderNum}" class="btn btn-success confirm-btn" th:if="${orderInfo.orderStatus == 'DELIVERY'}"><i class="fa fa-check" aria-hidden="true" ></i></button>
-                        <button th:data-order-num="${orderInfo.orderNum}" class="btn btn-danger comment-btn" th:if="${orderInfo.orderStatus == 'SUCCESS'}"><i class="fa fa-commenting" aria-hidden="true"></i></button>
+                        <a th:href="@{|/comment?orderId=${orderInfo.id}|}" class="btn btn-danger comment-btn" th:if="${orderInfo.orderStatus == 'SUCCESS'}"><i class="fa fa-commenting" aria-hidden="true"></i></a>
                     </th:block>
                 </td>
             </tr>

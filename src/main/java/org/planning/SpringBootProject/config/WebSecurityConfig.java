@@ -60,6 +60,8 @@ public class WebSecurityConfig {
                         .hasAnyRole("EMPLOYEE", "MANAGER")
                         .requestMatchers("/admin/order","/admin/product", "/admin/deleteProduct", "/admin/orderList", "/admin/loadData", "/admin/manageAccount", "/admin/activeAccount", "admin/deleteAccount", "/admin/editAccount", "/admin/addAccount", "/admin/manageProduct", "/admin/unlockProduct", "/admin/searchInManageProduct", "/admin/searchAccountByAdmin", "/admin/changeStatus")
                         .hasRole("MANAGER")
+                        .requestMatchers("/user/order", "/user/orderList", "/user/confirmStatus", "/user/viewOrderStatus", "/comment")
+                        .hasRole("EMPLOYEE")
                         .anyRequest().authenticated())
                 .exceptionHandling(e -> e.accessDeniedPage("/403"))
                 .formLogin(login -> login

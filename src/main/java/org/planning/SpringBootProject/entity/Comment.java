@@ -1,13 +1,12 @@
 package org.planning.SpringBootProject.entity;
 
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.GenericGenerator;
 
 import java.io.Serializable;
+import java.util.Date;
 
 @Entity
 @Table(name = "COMMENTS")
@@ -25,7 +24,26 @@ public class Comment implements Serializable {
     private String userId;
     @Column(name = "productId")
     private String productId;
+    @Column(name = "createAt")
+    private Date createAt;
+    @Column(name = "isDeleted")
+    private boolean isDeleted;
 
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
+    }
+
+    public Date getCreateAt() {
+        return createAt;
+    }
+
+    public void setCreateAt(Date createAt) {
+        this.createAt = createAt;
+    }
 
     public String getDetails() {
         return details;
