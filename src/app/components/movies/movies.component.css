@@ -21,3 +21,13 @@
   margin: 0.2em;
   text-align: left;
 }
+
+
+
+.ng-valid[required], .ng-valid.required  {
+  border: 2px solid #42A948; /* green */
+}
+
+.ng-invalid:not(form)  {
+  border: 2px solid #a94442; /* red */
+}

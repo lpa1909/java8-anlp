@@ -4,15 +4,21 @@
     <tr>
       <td>New movie's name:</td>
       <td>
-        <input #movieName placeholder="name">
+        <input #movieName placeholder="name" required [(ngModel)]="movie.name" #name="ngModel">
+        <div [hidden]="name.valid || name.pristine" class="alert alert-danger">
+          Name is required
+        </div>
       </td>
     </tr>
     <tr>
       <td>release year: </td>
-      <input #releaseYear placeholder="release year">
+      <input #releaseYear placeholder="release year" required [(ngModel)]="movie.releaseYear" #year="ngModel">
+      <div [hidden]="year.valid || year.pristine" class="alert alert-danger">
+        Year is required
+      </div>
     </tr>
     <tr>
-      <button (click)="add(movieName.value, releaseYear.value); movieName.value=''; releaseYear.value=''">
+      <button (click)="add(movieName.value, releaseYear.value); movieName.value=''; releaseYear.value=''" [disabled]="!name.valid || !year.valid">
         add
       </button>
     </tr>
