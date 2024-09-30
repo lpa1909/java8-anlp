@@ -1,15 +1,25 @@
 <div *ngIf="movie" class="details">
-  <h3>You selected: {{movie.name}}. Details:</h3>
+  <h3>You selected: {{ movie.name }}. Details:</h3>
   <table style="width: 100%">
     <tr>
       <td>name:</td>
-      <td><input [(ngModel)]="movie.name" placeholder="name"></td>
+      <td>
+        <input [(ngModel)]="movie.name" placeholder="name" #name="ngModel">
+        <div [hidden]="name.valid || name.pristine" class="alert alert-danger">
+          Name is required
+        </div>
+      </td>
     </tr>
     <tr>
-      <td>release year: </td>
-      <input [(ngModel)]="movie.releaseYear" placeholder="release year">
+      <td>release year:</td>
+      <td>
+        <input [(ngModel)]="movie.releaseYear" placeholder="release year" #year="ngModel">
+        <div [hidden]="year.valid || year.pristine" class="alert alert-danger">
+          Year is required
+        </div>
+      </td>
     </tr>
   </table>
-  <button (click)="save()">save</button>
+  <button (click)="save()" [disabled]="!name.valid || !year.valid">save</button>
   <button (click)="goBack()">go back</button>
 </div>

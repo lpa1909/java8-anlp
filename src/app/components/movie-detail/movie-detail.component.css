@@ -7,3 +7,11 @@
   text-align: left;
   font-size: 0.875em; /* 14px/16=0.875em */
 }
+
+.ng-valid[required], .ng-valid.required  {
+  border: 2px solid #42A948; /* green */
+}
+
+.ng-invalid:not(form)  {
+  border: 2px solid #a94442; /* red */
+}
