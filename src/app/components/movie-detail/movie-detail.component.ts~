@@ -22,9 +22,11 @@ export class MovieDetailComponent {
   }
   getMovieFromRoute(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
-    console.log(`this.route.snapshot.paramMap = ${JSON.stringify(this.route.snapshot.paramMap)}`);
-    //Call service to "get movie from id" ?
     this.movieService.getMovieFromId(id).subscribe(movie => this.movie = movie);
+  }
+
+  save(): void{
+    this.movieService.updateMovie(this.movie).subscribe((res) => this.)
   }
 
   goBack(): void {

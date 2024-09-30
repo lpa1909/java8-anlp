@@ -1,0 +1,19 @@
+import { Component } from '@angular/core';
+
+import { Observable } from "rxjs";;
+import { Subject } from 'rxjs';
+import { of } from 'rxjs';
+
+import {
+  debounceTime, distinctUntilChanged, switchMap
+} from 'rxjs/operators';
+
+
+@Component({
+  selector: 'app-movie-search',
+  templateUrl: './movie-search.component.html',
+  styleUrl: './movie-search.component.css'
+})
+export class MovieSearchComponent {
+
+}

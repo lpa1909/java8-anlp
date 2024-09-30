@@ -14,7 +14,7 @@
   text-align: left;
 }
 
-.selected{
-  background-color: greenyellow;
-  color: #cce5ff;
+.selected {
+  background: mediumseagreen !important;
+  color: white;
 }

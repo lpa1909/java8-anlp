@@ -25,6 +25,10 @@ export class MovieDetailComponent {
     this.movieService.getMovieFromId(id).subscribe(movie => this.movie = movie);
   }
 
+  save(): void{
+    this.movieService.updateMovie(this.movie).subscribe(() => this.goBack())
+  }
+
   goBack(): void {
     this.location.back();
   }

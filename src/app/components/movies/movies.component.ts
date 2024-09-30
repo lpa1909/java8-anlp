@@ -20,18 +20,43 @@ export class MoviesComponent implements OnInit {
 
   }
   getMoviesFromServices(): void {
-    this.movieService.getMovies().subscribe((res) => {
-      this.movies = res;
-    });
+    //this.movies = this.movieService.getMovies();
+    this.movieService.getMovies().subscribe(updatedMovies => this.movies = updatedMovies);
   }
   ngOnInit() {
     this.getMoviesFromServices();
   }
-  //Action when select a Movie in List item
-  selectedMovie: Movie = new Movie();
-  onSelect(movie: Movie): void {
-    this.selectedMovie = movie;
-    console.log(`selectedMovie = ${JSON.stringify(this.selectedMovie)}`);
-    // alert(`selectedMovie = ${JSON.stringify(this.selectedMovie)}`);
+
+  add(name: string, releaseYear:string): void {
+    name = name.trim();
+    if (Number.isNaN(Number(releaseYear)) || !name || Number(releaseYear) === 0) {
+      alert('Name must not be blank, Release year must be a number');
+      return;
+    }
+    const newMovie: Movie = new Movie();
+    newMovie.name = name;
+    newMovie.releaseYear = Number(releaseYear);
+    this.movieService.addMovie(newMovie)
+      .subscribe(insertedMovie => {
+        this.movies.push(insertedMovie);
+      });
   }
+
+  delete(movieId: number): void {
+    this.movieService.deleteMovie(movieId).subscribe(() => {
+      this.movies = this.movies.filter(eachMovie => eachMovie.id !== movieId);
+      alert('Delete success!!!')
+      this.getMoviesFromServices()
+    });
+  }
+
+
+
+  //Action when select a Movie in List item
+  // selectedMovie: Movie = new Movie();
+  // onSelect(movie: Movie): void {
+  //   this.selectedMovie = movie;
+  //   console.log(`selectedMovie = ${JSON.stringify(this.selectedMovie)}`);
+  //   // alert(`selectedMovie = ${JSON.stringify(this.selectedMovie)}`);
+  // }
 }

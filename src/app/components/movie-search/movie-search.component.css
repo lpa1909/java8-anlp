@@ -1,17 +1,10 @@
-.parent {
-  display: flex;
-}
-.selected {
-  background: mediumseagreen !important;
-  color: white;
-}
-
 .movies {
-  background: #3399ff;
+  background:white;
   padding: 0.5em 1em 0.5em 1.5em;
   margin: 1em;
   max-width: 16em;
 }
+
 .movies .movieListItem
 {
   font-size: 0.875em; /* 14px/16=0.875em */
@@ -19,5 +12,6 @@
   background: #cce5ff;
   padding: 0.3em;
   margin: 0.2em;
-  text-align: left;
+  text-align: center;
 }
+
