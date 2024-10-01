@@ -1,0 +1,10 @@
+<div nz-row>
+  <div nz-col [nzSpan]="6">
+    <app-category-component></app-category-component>
+  </div>
+
+  <div nz-col [nzSpan]="18">
+    <h1>Blog Management</h1>
+    <app-list-blog-components></app-list-blog-components>
+  </div>
+</div>

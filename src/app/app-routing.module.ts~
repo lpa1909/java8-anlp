@@ -1,0 +1,16 @@
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import {ListBlogComponentsComponent} from "./components/list-blog-components/list-blog-components.component";
+
+const routes: Routes = [
+  {
+    path: 'listBlogs',
+    component: ListBlogComponentsComponent
+  }
+];
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
+})
+export class AppRoutingModule { }

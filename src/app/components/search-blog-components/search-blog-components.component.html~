@@ -1,0 +1,14 @@
+<div class="search-blog">
+  <h2>Search Blogs</h2>
+  <nz-input-group [nzAddOnAfter]="suffixButton">
+    <input type="text" nz-input placeholder="Tiêu đề" #searchBox (keyup)="search(searchBox.value)">
+  </nz-input-group>
+  <ng-template #suffixButton>
+    <span nz-icon nzType="search" nzTheme="outline"></span>
+  </ng-template>
+</div>
+<ul>
+  <li *ngFor="let blog of blog$ | async">
+    {{ blog.title }}
+  </li>
+</ul>

@@ -1,0 +1,3 @@
+.search-blog input{
+  width: 70%;
+}
