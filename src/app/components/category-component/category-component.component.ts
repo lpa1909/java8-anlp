@@ -6,5 +6,9 @@ import { Component } from '@angular/core';
   styleUrl: './category-component.component.css'
 })
 export class CategoryComponentComponent {
+  isCollapsed = false;
 
+  toggleCollapsed(): void {
+    this.isCollapsed = !this.isCollapsed;
+  }
 }

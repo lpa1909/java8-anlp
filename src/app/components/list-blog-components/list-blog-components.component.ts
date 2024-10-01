@@ -20,6 +20,7 @@ export class ListBlogComponentsComponent implements OnInit {
   listCategorys: Category[] = [];
   listPositions: Position[] = [];
   blogsToDisplay: Blog[] = [];
+
   constructor() {
   }
 
@@ -45,7 +46,6 @@ export class ListBlogComponentsComponent implements OnInit {
   getAllBlog() {
     this.blogService.getBlogs().subscribe((res) => {
       this.listBlogs = res;
-
     })
   }
 
@@ -70,6 +70,18 @@ export class ListBlogComponentsComponent implements OnInit {
       this.blogService.deleteBlogs(id).subscribe(() => {
         this.listBlogs = this.listBlogs.filter(blog => blog.id !== id)
         alert("Xóa thành công !!!!!!");
+        this.getAllBlog();
+        this.getAllCategory();
+        this.getALlPosition();
+      })
+    }
+  }
+
+  changeStatus(id: number, status: boolean): void {
+    const confirm_change = confirm("Bạn có chắc chắn muốn thay đổi trạng thái của bài báo không?");
+    if (confirm_change) {
+      this.blogService.updateDataPublic(id, Boolean(status)).subscribe(() => {
+        alert('Thay đổi trạng thái thành công')
         this.getAllBlog();
         this.getAllCategory();
         this.getALlPosition();

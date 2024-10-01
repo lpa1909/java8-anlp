@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import { Observable } from "rxjs";;
 import { Subject } from 'rxjs';
 import { of } from 'rxjs';
@@ -8,6 +8,10 @@ import {
 } from 'rxjs/operators';
 import {Blog} from "../../model/blog";
 import {BlogServiceService} from "../../services/blog-service.service";
+import {CategoryServiceService} from "../../services/category-service.service";
+import {PositionServiceService} from "../../services/position-service.service";
+import {Category} from "../../model/category";
+import {Position} from "../../model/position";
 @Component({
   selector: 'app-search-blog-components',
   templateUrl: './search-blog-components.component.html',
@@ -15,6 +19,10 @@ import {BlogServiceService} from "../../services/blog-service.service";
 })
 export class SearchBlogComponentsComponent implements OnInit{
   blog$: Observable<Blog[]> = of([]);
+  categoryService = inject(CategoryServiceService)
+  positionService = inject(PositionServiceService)
+  listCategorys: Category[] = [];
+  listPositions: Position[] = [];
   private searchedSubject = new Subject<string>();
 
   constructor(private blogService: BlogServiceService) {

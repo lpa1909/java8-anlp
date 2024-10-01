@@ -35,7 +35,7 @@ export class SearchBlogComponentsComponent implements OnInit{
 
   ngOnInit() {
     this.blog$ = this.searchedSubject.pipe(
-      debounceTime(300), // wait 300ms after each keystroke before considering the searched string
+      debounceTime(100), // wait 300ms after each keystroke before considering the searched string
       distinctUntilChanged(),// ignore new string if same as previous string
       switchMap((searchedString: string) => this.blogService.searchMovies(searchedString))
     );

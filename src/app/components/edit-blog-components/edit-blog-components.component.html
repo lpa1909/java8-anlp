@@ -1,1 +1,51 @@
-<p>edit-blog-components works!</p>
+
+<form [formGroup]="blogForm" (ngSubmit)="onSubmit()">
+  <div class="form-group">
+    <label for="title">Tiêu đề:</label>
+    <input type="text" id="title" class="form-control" formControlName="title" required>
+  </div>
+
+  <div class="form-group">
+    <label for="des">Mô tả ngắn:</label>
+    <input type="text" id="des" class="form-control" formControlName="des" required>
+  </div>
+
+  <div class="form-group">
+    <label for="detail">Chi tiết:</label>
+    <textarea id="detail" class="form-control" formControlName="detail" rows="5" required></textarea>
+  </div>
+
+  <div class="form-group">
+    <label for="category">Danh mục:</label>
+    <select id="category" class="form-control" formControlName="category">
+      <option *ngFor="let category of listCategorys" [value]="category.id">{{ category.name }}</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label>Vị trí:</label>
+    <div *ngFor="let position of listPositions; let i = index">
+      <input type="checkbox" [formControlName]="i" [value]="position.id"> {{ position.name }}
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>Public:</label>
+    <div>
+      <input type="radio" formControlName="public" [value]="true"> Yes
+      <input type="radio" formControlName="public" [value]="false"> No
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="data_pubblic">Ngày đăng:</label>
+    <input type="date" id="data_pubblic" class="form-control" formControlName="data_pubblic" required>
+  </div>
+
+  <div class="form-group">
+    <label for="thumbs">Hình ảnh:</label>
+    <input type="file" id="thumbs" class="form-control-file" (change)="onFileSelected($event)">
+  </div>
+
+  <button type="submit" class="btn btn-primary" [disabled]="!blogForm.valid">Đăng bài</button>
+</form>

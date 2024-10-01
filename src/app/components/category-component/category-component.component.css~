@@ -1,5 +1,4 @@
 .category-table{
-  /*border: 1px solid #606060;*/
   border-collapse: collapse;
   width: 40%;
   text-align: center;
@@ -11,7 +10,6 @@
 
 .category-table th{
   border: 1px solid #606060;
-  border-radius: 100px;
 }
 
 a{

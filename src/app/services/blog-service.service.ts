@@ -25,8 +25,16 @@ export class BlogServiceService {
       return of([]);
     }
     return this.http.get<Blog[]>(this.url_blog).pipe(
-      map(blog => blog.filter(blog => blog.title.toLowerCase().startsWith(typedString.toLowerCase())))
+      map(blogs => blogs.filter(blog => blog.title.toLowerCase().includes(typedString.toLowerCase())))
     );
+  }
+
+  updateDataPublic(id: number, newStatus: boolean): Observable<Blog> {
+    return this.http.patch<Blog>(`${this.url_blog}/${id.toString()}`, { public: newStatus });
+  }
+
+  addNewBlog(newBlog: Blog): Observable<Blog>{
+    return this.http.post<Blog>(this.url_blog, newBlog);
   }
 
   // private updateBlogIds() {

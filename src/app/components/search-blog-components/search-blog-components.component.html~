@@ -7,8 +7,7 @@
     <span nz-icon nzType="search" nzTheme="outline"></span>
   </ng-template>
 </div>
-<ul>
-  <li *ngFor="let blog of blog$ | async">
-    {{ blog.title }}
-  </li>
-</ul>
+<app-list-blog-components [searchResults]="blog$ | async"></app-list-blog-components>
+
+
+<app-edit-blog-components></app-edit-blog-components>

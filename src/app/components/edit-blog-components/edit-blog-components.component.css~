@@ -1,6 +1,6 @@
 
 .btn-sub1, .btn-sub2 {
-  margin-top: 5px;
+  margin-top: 1rem;
   border-radius: 10px;/* Thêm khoảng cách giữa các button và phần tử phía trên */
 }
 

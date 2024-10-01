@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {catchError, Observable, tap, throwError} from "rxjs";
+import {catchError, map, Observable, of, tap, throwError} from "rxjs";
 import {Blog} from "../model/blog";
 
 @Injectable({
@@ -18,6 +18,19 @@ export class BlogServiceService {
 
   deleteBlogs(id: number): Observable<Blog> {
     return this.http.delete<Blog>(`${this.url_blog}/${id}`);
+  }
+
+  searchMovies(typedString: string): Observable<Blog[]> {
+    if (!typedString.trim()) {
+      return of([]);
+    }
+    return this.http.get<Blog[]>(this.url_blog).pipe(
+      map(blogs => blogs.filter(blog => blog.title.toLowerCase().includes(typedString.toLowerCase())))
+    );
+  }
+
+  updateDataPublic(id: number, newStatus: boolean): Observable<Blog> {
+    return this.http.patch<Blog>(`${this.url_blog}/${id.toString()}`, { public: newStatus });
   }
 
   // private updateBlogIds() {

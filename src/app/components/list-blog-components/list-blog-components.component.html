@@ -8,6 +8,7 @@
     <th>Trạng thái</th>
     <th>Vị trí</th>
     <th>Ngày public</th>
+    <th>Thay đổi trạng thái</th>
     <th>Chi tiết</th>
     <th>Chỉnh sửa</th>
     <th>Xóa</th>
@@ -19,12 +20,15 @@
     <td>{{ data.title }}</td>
     <td>{{ getCategoryName(data.category) }}</td>
     <td [ngStyle]="{'color': data.public ? 'blue' : 'red'}">{{ data.public ? "Yes" : "No" }}</td>
-    <td>
+    <td style="width: 100px; max-width: 100px">
       <nz-tag *ngFor="let positionName of getPositionNames(data.position)">
         {{ positionName }}
       </nz-tag>
     </td>
     <td>{{ data.data_pubblic | date:"dd/MM/yyyy" }}</td>
+    <td style="text-align: center">
+      <button (click)="changeStatus(data.id, !data.public)"><span nz-icon nzType="tool" nzTheme="outline"></span></button>
+    </td>
     <td style="text-align: center">
       <button><span nz-icon nzType="eye" nzTheme="outline"></span></button>
     </td>

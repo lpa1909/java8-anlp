@@ -68,7 +68,7 @@ export class EditBlogComponentsComponent implements OnInit {
       const newBlog: Blog = {
         ...formValue,
         position: selectedPositionIds,
-        category: Number(formValue.category), // Giả sử category đã là ID
+        category: formValue.category, // Giả sử category đã là ID
         thumbs: '' // Xử lý upload hình ảnh và cập nhật thumbs ở đây
       };
 
