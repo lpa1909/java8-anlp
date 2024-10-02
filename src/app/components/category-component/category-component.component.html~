@@ -1,36 +1,20 @@
-<!--<table class="category-table">-->
-<!--  <tr>-->
-<!--    <th><a nz-button nzType="link" routerLink="/listBlogs"><i nz-icon nzType="ordered-list"></i> List</a></th>-->
-<!--  </tr>-->
-<!--  <tr>-->
-<!--    <th><a nz-button nzType="link" routerLink="/"><i nz-icon nzType="file-add"></i> New</a></th>-->
-<!--  </tr>-->
-<!--  <tr>-->
-<!--    <th><a nz-button nzType="link" routerLink="/searchListBlogs"><i nz-icon nzType="search"></i> Search</a></th>-->
-<!--  </tr>-->
-<!--  <tr>-->
-<!--    <th><a nz-button nzType="link" routerLink="/edit"><i nz-icon nzType="edit"></i> Edit</a></th>-->
-<!--  </tr>-->
-<!--</table>-->
-
-<div class="wrapper">
-  <button nz-button nzType="primary" (click)="toggleCollapsed()">
-    <span nz-icon [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"></span>
-  </button>
-  <ul nz-menu nzMode="inline" nzTheme="dark" [nzInlineCollapsed]="isCollapsed">
-    <li nz-submenu nzTitle="Danh mục" nzIcon="appstore">
-      <ul>
-        <li nz-menu-item><a nz-button nzType="link" routerLink="/listBlogs"><i nz-icon nzType="ordered-list"></i> List</a></li>
-        <li nz-menu-item><a nz-button nzType="link" routerLink="/searchListBlogs"><i nz-icon nzType="search"></i> Search</a></li>
-      </ul>
-    </li>
-    <li nz-submenu nzTitle="Quản lí" nzIcon="setting">
-      <ul>
-        <li nz-menu-item><a nz-button nzType="link" routerLink="/edit"><i nz-icon nzType="edit"></i> Edit</a></li>
-        <li nz-menu-item><a nz-button nzType="link" routerLink="/"><i nz-icon nzType="file-add"></i> New</a></li>
-      </ul>
-    </li>
-  </ul>
-</div>
+<ul nz-menu nzMode="inline">
+  <li nz-submenu nzTitle="Danh mục" nzIcon="mail" nzOpen>
+    <ul>
+      <li nz-menu-group nzTitle="Blog">
+        <ul>
+          <li nz-menu-item><a nz-button nzType="link" routerLink="/listBlogs"><i nz-icon nzType="ordered-list"></i> List</a></li>
+          <li nz-menu-item><a nz-button nzType="link" routerLink="/searchListBlogs"><i nz-icon nzType="search"></i> Search</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li nz-submenu nzTitle="Quản lý" nzIcon="setting">
+    <ul>
+      <li nz-menu-item><a nz-button nzType="link" routerLink="/edit"><i nz-icon nzType="edit"></i> Edit</a></li>
+      <li nz-menu-item><a nz-button nzType="link" routerLink="/"><i nz-icon nzType="file-add"></i> New</a></li>
+    </ul>
+  </li>
+</ul>
 
 

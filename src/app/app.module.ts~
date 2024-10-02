@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NZ_I18N } from 'ng-zorro-antd/i18n';
 import { en_US } from 'ng-zorro-antd/i18n';
-import { registerLocaleData } from '@angular/common';
+import {CommonModule, registerLocaleData} from '@angular/common';
 import en from '@angular/common/locales/en';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
@@ -26,7 +26,14 @@ import {NzSelectModule} from "ng-zorro-antd/select";
 import {NzCheckboxModule} from "ng-zorro-antd/checkbox";
 import {NzSwitchModule} from "ng-zorro-antd/switch";
 import {NzMenuModule} from "ng-zorro-antd/menu";
-
+import {NzTooltipDirective} from "ng-zorro-antd/tooltip";
+import { BlogDetailComponent } from './components/blog-detail/blog-detail.component';
+import { NzModalModule } from 'ng-zorro-antd/modal';
+import { NzCardModule } from 'ng-zorro-antd/card';
+import { NzListModule } from 'ng-zorro-antd/list';
+import {NzAlertModule} from "ng-zorro-antd/alert";
+import { NzMessageService } from 'ng-zorro-antd/message';
+import { NzUploadChangeParam } from 'ng-zorro-antd/upload';
 registerLocaleData(en);
 
 @NgModule({
@@ -35,7 +42,8 @@ registerLocaleData(en);
     ListBlogComponentsComponent,
     CategoryComponentComponent,
     SearchBlogComponentsComponent,
-    EditBlogComponentsComponent
+    EditBlogComponentsComponent,
+    BlogDetailComponent,
   ],
   imports: [
     BrowserModule,
@@ -55,7 +63,13 @@ registerLocaleData(en);
     HttpClientModule,
     NzInputGroupSlotComponent,
     NzSwitchModule,
-    NzMenuModule
+    NzMenuModule,
+    NzTooltipDirective,
+    NzModalModule,
+    NzListModule,
+    NzCardModule,
+    NzAlertModule,
+    CommonModule,
   ],
   providers: [
     { provide: NZ_I18N, useValue: en_US },

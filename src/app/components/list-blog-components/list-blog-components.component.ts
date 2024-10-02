@@ -20,6 +20,17 @@ export class ListBlogComponentsComponent implements OnInit {
   listCategorys: Category[] = [];
   listPositions: Position[] = [];
   blogsToDisplay: Blog[] = [];
+  blogObj: Blog = {
+    id: 0,
+    title: '',
+    des: '',
+    detail: '',
+    category: 0,
+    public: false,
+    data_pubblic: '',
+    position: [],
+    thumbs: ''
+  }
 
   constructor() {
   }
@@ -28,6 +39,7 @@ export class ListBlogComponentsComponent implements OnInit {
     this.getAllBlog();
     this.getAllCategory();
     this.getALlPosition();
+    this.ngDoCheck()
   }
 
   getALlPosition() {
@@ -39,7 +51,6 @@ export class ListBlogComponentsComponent implements OnInit {
   getAllCategory() {
     this.categoryService.getCategories().subscribe((res) => {
       this.listCategorys = res;
-      console.log(this.listCategorys)
     })
   }
 
@@ -51,7 +62,6 @@ export class ListBlogComponentsComponent implements OnInit {
 
   getCategoryName(id: number): string {
     const category = this.listCategorys.find(category => +category.id === id);
-    console.log(category)
     return category ? category.name : "Unknown";
   }
 
@@ -77,6 +87,12 @@ export class ListBlogComponentsComponent implements OnInit {
     }
   }
 
+  getBlogByBlogId(id: number): void{
+    this.blogService.getBlogById(id).subscribe((res) => {
+      this.blogObj = res;
+    })
+  }
+
   changeStatus(id: number, status: boolean): void {
     const confirm_change = confirm("Bạn có chắc chắn muốn thay đổi trạng thái của bài báo không?");
     if (confirm_change) {
@@ -91,5 +107,27 @@ export class ListBlogComponentsComponent implements OnInit {
 
   ngDoCheck(): void {
     this.blogsToDisplay = this.searchResults?.length ? this.searchResults : this.listBlogs;
+  }
+
+
+  isVisible = false;
+  isOkLoading = false;
+
+  showModal(id: number): void {
+    this.isVisible = true;
+    this.getBlogByBlogId(id);
+    console.log(this.blogObj)
+  }
+
+  handleOk(): void {
+    this.isOkLoading = true;
+    setTimeout(() => {
+      this.isVisible = false;
+      this.isOkLoading = false;
+    }, 1000);
+  }
+
+  handleCancel(): void {
+    this.isVisible = false;
   }
 }

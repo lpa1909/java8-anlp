@@ -31,7 +31,7 @@
       </button>
     </td>
     <td style="text-align: center">
-      <button (click)="showModal(data.id)"><span nz-icon nzType="eye" nzTheme="twotone"></span></button>
+      <span nz-icon nzType="eye" nzTheme="twotone"><button (click)="showModal(data.id)"></button></span>
     </td>
     <td style="text-align: center">
       <a routerLink="/edit/{{ data.id }}"><span nz-icon nzType="edit" nzTheme="outline"></span></a>

@@ -2,44 +2,58 @@
 <form [formGroup]="blogForm" (ngSubmit)="onSubmit()">
   <div class="form-group">
     <label for="title">Tiêu đề:</label>
-    <input type="text" id="title" class="form-control" formControlName="title" required>
-  </div>
-
-  <div class="form-group">
-    <label for="des">Mô tả ngắn:</label>
-    <input type="text" id="des" class="form-control" formControlName="des" required>
-  </div>
-
-  <div class="form-group">
-    <label for="detail">Chi tiết:</label>
-    <textarea id="detail" class="form-control" formControlName="detail" rows="5" required></textarea>
-  </div>
-
-  <div class="form-group">
-    <label for="category">Danh mục:</label>
-    <select id="category" class="form-control" formControlName="category">
-      <option *ngFor="let category of listCategorys" [value]="category.id">{{ category.name }}</option>
-    </select>
-  </div>
-
-  <div class="form-group">
-    <label>Vị trí:</label>
-    <div *ngFor="let position of listPositions; let i = index">
-      <input type="checkbox" [formControlName]="i" [value]="position.id"> {{ position.name }}
+    <input type="text" id="title" class="form-control" formControlName="title" required #titleInput>
+    <div *ngIf="blogForm.get('title')?.hasError('required') && (blogForm.get('title')?.dirty || blogForm.get('title')?.touched)">
+      <nz-alert nzType="error" nzMessage="Tiêu đề không được bỏ trống!" nzShowIcon></nz-alert>
     </div>
   </div>
 
   <div class="form-group">
+    <label for="des">Mô tả ngắn:</label>
+    <input type="text" id="des" class="form-control" formControlName="des" required #desInput>
+    <div *ngIf="blogForm.get('des')?.hasError('required') && (blogForm.get('des')?.dirty || blogForm.get('des')?.touched)">
+      <nz-alert nzType="error" nzMessage="Mô tả không được bỏ trống!" nzShowIcon></nz-alert>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="detail">Chi tiết:</label>
+    <textarea id="detail" class="form-control" formControlName="detail" rows="5" required #detailInput></textarea>
+    <div *ngIf="blogForm.get('detail')?.hasError('required') && (blogForm.get('detail')?.dirty || blogForm.get('detail')?.touched)">
+      <nz-alert nzType="error" nzMessage="Chi tiết không được bỏ trống!" nzShowIcon></nz-alert>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="category">Danh mục:</label>
+    <select id="category" class="form-control" formControlName="category" required #categoryInput>
+      <option *ngFor="let category of listCategorys" [value]="category.id">{{ category.name }}</option>
+    </select>
+    <div *ngIf="blogForm.get('category')?.hasError('required') && (blogForm.get('category')?.dirty || blogForm.get('category')?.touched)">
+      <nz-alert nzType="error" nzMessage="Danh mục không được bỏ trống!" nzShowIcon></nz-alert>
+    </div>
+  </div>
+  <nz-form-item>
+    <nz-form-label>Vi tri</nz-form-label>
+    <nz-form-control>
+      <nz-checkbox-group formControlName="position" ></nz-checkbox-group>
+    </nz-form-control>
+  </nz-form-item>
+
+  <div class="form-group">
     <label>Public:</label>
     <div>
-      <input type="radio" formControlName="public" [value]="true"> Yes
+      <input type="radio" formControlName="public" [value]="true" > Yes
       <input type="radio" formControlName="public" [value]="false"> No
     </div>
   </div>
 
   <div class="form-group">
     <label for="data_pubblic">Ngày đăng:</label>
-    <input type="date" id="data_pubblic" class="form-control" formControlName="data_pubblic" required>
+    <input type="date" id="data_pubblic" class="form-control" formControlName="data_pubblic" required #data_pubblicInput>
+    <div *ngIf="blogForm.get('data_pubblic')?.hasError('required') && (blogForm.get('data_pubblic')?.dirty || blogForm.get('data_pubblic')?.touched)">
+      <nz-alert nzType="error" nzMessage="Ngày đăng không được bỏ trống!" nzShowIcon></nz-alert>
+    </div>
   </div>
 
   <div class="form-group">
@@ -47,5 +61,6 @@
     <input type="file" id="thumbs" class="form-control-file" (change)="onFileSelected($event)">
   </div>
 
-  <button type="submit" class="btn btn-primary" [disabled]="!blogForm.valid">Đăng bài</button>
+  <button type="submit" class="btn btn-success" [disabled]="!blogForm.valid">{{ isEdit ? 'Cập nhật' : 'Thêm mới' }}</button>
+  <button type="reset" class="btn ant-btn-danger">Reset</button>
 </form>

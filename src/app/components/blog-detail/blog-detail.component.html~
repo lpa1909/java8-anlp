@@ -1,0 +1,13 @@
+<div style="display: flex; justify-content: center;">
+  <nz-card style="width: 80%;" [nzCover]="coverTemplate">
+    <nz-card-meta
+      [nzTitle]="blogObj.title"
+      [nzDescription]="blogObj.des"
+    >
+    </nz-card-meta>
+    <p>{{ blogObj.detail }}</p>
+    <ng-template #coverTemplate>
+      <img alt="example" [src]="blogObj.thumbs" />
+    </ng-template>
+  </nz-card>
+</div>

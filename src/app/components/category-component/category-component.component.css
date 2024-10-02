@@ -1,7 +1,6 @@
-.wrapper {
+[nz-menu] {
   width: 240px;
-}
-
-button {
-  margin-bottom: 12px;
+  margin-left: 20%;
+  margin-top: 10%;
+  border: 1px solid gray;
 }

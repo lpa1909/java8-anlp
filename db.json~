@@ -15,23 +15,24 @@
     },
     {
       "id": "2",
-      "title": "Hai dự án cao tốc Bắc Nam sẽ khởi công vào tháng 8",
+      "title": "Hai dự án cao tốc Bắc Nam sẽ khởi công",
       "des": "Bộ Giao thông Vận tải sẽ mời thanh tra, kiểm toán tham gia vào các dự án từ đầu nhằm tăng cường công tác giám sát. ",
       "detail": "Tại cuộc họp về tiến độ cao tốc Bắc Nam chiều 26/6, ông Nguyễn Văn Thể, Bộ trưởng Giao thông Vận tải cho biết, các dự án cao tốc sử dụng vốn đầu tư công là Cam Lộ - La Sơn (đi qua 2 tỉnh Quảng Trị và Thừa Thiên Huế) và Cao Bồ - Mai Sơn (nằm trên tỉnh Nam Định và Ninh Bình) sẽ khởi công trong tháng 8. Dự án đường dẫn hai đầu cầu Mỹ Thuận 2 khởi công cuối năm 2019.\"Từ nay đến tháng 12, toàn bộ gói thầu của ba dự án đầu tư công sẽ được khởi công, riêng phần cầu chính Mỹ Thuận 2 sẽ bắt đầu vào quý I năm sau\", Bộ trưởng Thể nói.Với 8 dự án cao tốc Bắc Nam khác được đầu tư theo hình thức PPP, Bộ Giao thông Vận tải sẽ báo cáo Chính phủ để xin ý kiến chỉ đạo thực hiện các bước tiếp theo. Hiện nay Bộ bán hồ sơ thầu các dự án, đã có 120 nhà đầu tư mua hồ sơ. Với công tác đấu thầu dự án cao tốc Bắc Nam theo hình thức đầu tư công, Bộ trưởng Nguyễn Văn Thể chỉ đạo các chủ đầu tư, ban quản lý dự án lựa chọn những gói thầu phù hợp, kể cả gói thầu xây lắp để tổ chức đầu thầu qua mạng, đảm bảo tỷ lệ gói thầu qua mạng trên 50%. ",
       "category": 4,
       "public": true,
       "data_pubblic": "2019-06-28",
       "position": [
-        1
+        null,
+        null
       ],
-      "thumbs": "https://i-vnexpress.vnecdn.net/2019/06/26/anh-1-1533376007-680x0-8743-15-6639-9178-1561555738.jpg"
+      "thumbs": ""
     },
     {
       "title": "Nắng nóng như 'đầu lâu tử thần' trên bản đồ nhiệt châu Âu",
       "des": "Bản đồ nền nhiệt châu Âu trong đợt nắng nóng 40 độ C được mô tả là rất giống biểu tượng của thần chết.",
       "detail": "Nhà khí tượng học người Pháp Ruben Hallali hôm qua đăng ảnh bản đồ dự báo nhiệt độ châu Âu và phát hiện biểu tượng rất giống một \"đầu lâu tử thần\" khổng lồ trên phần lãnh thổ Pháp, nơi đang phải đối mặt với mức nhiệt được dự báo cao kỷ lục. Để người xem dễ hình dung, Hallali còn đặt tấm bản đồ cạnh bức họa \"The Scream\" (Tiếng thét) của danh họa người Na Uy Edvard Munch. Bức họa thể hiện một gương mặt đầy âu lo, tuyệt vọng và là một trong bốn bản sáng tác in trên đá, theo trường phái biểu hiện của Munch vào khoảng năm 1893 và 1910.\"Tôi chưa từng thấy điều gì tương tự trong suốt 15 năm làm nghề khí tượng của mình\", Hallali cho biết.Tấm bản đồ nhiệt do trang web Meteociel của Pháp công bố, sử dụng các phương thức dự báo khác nhau nhằm trực quan hóa hiện tượng thời tiết. Theo phát ngôn viên của Meteociel, bản đồ này dựa trên Hệ thống Dự báo Toàn cầu của Mỹ và hình dạng đặc biệt trên hoàn toàn là tình cờ.",
       "category": 1,
-      "public": false,
+      "public": true,
       "data_pubblic": "2019-06-28",
       "position": [
         2
@@ -44,7 +45,7 @@
       "des": "Tổng thống Mỹ lên án những bình luận \"xúc phạm\" của Iran và cảnh báo sẽ \"xóa sổ\" nước này nếu họ thực hiện bất cứ cuộc tấn công nào.",
       "detail": "\"Những phát biểu vô cùng ngu ngốc và xúc phạm mà Iran đưa ra hôm nay chỉ thể hiện rằng họ không hiểu thực tế. Bất cứ cuộc tấn công nào của Iran nhắm tới Mỹ đều sẽ vấp phải lực lượng vĩ đại và áp đảo. Trong một số trường hợp, áp đảo đồng nghĩa với xóa sổ\", Tổng thống Mỹ Donald Trump hôm nay viết trên Twitter. ",
       "category": 1,
-      "public": true,
+      "public": false,
       "data_pubblic": "2019-06-12",
       "position": [
         1
@@ -77,19 +78,6 @@
       ],
       "thumbs": "https://i-kinhdoanh.vnecdn.net/2019/06/25/gold-2091-1561422558.jpg",
       "id": "6"
-    },
-    {
-      "title": "Song Hye Kyo - 'ngọc nữ' giàu có, đa tình",
-      "des": "Danh tiếng của minh tinh Hàn Quốc gắn liền với sắc đẹp, các bộ phim đình đám ở châu Á cùng tình yêu với nhiều bạn diễn.",
-      "detail": "Sau khi Song Hye Kyo - Song Joong Ki thông báo ly hôn hôm 27/6, nhiều người đồn đoán lý do đổ vỡ từ phía nữ diễn viên. Luật sư của nam diễn viên nói: \"Ly hôn là lỗi của Song Hye Kyo\". Theo Sohu, trong ấn tượng của không ít khán giả Hàn Quốc, Hye Kyo là diễn viên đa tình. Người đẹp thường hẹn hò bạn diễn và vướng tin đồn tình ái với nhiều sao nam. Năm 2003, Song Hye Kyo đóng chung Lee Byung Hun trong All In. Người đẹp 22 tuổi rung động trước vẻ nam tính, mạnh mẽ của bạn diễn. Hai người hẹn hò khoảng một năm. Trên Newsen, một người bạn của Hye Kyo nói nữ diễn viên đau khổ thời gian dài, mất ăn mất ngủ vì mối tình đầu.Khi đóng vợ Lương Triều Vỹ trong Nhất đại tông sư, Song Hye Kyo cho biết rung động vì ánh mắt của tài tử Hong Kong. \"Nhiều người biết Lương Triều Vỹ có ánh mắt chết người. Lúc diễn riêng với anh ấy, tôi cảm nhận được sức mạnh từ ánh mắt ấy\", Hye Kyo từng nói trên QQ.",
-      "category": 3,
-      "public": true,
-      "data_pubblic": "2019-06-20",
-      "position": [
-        1
-      ],
-      "thumbs": "https://i-giaitri.vnecdn.net/2019/06/28/lee-byung-hun-8385-1561686128.jpg",
-      "id": "7"
     },
     {
       "title": "HLV Venezuela: 'Đã tới lúc cạnh tranh, thay vì ngưỡng mộ Messi'",
@@ -329,50 +317,88 @@
       "id": "31"
     },
     {
-      "id": "b23b",
-      "title": "dấdwdawd",
-      "des": "ádasdwdadw",
-      "detail": "dắdawdasdawd",
-      "thumbs": "C:\\fakepath\\WMNS+AIR+JORDAN+1+LOW (1).png",
-      "category": "3",
-      "position": "3",
-      "public": true,
-      "data_pubblic": "2024-09-30"
-    },
-    {
-      "id": "1cd7",
-      "title": "đâsdaswdwad",
-      "des": "sdawdadwadas",
-      "detail": "ưadasdawdawd",
-      "thumbs": "C:\\fakepath\\WMNS+AIR+JORDAN+1+MID+SE.png",
-      "category": 2,
-      "position": 2,
-      "public": true,
-      "data_pubblic": "2024-09-30"
-    },
-    {
-      "id": "8dff",
-      "title": "ádawdawda",
-      "des": "ưdawdasdawd",
-      "detail": "ădasdawdawdawd",
-      "thumbs": "C:\\fakepath\\WMNS+AIR+FORCE+1+'07+SE.png",
-      "category": "3",
-      "position": 2,
-      "public": true,
-      "data_pubblic": "2024-09-30"
-    },
-    {
-      "id": "f75f",
-      "title": "dădawfaqwfafsawđ",
-      "des": "adwadasdawdawdawd",
-      "detail": "ădawdawdawdasdawdawd",
-      "thumbs": "C:\\fakepath\\WMNS+AIR+FORCE+1+'07+SE.png",
-      "category": 3,
+      "id": "62d3",
+      "title": "dấgfgrasdgregdrgdrg",
+      "des": "fasdgaregeargeargdfgdfrgdrg",
+      "detail": "wbndyugohfyuasdbf hjglsbda fiefhasudhfuiashdfuie",
+      "category": 1,
       "position": [
-        1
+        1,
+        3,
+        4
       ],
       "public": true,
-      "data_pubblic": "2024-09-30"
+      "data_pubblic": "2024-09-30",
+      "thumbs": ""
+    },
+    {
+      "id": "61f5",
+      "title": "dhyauwhduiahsduiw",
+      "des": "ưduihasiudhuaihfiuawshefiu",
+      "detail": "duiahdwiuadhiuawhwdiuwhdiu",
+      "category": 4,
+      "position": [
+        3,
+        4
+      ],
+      "public": true,
+      "data_pubblic": "2024-09-30",
+      "thumbs": ""
+    },
+    {
+      "id": "a38b",
+      "title": "adasd",
+      "des": "adsas",
+      "detail": "asdas",
+      "category": 2,
+      "position": [],
+      "public": false,
+      "data_pubblic": "2024-10-10",
+      "thumbs": "",
+      "listPositions": []
+    },
+    {
+      "id": "29b4",
+      "title": "12312",
+      "des": "1231",
+      "detail": "2131",
+      "category": 2,
+      "position": [
+        null
+      ],
+      "public": false,
+      "data_pubblic": "2024-10-18",
+      "thumbs": ""
+    },
+    {
+      "id": "7498",
+      "title": "qweqw",
+      "des": "qweq",
+      "detail": "qaweqw",
+      "category": 2,
+      "position": [
+        {
+          "label": "Việt Nam",
+          "value": "1",
+          "checked": true
+        },
+        {
+          "label": "Trung Quốc",
+          "value": "2",
+          "checked": true
+        },
+        {
+          "label": "Nga",
+          "value": "3"
+        },
+        {
+          "label": "Mỹ",
+          "value": "4"
+        }
+      ],
+      "public": false,
+      "data_pubblic": "2024-10-09",
+      "thumbs": ""
     }
   ],
   "categories": [

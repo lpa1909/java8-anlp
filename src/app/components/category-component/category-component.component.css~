@@ -1,19 +1,5 @@
-.category-table{
-  border-collapse: collapse;
-  width: 40%;
-  text-align: center;
-  font-size: 20px;
-  margin-top: 20%;
-  margin-left: 30%;
-
-}
-
-.category-table th{
-  border: 1px solid #606060;
-}
-
-a{
-  font-size: 20px;
-  font-family: Arial, Helvetica, sans-serif;
-  color: #606060;
+[nz-menu] {
+  width: 240px;
+  margin-left: 20%;
+  margin-top: 10%;
 }
