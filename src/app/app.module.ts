@@ -7,7 +7,7 @@ import { NZ_I18N } from 'ng-zorro-antd/i18n';
 import { en_US } from 'ng-zorro-antd/i18n';
 import {CommonModule, registerLocaleData} from '@angular/common';
 import en from '@angular/common/locales/en';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {AbstractControl, FormsModule, NonNullableFormBuilder, ReactiveFormsModule} from '@angular/forms';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import {HttpClientModule, provideHttpClient} from '@angular/common/http';
 import { ListBlogComponentsComponent } from './components/list-blog-components/list-blog-components.component';
@@ -33,6 +33,10 @@ import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzListModule } from 'ng-zorro-antd/list';
 import {NzAlertModule} from "ng-zorro-antd/alert";
 import { NzMessageService } from 'ng-zorro-antd/message';
+import {NzFormModule} from "ng-zorro-antd/form";
+import {NzRadioModule} from "ng-zorro-antd/radio";
+import {NzDatePickerModule} from "ng-zorro-antd/date-picker";
+import { NzUploadChangeParam } from 'ng-zorro-antd/upload';
 registerLocaleData(en);
 
 @NgModule({
@@ -69,6 +73,9 @@ registerLocaleData(en);
     NzCardModule,
     NzAlertModule,
     CommonModule,
+    NzFormModule,
+    NzRadioModule,
+    NzDatePickerModule
   ],
   providers: [
     { provide: NZ_I18N, useValue: en_US },

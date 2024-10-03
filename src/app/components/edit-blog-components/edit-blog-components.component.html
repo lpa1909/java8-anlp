@@ -1,66 +1,90 @@
-
-<form [formGroup]="blogForm" (ngSubmit)="onSubmit()">
-  <div class="form-group">
-    <label for="title">Tiêu đề:</label>
-    <input type="text" id="title" class="form-control" formControlName="title" required #titleInput>
-    <div *ngIf="blogForm.get('title')?.hasError('required') && (blogForm.get('title')?.dirty || blogForm.get('title')?.touched)">
-      <nz-alert nzType="error" nzMessage="Tiêu đề không được bỏ trống!" nzShowIcon></nz-alert>
-    </div>
-  </div>
-
-  <div class="form-group">
-    <label for="des">Mô tả ngắn:</label>
-    <input type="text" id="des" class="form-control" formControlName="des" required #desInput>
-    <div *ngIf="blogForm.get('des')?.hasError('required') && (blogForm.get('des')?.dirty || blogForm.get('des')?.touched)">
-      <nz-alert nzType="error" nzMessage="Mô tả không được bỏ trống!" nzShowIcon></nz-alert>
-    </div>
-  </div>
-
-  <div class="form-group">
-    <label for="detail">Chi tiết:</label>
-    <textarea id="detail" class="form-control" formControlName="detail" rows="5" required #detailInput></textarea>
-    <div *ngIf="blogForm.get('detail')?.hasError('required') && (blogForm.get('detail')?.dirty || blogForm.get('detail')?.touched)">
-      <nz-alert nzType="error" nzMessage="Chi tiết không được bỏ trống!" nzShowIcon></nz-alert>
-    </div>
-  </div>
-
-  <div class="form-group">
-    <label for="category">Danh mục:</label>
-    <select id="category" class="form-control" formControlName="category" required #categoryInput>
-      <option *ngFor="let category of listCategorys" [value]="category.id">{{ category.name }}</option>
-    </select>
-    <div *ngIf="blogForm.get('category')?.hasError('required') && (blogForm.get('category')?.dirty || blogForm.get('category')?.touched)">
-      <nz-alert nzType="error" nzMessage="Danh mục không được bỏ trống!" nzShowIcon></nz-alert>
-    </div>
-  </div>
+<form nz-form [formGroup]="blogForm" (ngSubmit)="onSubmit()">
   <nz-form-item>
-    <nz-form-label>Vi tri</nz-form-label>
-    <nz-form-control>
+    <nz-form-label [nzSpan]="7" nzRequired>Title</nz-form-label>
+    <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="Validating..." [nzErrorTip]="title">
+      <input nz-input formControlName="title" placeholder="Nhập tiêu đề bài báo" />
+      <ng-template #title let-control>
+        @if (control.touched && control.errors?.['required']) {
+          Tiêu đề bài báo không được để trống!
+        }
+      </ng-template>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSpan]="7" nzRequired>Mô tả ngắn:</nz-form-label>
+    <nz-form-control [nzSpan]="12" nzHasFeedback [nzErrorTip]="des">
+      <input nz-input formControlName="des" placeholder="Mô tả ngắn" type="text" />
+      <ng-template #des let-control>
+        @if (control.errors?.['required']) {
+          Mô tả ngắn không được để trống!
+        }
+      </ng-template>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSpan]="7" nzRequired>Chi tiết:</nz-form-label>
+    <nz-form-control [nzSpan]="12" nzHasFeedback [nzErrorTip]="detail">
+        <textarea formControlName="detail" nz-input rows="5" placeholder="Chi tiết"></textarea>
+      <ng-template #detail let-control>
+        @if (control.errors?.['required']) {
+          Chi tiết không được để trống!
+        }
+      </ng-template>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSpan]="7" nzRequired>Danh mục:</nz-form-label>
+    <nz-form-control [nzSpan]="12" nzHasFeedback [nzErrorTip]="category">
+      <nz-select formControlName="category">
+        <nz-option *ngFor="let category of listCategorys" [nzValue]="category.id" [nzLabel]="category.name"></nz-option>
+      </nz-select>
+      <ng-template #category let-control>
+        @if (control.errors?.['required']) {
+          Danh mục không được để trống!
+        }
+      </ng-template>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSpan]="7" nzRequired>Vị trí</nz-form-label>
+    <nz-form-control [nzSpan]="12" nzHasFeedback>
       <nz-checkbox-group formControlName="position" ></nz-checkbox-group>
     </nz-form-control>
   </nz-form-item>
-
-  <div class="form-group">
-    <label>Public:</label>
-    <div>
-      <input type="radio" formControlName="public" [value]="true" > Yes
-      <input type="radio" formControlName="public" [value]="false"> No
-    </div>
-  </div>
-
-  <div class="form-group">
-    <label for="data_pubblic">Ngày đăng:</label>
-    <input type="date" id="data_pubblic" class="form-control" formControlName="data_pubblic" required #data_pubblicInput>
-    <div *ngIf="blogForm.get('data_pubblic')?.hasError('required') && (blogForm.get('data_pubblic')?.dirty || blogForm.get('data_pubblic')?.touched)">
-      <nz-alert nzType="error" nzMessage="Ngày đăng không được bỏ trống!" nzShowIcon></nz-alert>
-    </div>
-  </div>
-
-  <div class="form-group">
-    <label for="thumbs">Hình ảnh:</label>
-    <input type="file" id="thumbs" class="form-control-file" (change)="onFileSelected($event)">
-  </div>
-
-  <button type="submit" class="btn btn-success" [disabled]="!blogForm.valid">{{ isEdit ? 'Cập nhật' : 'Thêm mới' }}</button>
-  <button type="reset" class="btn ant-btn-danger">Reset</button>
+  <nz-form-item>
+    <nz-form-label [nzSpan]="7" nzRequired>Public:</nz-form-label>
+    <nz-form-control [nzSpan]="12" nzHasFeedback>
+          <div>
+            <input type="radio" formControlName="public" [value]="true" > Yes
+            <input type="radio" formControlName="public" [value]="false"> No
+          </div>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSpan]="7" nzRequired>Hình ảnh:</nz-form-label>
+    <nz-form-control [nzSpan]="12" nzHasFeedback>
+      <nz-upload
+        nzAction="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+        [nzHeaders]="{ authorization: 'authorization-text' }"
+        (nzChange)="onFileSelected($event)"
+      >
+        <button nz-button nzType="default" type="button">
+          <span nz-icon nzType="upload"></span>
+          Click to Upload
+        </button>
+      </nz-upload>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSpan]="7" nzRequired>Ngày đăng:</nz-form-label>
+    <nz-form-control [nzSpan]="12" nzHasFeedback>
+      <nz-date-picker formControlName="data_pubblic"></nz-date-picker>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-control [nzOffset]="7" [nzSpan]="12">
+      <button nz-button nzType="primary" [disabled]="!blogForm.valid">Submit</button>
+      <button nz-button type="reset">Reset</button>
+    </nz-form-control>
+  </nz-form-item>
 </form>

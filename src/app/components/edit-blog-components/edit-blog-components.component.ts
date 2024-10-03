@@ -41,18 +41,13 @@ export class EditBlogComponentsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
     this.categoryService.getCategories().subscribe((res) => {
       this.listCategorys = res;
       console.log(this.listCategorys)
     })
-
-
-
     this.route.paramMap.subscribe(params => {
       this.id = Number(params.get('id'));
     });
-
     this.positionService.getPositions().subscribe((res) => {
       this.listPositions = res;
       this.blogForm.patchValue({...this.blogObj, position: this.listPositions.map(i => ({...i, id: i.id, label: i.name}))});
@@ -61,7 +56,15 @@ export class EditBlogComponentsComponent implements OnInit {
   }
 
   onFileSelected(event: any): void {
-    this.selectedFile = event.target.files[0] ?? null;
+    if (event.file.status === 'done') {
+      const selectedFile = event.file.originFileObj;
+      const reader = new FileReader();
+      reader.readAsDataURL(selectedFile);
+      reader.onload = () => {
+        const base64Image = reader.result as string;
+        this.blogForm.patchValue({ thumbs: base64Image });
+      };
+    }
   }
 
   onSubmit(): void {
