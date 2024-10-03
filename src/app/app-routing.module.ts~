@@ -10,11 +10,19 @@ const routes: Routes = [
     component: ListBlogComponentsComponent
   },
   {
+    path: '**',
+    redirectTo: '/listBlogs'
+  },
+  {
     path: 'searchListBlogs',
     component: SearchBlogComponentsComponent
   },
+  // {
+  //   path: 'edit',
+  //   component: EditBlogComponentsComponent
+  // },
   {
-    path: 'edit',
+    path: 'edit/:id',
     component: EditBlogComponentsComponent
   }
 ];

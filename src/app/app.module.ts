@@ -37,6 +37,7 @@ import {NzFormModule} from "ng-zorro-antd/form";
 import {NzRadioModule} from "ng-zorro-antd/radio";
 import {NzDatePickerModule} from "ng-zorro-antd/date-picker";
 import { NzUploadChangeParam } from 'ng-zorro-antd/upload';
+import {RouterModule} from "@angular/router";
 registerLocaleData(en);
 
 @NgModule({
@@ -75,7 +76,8 @@ registerLocaleData(en);
     CommonModule,
     NzFormModule,
     NzRadioModule,
-    NzDatePickerModule
+    NzDatePickerModule,
+    RouterModule
   ],
   providers: [
     { provide: NZ_I18N, useValue: en_US },

@@ -27,17 +27,16 @@
     </td>
     <td>{{ data.data_pubblic | date:"dd/MM/yyyy" }}</td>
     <td style="text-align: center">
-      <button (click)="changeStatus(data.id, !data.public)"><span nz-icon nzType="tool" nzTheme="outline"></span>
-      </button>
+      <button nz-button nzType="link" style="color: #2A2A2A" (click)="changeStatus(data.id, !data.public)"><span nz-icon nzType="tool" nzTheme="outline"></span></button>
     </td>
     <td style="text-align: center">
-      <span nz-icon nzType="eye" nzTheme="twotone"><button (click)="showModal(data.id)"></button></span>
+      <button nz-button nzType="link" style="color: #2A2A2A" (click)="showModal(data.id)"><span nz-icon nzType="eye" nzTheme="twotone"></span></button>
     </td>
     <td style="text-align: center">
-      <a routerLink="/edit/{{ data.id }}"><span nz-icon nzType="edit" nzTheme="outline"></span></a>
+      <button nz-button nzType="link" style="color: #2A2A2A" (click)="showModalTop(data.id)"><span nz-icon nzType="edit" nzTheme="outline"></span></button>
     </td>
     <td>
-      <button (click)="deleteBlog(data.id)"><span nz-icon nzType="delete" nzTheme="outline"></span></button>
+      <button nz-button nzType="link" style="color: #2A2A2A" (click)="deleteBlog(data.id)"><span nz-icon nzType="delete" nzTheme="outline"></span></button>
     </td>
   </tr>
   </tbody>
@@ -54,4 +53,18 @@
   <p *nzModalContent>
     <app-blog-detail [blogObj]="blogObj"></app-blog-detail>
   </p>
+</nz-modal>
+
+
+<nz-modal
+  [nzStyle]="{ top: '20px' }"
+  [(nzVisible)]="isVisibleTop"
+  nzTitle="Thêm mới blog"
+  (nzOnCancel)="handleCancelTop()"
+  (nzOnOk)="handleOkTop()"
+  [nzFooter]="null"
+>
+  <ng-container *nzModalContent>
+    <app-edit-blog-components [id]="idEdit"></app-edit-blog-components>
+  </ng-container>
 </nz-modal>

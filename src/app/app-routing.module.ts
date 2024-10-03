@@ -14,12 +14,12 @@ const routes: Routes = [
     component: SearchBlogComponentsComponent
   },
   {
-    path: 'edit',
+    path: 'edit/:id',
     component: EditBlogComponentsComponent
   },
   {
-    path: 'edit/:id',
-    component: EditBlogComponentsComponent
+    path: '**',
+    redirectTo: '/listBlogs'
   }
 ];
 

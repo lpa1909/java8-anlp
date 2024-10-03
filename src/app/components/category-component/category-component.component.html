@@ -11,9 +11,22 @@
   </li>
   <li nz-submenu nzTitle="Quản lý" nzIcon="setting">
     <ul>
-      <li nz-menu-item><a nz-button nzType="link" routerLink="/edit"><i nz-icon nzType="file-add"></i> New</a></li>
+      <li nz-menu-item><button nz-button nzType="link" (click)="showModalTop()" style="color: #2A2A2A"><i nz-icon nzType="file-add"></i> New</button></li>
     </ul>
   </li>
 </ul>
+
+<nz-modal
+  [nzStyle]="{ top: '20px' }"
+  [(nzVisible)]="isVisibleTop"
+  nzTitle="Chỉnh sửa blog"
+  (nzOnCancel)="handleCancelTop()"
+  (nzOnOk)="handleOkTop()"
+  [nzFooter]="null"
+>
+  <ng-container *nzModalContent>
+    <app-edit-blog-components></app-edit-blog-components>
+  </ng-container>
+</nz-modal>
 
 

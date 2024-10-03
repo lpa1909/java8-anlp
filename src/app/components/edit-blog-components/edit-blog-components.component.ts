@@ -6,7 +6,7 @@ import {Category} from "../../model/category";
 import {Position} from "../../model/position";
 import {FormArray, FormBuilder, FormControl, FormGroup, NgForm, Validators} from "@angular/forms";
 import {BlogServiceService} from "../../services/blog-service.service";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {Location} from "@angular/common";
 
 @Component({
@@ -20,14 +20,14 @@ export class EditBlogComponentsComponent implements OnInit {
   blogService = inject(BlogServiceService)
   listCategorys: Category[] = [];
   listPositions: Position[] = [];
+  listBlogs: Blog[] = [];
   fb = inject(FormBuilder);
   blogForm!: FormGroup;
-  selectedFile: File | null = null;
   isEdit = false;
   @Input() id: number = 0;
   blogObj: Blog | undefined;
 
-  constructor(private route: ActivatedRoute, private location: Location) {
+  constructor(private route: ActivatedRoute, private location: Location, private router: Router) {
     this.blogForm = this.fb.group({
       title: ['', Validators.required],
       des: ['', Validators.required],
@@ -45,14 +45,14 @@ export class EditBlogComponentsComponent implements OnInit {
       this.listCategorys = res;
       console.log(this.listCategorys)
     })
-    this.route.paramMap.subscribe(params => {
-      this.id = Number(params.get('id'));
-    });
+    console.log('id edit', this.id)
     this.positionService.getPositions().subscribe((res) => {
       this.listPositions = res;
       this.blogForm.patchValue({...this.blogObj, position: this.listPositions.map(i => ({...i, id: i.id, label: i.name}))});
       this.getBlogById(this.id);
     });
+
+    this.getAllBlog();
   }
 
   onFileSelected(event: any): void {
@@ -82,8 +82,11 @@ export class EditBlogComponentsComponent implements OnInit {
       } else {
         const formValue = this.blogForm.value;
         const selectedIds = this.getSelectedIds();
+        const id = this.listBlogs.length + 1;
+        const idString = id.toString();
         const newBlog: Blog = {
           ...formValue,
+          id: idString,
           position: selectedIds,
           category: Number(formValue.category),
           thumbs: ''
@@ -112,6 +115,7 @@ export class EditBlogComponentsComponent implements OnInit {
       this.blogService.addNewBlog(blog).subscribe(() => {
         alert('Thêm blog thành công!');
         this.blogForm.reset();
+        this.goBack();
       });
     }
   }
@@ -122,6 +126,7 @@ export class EditBlogComponentsComponent implements OnInit {
       this.blogService.updateBlog(id, blog).subscribe(() => {
         alert('Thay đổi bài báo thành công !');
         this.blogForm.reset();
+        this.goBack();
       });
     }
   }
@@ -140,8 +145,15 @@ export class EditBlogComponentsComponent implements OnInit {
     })
   }
 
+  getAllBlog(): void{
+    this.blogService.getBlogs().subscribe((res) => {
+      this.listBlogs = res;
+    })
+  }
+
   goBack(): void {
     this.location.back();
+    window.location.reload();
   }
 
 }

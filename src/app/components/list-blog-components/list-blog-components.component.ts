@@ -32,6 +32,7 @@ export class ListBlogComponentsComponent implements OnInit {
     thumbs: ''
   }
 
+
   constructor() {
   }
 
@@ -112,7 +113,6 @@ export class ListBlogComponentsComponent implements OnInit {
 
   isVisible = false;
   isOkLoading = false;
-
   showModal(id: number): void {
     this.isVisible = true;
     this.getBlogByBlogId(id);
@@ -130,4 +130,28 @@ export class ListBlogComponentsComponent implements OnInit {
   handleCancel(): void {
     this.isVisible = false;
   }
+
+  isVisibleTop = false;
+  isVisibleMiddle = false;
+  idEdit: number = 0;
+
+  showModalTop(id:number): void {
+    this.isVisibleTop = true;
+    this.idEdit = id;
+    console.log(this.idEdit);
+  }
+
+  showModalMiddle(): void {
+    this.isVisibleMiddle = true;
+  }
+
+  handleOkTop(): void {
+    console.log('点击了确定');
+    this.isVisibleTop = false;
+  }
+
+  handleCancelTop(): void {
+    this.isVisibleTop = false;
+  }
+
 }

@@ -39,7 +39,7 @@ export class ListBlogComponentsComponent implements OnInit {
     this.getAllBlog();
     this.getAllCategory();
     this.getALlPosition();
-    this.ngDoCheck();
+    this.ngDoCheck()
   }
 
   getALlPosition() {
@@ -116,6 +116,7 @@ export class ListBlogComponentsComponent implements OnInit {
   showModal(id: number): void {
     this.isVisible = true;
     this.getBlogByBlogId(id);
+    console.log(this.blogObj)
   }
 
   handleOk(): void {
@@ -129,4 +130,25 @@ export class ListBlogComponentsComponent implements OnInit {
   handleCancel(): void {
     this.isVisible = false;
   }
+
+  isVisibleTop = false;
+  isVisibleMiddle = false;
+
+  showModalTop(): void {
+    this.isVisibleTop = true;
+  }
+
+  showModalMiddle(): void {
+    this.isVisibleMiddle = true;
+  }
+
+  handleOkTop(): void {
+    console.log('点击了确定');
+    this.isVisibleTop = false;
+  }
+
+  handleCancelTop(): void {
+    this.isVisibleTop = false;
+  }
+
 }
