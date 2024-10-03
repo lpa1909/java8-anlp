@@ -28,7 +28,7 @@ import {NzSwitchModule} from "ng-zorro-antd/switch";
 import {NzMenuModule} from "ng-zorro-antd/menu";
 import {NzTooltipDirective} from "ng-zorro-antd/tooltip";
 import { BlogDetailComponent } from './components/blog-detail/blog-detail.component';
-import { NzModalModule } from 'ng-zorro-antd/modal';
+import {NzModalModule, NzModalService} from 'ng-zorro-antd/modal';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzListModule } from 'ng-zorro-antd/list';
 import {NzAlertModule} from "ng-zorro-antd/alert";
@@ -38,6 +38,8 @@ import {NzRadioModule} from "ng-zorro-antd/radio";
 import {NzDatePickerModule} from "ng-zorro-antd/date-picker";
 import { NzUploadChangeParam } from 'ng-zorro-antd/upload';
 import {RouterModule} from "@angular/router";
+import {NzNotificationModule} from "ng-zorro-antd/notification";
+
 registerLocaleData(en);
 
 @NgModule({
@@ -77,7 +79,8 @@ registerLocaleData(en);
     NzFormModule,
     NzRadioModule,
     NzDatePickerModule,
-    RouterModule
+    RouterModule,
+    NzNotificationModule
   ],
   providers: [
     { provide: NZ_I18N, useValue: en_US },

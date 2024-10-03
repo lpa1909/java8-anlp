@@ -1,4 +1,4 @@
-import {Component, inject, Input, OnInit} from '@angular/core';
+import {Component, inject, Input, OnInit, TemplateRef} from '@angular/core';
 import {CategoryServiceService} from "../../services/category-service.service";
 import {PositionServiceService} from "../../services/position-service.service";
 import {Blog} from "../../model/blog";
@@ -8,6 +8,8 @@ import {FormArray, FormBuilder, FormControl, FormGroup, NgForm, Validators} from
 import {BlogServiceService} from "../../services/blog-service.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Location} from "@angular/common";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {NzNotificationService} from "ng-zorro-antd/notification";
 
 @Component({
   selector: 'app-edit-blog-components',
@@ -26,8 +28,9 @@ export class EditBlogComponentsComponent implements OnInit {
   isEdit = false;
   @Input() id: number = 0;
   blogObj: Blog | undefined;
+  notificationTitle: String = '';
 
-  constructor(private route: ActivatedRoute, private location: Location, private router: Router) {
+  constructor(private route: ActivatedRoute, private location: Location, private router: Router, private modal: NzModalService, private notification: NzNotificationService) {
     this.blogForm = this.fb.group({
       title: ['', Validators.required],
       des: ['', Validators.required],
@@ -43,12 +46,13 @@ export class EditBlogComponentsComponent implements OnInit {
   ngOnInit(): void {
     this.categoryService.getCategories().subscribe((res) => {
       this.listCategorys = res;
-      console.log(this.listCategorys)
     })
-    console.log('id edit', this.id)
     this.positionService.getPositions().subscribe((res) => {
       this.listPositions = res;
-      this.blogForm.patchValue({...this.blogObj, position: this.listPositions.map(i => ({...i, id: i.id, label: i.name}))});
+      this.blogForm.patchValue({
+        ...this.blogObj,
+        position: this.listPositions.map(i => ({...i, id: i.id, label: i.name}))
+      });
       this.getBlogById(this.id);
     });
 
@@ -62,12 +66,12 @@ export class EditBlogComponentsComponent implements OnInit {
       reader.readAsDataURL(selectedFile);
       reader.onload = () => {
         const base64Image = reader.result as string;
-        this.blogForm.patchValue({ thumbs: base64Image });
+        this.blogForm.patchValue({thumbs: base64Image});
       };
     }
   }
 
-  onSubmit(): void {
+  onSubmit(template: TemplateRef<{}>): void {
     if (this.blogForm.valid) {
       if (this.isEdit) {
         const formValue = this.blogForm.value;
@@ -78,11 +82,11 @@ export class EditBlogComponentsComponent implements OnInit {
           category: Number(formValue.category),
           thumbs: ''
         };
-        this.updateBlog(this.id, editBlog);
+        this.showEditConfirm(this.id, editBlog, template);
       } else {
         const formValue = this.blogForm.value;
         const selectedIds = this.getSelectedIds();
-        const id = this.listBlogs.length + 1;
+        const id = this.generateRandomNumber(8);
         const idString = id.toString();
         const newBlog: Blog = {
           ...formValue,
@@ -91,7 +95,7 @@ export class EditBlogComponentsComponent implements OnInit {
           category: Number(formValue.category),
           thumbs: ''
         };
-        this.addBlog(newBlog);
+        this.showAddConfirm(newBlog, template)
       }
     }
   }
@@ -109,26 +113,20 @@ export class EditBlogComponentsComponent implements OnInit {
     return selectedIds;
   }
 
-  addBlog(blog: Blog): void {
-    const confirmBlog = confirm('Bạn chắc chắn muốn thêm bài báo ?');
-    if (confirmBlog) {
-      this.blogService.addNewBlog(blog).subscribe(() => {
-        alert('Thêm blog thành công!');
-        this.blogForm.reset();
-        this.goBack();
-      });
-    }
+  addBlog(blog: Blog, template: TemplateRef<{}>): void {
+    this.blogService.addNewBlog(blog).subscribe(() => {
+      this.notificationTitle = 'Thêm bài báo thành công!';
+      this.blogForm.reset();
+      this.goBack(template);
+    });
   }
 
-  updateBlog(id: number, blog: Blog): void {
-    const confirmEdit = confirm(' có chắc chắn muốn thay đổi bài báo ?');
-    if (confirmEdit) {
-      this.blogService.updateBlog(id, blog).subscribe(() => {
-        alert('Thay đổi bài báo thành công !');
-        this.blogForm.reset();
-        this.goBack();
-      });
-    }
+  updateBlog(id: number, blog: Blog, template: TemplateRef<{}>): void {
+    this.blogService.updateBlog(id, blog).subscribe(() => {
+      this.notificationTitle = 'Thay đổi bài báo thành công!';
+      this.blogForm.reset();
+      this.goBack(template);
+    });
   }
 
   getBlogById(id: number): void {
@@ -136,6 +134,7 @@ export class EditBlogComponentsComponent implements OnInit {
       this.isEdit = true;
       this.blogForm.patchValue({
         ...res,
+        category: res.category.toString(),
         position: this.listPositions.map(i => ({
           ...i,
           label: i.name,
@@ -145,15 +144,54 @@ export class EditBlogComponentsComponent implements OnInit {
     })
   }
 
-  getAllBlog(): void{
+  getAllBlog(): void {
     this.blogService.getBlogs().subscribe((res) => {
       this.listBlogs = res;
     })
   }
 
-  goBack(): void {
+  goBack(template: TemplateRef<{}>): void {
     this.location.back();
     window.location.reload();
+    this.createBasicNotification(template);
+  }
+
+  showAddConfirm(blog: Blog, template: TemplateRef<{}>): void {
+    this.modal.confirm({
+      nzTitle: '<b style="color: red;">Bạn chắc chắn muốn thêm mới blog này?</b>',
+      nzOkText: 'Có',
+      nzOkType: 'primary',
+      nzOnOk: () => this.addBlog(blog, template),
+      nzCancelText: 'Không',
+      nzOnCancel: () => console.log('Cancel')
+    });
+  }
+
+
+  showEditConfirm(id: number, blog: Blog, template: TemplateRef<{}>): void {
+    this.modal.confirm({
+      nzTitle: '<b style="color: red;">Bạn chắc chắn muốn cập nhật blog này?</b>',
+      nzOkText: 'Có',
+      nzOkType: 'primary',
+      nzOnOk: () => this.updateBlog(id, blog, template),
+      nzCancelText: 'Không',
+      nzOnCancel: () => console.log('Cancel')
+    });
+  }
+
+//random id
+  generateRandomNumber(length: number = 8): string {
+    let result = '';
+    const characters = '0123456789';
+    const charactersLength = characters.length;
+    for (let i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+  }
+
+  createBasicNotification(template: TemplateRef<{}>): void {
+    this.notification.template(template);
   }
 
 }

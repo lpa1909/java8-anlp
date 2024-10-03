@@ -27,7 +27,7 @@
     </td>
     <td>{{ data.data_pubblic | date:"dd/MM/yyyy" }}</td>
     <td style="text-align: center">
-      <button nz-button nzType="link" style="color: #2A2A2A" (click)="changeStatus(data.id, !data.public)"><span nz-icon nzType="tool" nzTheme="outline"></span></button>
+      <button nz-button nzType="link" style="color: #2A2A2A" (click)="showChangeStatusConfirm(data.id, !data.public, template)"><span nz-icon nzType="tool" nzTheme="outline"></span></button>
     </td>
     <td style="text-align: center">
       <button nz-button nzType="link" style="color: #2A2A2A" (click)="showModal(data.id)"><span nz-icon nzType="eye" nzTheme="outline"></span></button>
@@ -36,7 +36,7 @@
       <button nz-button nzType="link" style="color: #2A2A2A" (click)="showModalTop(data.id)"><span nz-icon nzType="edit" nzTheme="outline"></span></button>
     </td>
     <td>
-      <button nz-button nzType="link" style="color: #2A2A2A" (click)="deleteBlog(data.id)"><span nz-icon nzType="delete" nzTheme="outline"></span></button>
+      <button nz-button nzType="link" style="color: #2A2A2A" (click)="showDeleteConfirm(data.id, template)"><span nz-icon nzType="delete" nzTheme="outline"></span></button>
     </td>
   </tr>
   </tbody>
@@ -68,3 +68,17 @@
     <app-edit-blog-components [id]="idEdit"></app-edit-blog-components>
   </ng-container>
 </nz-modal>
+
+
+<ng-template #template>
+  <div class="ant-notification-notice-content">
+    <div class="ant-notification-notice-with-icon">
+          <span class="ant-notification-notice-icon">
+            <span nz-icon nzType="smile" style="color: rgb(16, 142, 233);"></span>
+          </span>
+      <div class="ant-notification-notice-message">{{notificationTitle}}</div>
+      <div class="ant-notification-notice-description">
+      </div>
+    </div>
+  </div>
+</ng-template>

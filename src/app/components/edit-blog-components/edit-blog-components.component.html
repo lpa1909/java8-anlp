@@ -1,4 +1,4 @@
-<form nz-form [formGroup]="blogForm" (ngSubmit)="onSubmit()">
+<form nz-form [formGroup]="blogForm" (ngSubmit)="onSubmit(template)">
   <nz-form-item>
     <nz-form-label [nzSpan]="7" nzRequired>Title</nz-form-label>
     <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="Validating..." [nzErrorTip]="title">
@@ -88,3 +88,16 @@
     </nz-form-control>
   </nz-form-item>
 </form>
+
+<ng-template #template>
+  <div class="ant-notification-notice-content">
+    <div class="ant-notification-notice-with-icon">
+          <span class="ant-notification-notice-icon">
+            <span nz-icon nzType="smile" style="color: rgb(16, 142, 233);"></span>
+          </span>
+      <div class="ant-notification-notice-message">{{notificationTitle}}</div>
+      <div class="ant-notification-notice-description">
+      </div>
+    </div>
+  </div>
+</ng-template>

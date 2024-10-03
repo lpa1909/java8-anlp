@@ -1,10 +1,12 @@
-import {Component, inject, Input, OnInit} from '@angular/core';
+import {Component, inject, Input, OnInit, TemplateRef} from '@angular/core';
 import {BlogServiceService} from "../../services/blog-service.service";
 import {Blog} from "../../model/blog";
 import {CategoryServiceService} from "../../services/category-service.service";
 import {PositionServiceService} from "../../services/position-service.service";
 import {Category} from "../../model/category";
 import {Position} from "../../model/position";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {NzNotificationService} from "ng-zorro-antd/notification";
 
 @Component({
   selector: 'app-list-blog-components',
@@ -31,9 +33,10 @@ export class ListBlogComponentsComponent implements OnInit {
     position: [],
     thumbs: ''
   }
+  notificationTitle: String = '';
 
 
-  constructor() {
+  constructor(private modal: NzModalService, private notification: NzNotificationService) {
   }
 
   ngOnInit(): void {
@@ -75,35 +78,33 @@ export class ListBlogComponentsComponent implements OnInit {
     return positionNames;
   }
 
-  deleteBlog(id: number): void {
-    const confirm_delete = confirm("Bạn chắc chắn muốn xóa tin tức này ?")
-    if (confirm_delete) {
-      this.blogService.deleteBlogs(id).subscribe(() => {
-        this.listBlogs = this.listBlogs.filter(blog => blog.id !== id)
-        alert("Xóa thành công !!!!!!");
-        this.getAllBlog();
-        this.getAllCategory();
-        this.getALlPosition();
-      })
-    }
+  deleteBlog(id: number, template: TemplateRef<{}>): void {
+
+    this.blogService.deleteBlogs(id).subscribe(() => {
+      this.listBlogs = this.listBlogs.filter(blog => blog.id !== id)
+      this.notificationTitle = 'Xóa thành công !!!!!!';
+      this.createBasicNotification(template);
+      this.getAllBlog();
+      this.getAllCategory();
+      this.getALlPosition();
+    })
+
   }
 
-  getBlogByBlogId(id: number): void{
+  getBlogByBlogId(id: number): void {
     this.blogService.getBlogById(id).subscribe((res) => {
       this.blogObj = res;
     })
   }
 
-  changeStatus(id: number, status: boolean): void {
-    const confirm_change = confirm("Bạn có chắc chắn muốn thay đổi trạng thái của bài báo không?");
-    if (confirm_change) {
+  changeStatus(id: number, status: boolean, template: TemplateRef<{}>): void {
       this.blogService.updateDataPublic(id, Boolean(status)).subscribe(() => {
-        alert('Thay đổi trạng thái thành công')
+        this.notificationTitle = 'Thay đổi trạng thái thành công';
+        this.createBasicNotification(template);
         this.getAllBlog();
         this.getAllCategory();
         this.getALlPosition();
       })
-    }
   }
 
   ngDoCheck(): void {
@@ -113,6 +114,7 @@ export class ListBlogComponentsComponent implements OnInit {
 
   isVisible = false;
   isOkLoading = false;
+
   showModal(id: number): void {
     this.isVisible = true;
     this.getBlogByBlogId(id);
@@ -135,7 +137,7 @@ export class ListBlogComponentsComponent implements OnInit {
   isVisibleMiddle = false;
   idEdit: number = 0;
 
-  showModalTop(id:number): void {
+  showModalTop(id: number): void {
     this.isVisibleTop = true;
     this.idEdit = id;
     console.log(this.idEdit);
@@ -154,4 +156,32 @@ export class ListBlogComponentsComponent implements OnInit {
     this.isVisibleTop = false;
   }
 
+  showChangeStatusConfirm(id: number, status: boolean, template: TemplateRef<{}>): void {
+    this.modal.confirm({
+      nzTitle: '<b style="color: red;">Bạn chắc chắn muốn thay đổi trạng thái của bài báo này?</b>',
+      nzOkText: 'Có',
+      nzOkType: 'primary',
+      nzOnOk: () => this.changeStatus(id, status, template),
+      nzCancelText: 'Không',
+      nzOnCancel: () => console.log('Cancel')
+    });
+  }
+
+
+  showDeleteConfirm(id: number, template: TemplateRef<{}>): void {
+    this.modal.confirm({
+      nzTitle: '<b style="color: red;">Bạn chắc chắn muốn xóa blog này?</b>',
+      nzContent: 'Khi xóa xong sẽ không thể khôi phục được.',
+      nzOkText: 'Có',
+      nzOkType: 'primary',
+      nzOkDanger: true,
+      nzOnOk: () => this.deleteBlog(id, template),
+      nzCancelText: 'Không',
+      nzOnCancel: () => console.log('Cancel')
+    });
+  }
+
+  createBasicNotification(template: TemplateRef<{}>): void {
+    this.notification.template(template);
+  }
 }
