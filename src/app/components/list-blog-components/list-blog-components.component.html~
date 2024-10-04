@@ -59,7 +59,7 @@
 <nz-modal
   [nzStyle]="{ top: '20px' }"
   [(nzVisible)]="isVisibleTop"
-  nzTitle="Chỉnh sửa Blog"
+  nzTitle="Thêm mới blog"
   (nzOnCancel)="handleCancelTop()"
   (nzOnOk)="handleOkTop()"
   [nzFooter]="null"
